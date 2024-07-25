@@ -10,4 +10,17 @@
 // 添加要在此处预编译的标头
 #include "framework.h"
 
-#endif //PCH_H
+#include <chrono>
+#include <exception>
+#include <format>
+#include <memory>
+#include <string>
+#include <utility>
+#include <version>
+
+#include <curl/curl.h>
+#include <curl/easy.h>
+#include <json/reader.h>
+#include <json/value.h>
+
+#endif	//PCH_H

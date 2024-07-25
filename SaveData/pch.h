@@ -10,4 +10,11 @@
 // 添加要在此处预编译的标头
 #include "framework.h"
 
-#endif //PCH_H
+#include <exception>
+#include <format>
+#include <fstream>
+#include <iosfwd>
+#include <string>
+#include <version>
+
+#endif	//PCH_H

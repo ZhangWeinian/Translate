@@ -1,12 +1,21 @@
 #pragma once
 
-#include "__inter__AttributeDefinition.h"
 #include "pch.h"
+
+#include "../SaveData/SaveData.h"
+#include "__inter__AttributeDefinition.h"
+
+#include <curl/curl.h>
+#include <exception>
+#include <memory>
+#include <string>
 
 class BaiduTranslate final
 {
 public:
 	BAIDUTRANSLATE_API explicit BaiduTranslate(const _STD string& appid, const _STD string& appkey) noexcept;
+
+	BAIDUTRANSLATE_API ~BaiduTranslate(void) noexcept;
 
 	/// <summary>
 	/// 设置百度翻译的 AppID 和 AppKey
@@ -28,15 +37,22 @@ public:
 											 const _STD string& to) noexcept;
 
 private:
-	TranslateInfoType TranslateInfo = {};
+	TranslateInfoType TranslateInfo		= {};
 
-	_STD size_t		  WriteCallback(void* contents, _STD size_t size, _STD size_t nmemb, _STD string* userp) const;
+	CURL*			  curl				= nullptr;
 
-	_STD string		  GetURL(void);
+	_STD unique_ptr<SaveData> pSaveData = nullptr;
 
-	_STD string		  GetErrorInfo(const _STD string& errorCode) const noexcept;
+	// 写回调函数必须是静态的
+	static _STD size_t WriteCallback(const char* data, _STD size_t size, _STD size_t nmemb, _STD string* userdata);
 
-	_STD string		  InterTranslate(void);
+	_STD string		   SourceEncode(const _STD string& source) const;
 
-	void			  HandleException(const _STD exception& e) const noexcept;
+	_STD string		   GetURL(void);
+
+	_STD string		   GetErrorInfo(const _STD string& errorCode) const noexcept;
+
+	_STD string		   InterTranslate(void);
+
+	void			   HandleException(const _STD exception& e) const noexcept;
 };

@@ -8,7 +8,7 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
-	BaiduTranslate baiduTranslate("20210819000900600", "X3Q1Q1J");
+	BaiduTranslate baiduTranslate("20230527001691590", "dNBnV59wxA6ZhONLUmtF");
 
 	cout << baiduTranslate.Translate("Hello, World!", "en", "zh") << endl;
 
