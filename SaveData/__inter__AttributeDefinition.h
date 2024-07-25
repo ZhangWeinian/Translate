@@ -24,10 +24,10 @@
 
 
 #ifdef SAVEDATA_EXPORTS
-	#define SAVEDATA_API extern __declspec(dllexport)
+	#define SAVEDATA_API __declspec(dllexport)
 #else
-	#define SAVEDATA_API extern __declspec(dllimport)
+	#define SAVEDATA_API __declspec(dllimport)
 #endif	// SAVEDATA_EXPORTS
 
 
-using info = _STD pair<_STD string, _STD string>;
+using AppIDAndKey = _STD pair<_STD string, _STD string>;

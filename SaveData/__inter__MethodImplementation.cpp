@@ -6,12 +6,19 @@
 #include <array>
 #include <exception>
 #include <format>
+#include <fstream>
 #include <iostream>
 
 #include <openssl/evp.h>
 
 namespace Data::inline ERR_DEF
 {
+	class FileError final: public _STD exception
+	{
+	public:
+		explicit FileError(const char* msg): _STD exception(msg) {}
+	};
+
 	class MD5Error final: public _STD exception
 	{
 	public:
@@ -72,28 +79,66 @@ namespace Data
 		return result;
 	}
 
-	_STD string GetIdentifyingCode(const _STD string& userName) noexcept(false)
+	_STD string Encryption(const _STD string& str)
 	{
-		return userName;
+		_STD string encrypted {};
+		for (const auto& ch: str)
+		{
+			encrypted.push_back(ch ^ 'x');
+		}
+
+		return encrypted;
 	}
 
-	_NODISCARD bool SaveData(const _STD string& identifyingCode, const _STD string& appid, const _STD string& appkey)
-		noexcept(false)
+	_STD string Decryption(const _STD string& str)
 	{
-		return false;
+		_STD string decrypted {};
+		for (const auto& ch: str)
+		{
+			decrypted.push_back(ch ^ 'x');
+		}
+
+		return decrypted;
 	}
 
-	info GetData(const _STD string& dentifyingCode) noexcept(false)
+	_NODISCARD bool SaveData(const _STD string& appid, const _STD string& appkey) noexcept(false)
 	{
-		return { "appid--", "appkey++" };
+		_STD ofstream file("./setting.ini", _STD ios::out | _STD ios::trunc);
+
+		if (!file.is_open())
+		{
+			throw ERR_DEF::FileError("File open error");
+		}
+
+		file << Encryption(appid) << _STD  endl;
+		file << Encryption(appkey) << _STD endl;
+
+		file.close();
+
+		return true;
+	}
+
+	AppIDAndKey GetData() noexcept(false)
+	{
+		_STD ifstream file("./setting.ini");
+
+		if (!file.is_open())
+		{
+			throw ERR_DEF::FileError("File open error");
+		}
+
+		_STD string appid;
+		_STD string appkey;
+
+		_STD		getline(file, appid);
+		_STD		getline(file, appkey);
+
+		file.close();
+
+		return { Decryption(appid), Decryption(appkey) };
 	}
 }  // namespace Data
 
-/// <summary>
-/// 获取字符串的 MD5 值
-/// </summary>
-/// <param name="str">目标字符串</param>
-/// <returns>字符串的 MD5 值</returns>
 _STD string GetMD5(const _STD string& str) noexcept
 {
 	try
@@ -108,33 +153,11 @@ _STD string GetMD5(const _STD string& str) noexcept
 	}
 }
 
-/// <summary>
-/// 生成与你 userName 关联的唯一身份凭证码
-/// </summary>
-/// <param name="userName">用户名，建议使用 AppID</param>
-/// <returns>返回身份码</returns>
-_STD string GetIdentifyingCode(const _STD string& userName) noexcept
-{
-	return ::Data::GetIdentifyingCode(userName);
-}
-
-/// <summary>
-/// 保存数据到本地
-/// </summary>
-/// <param name="identifyingCode">唯一身份凭证码</param>
-/// <param name="appid">与身份码关联的 AppID</param>
-/// <param name="appkey">对应 AppID 的 key</param>
-_NODISCARD bool
-	SaveData(const _STD string& identifyingCode, const _STD string& appid, const _STD string& appkey) noexcept
+_NODISCARD bool SaveData(const _STD string& appid, const _STD string& appkey) noexcept
 {
 	try
 	{
-		if (identifyingCode != GetIdentifyingCode(appid))
-		{
-			throw ::Data::IDError("ID error");
-		}
-
-		return ::Data::SaveData(identifyingCode, appid, appkey);
+		return ::Data::SaveData(appid, appkey);
 	}
 	catch (const _STD exception& e)
 	{
@@ -144,12 +167,7 @@ _NODISCARD bool
 	}
 }
 
-/// <summary>
-/// 获取本地数据
-/// </summary>
-/// <param name="dentifyingCode">唯一身份凭证码</param>
-/// <returns>返回一个 pair ，分别对应与身份码关联的 AppID 和对应的 key</returns>
-info GetData(const _STD string& dentifyingCode) noexcept
+AppIDAndKey GetData() noexcept
 {
-	return ::Data::GetData(dentifyingCode);
+	return ::Data::GetData();
 }

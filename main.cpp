@@ -8,11 +8,9 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
-	cout << "Hello, World!" << endl;
+	BaiduTranslate baiduTranslate("20210819000900600", "X3Q1Q1J");
 
-	SetBaiDuTranslateAppID("appid", "appkey");
-
-	BaiduTranslate("source", "from", "to");
+	cout << baiduTranslate.Translate("Hello, World!", "en", "zh") << endl;
 
 	return 0;
 }

@@ -4,6 +4,7 @@
 
 #include <format>
 #include <limits>
+#include <string>
 #include <utility>
 #include <version>
 
@@ -24,7 +25,18 @@
 
 
 #ifdef BAIDUTRANSLATE_EXPORTS
-	#define BAIDUTRANSLATE_API extern __declspec(dllexport)
+	#define BAIDUTRANSLATE_API __declspec(dllexport)
 #else
-	#define BAIDUTRANSLATE_API extern __declspec(dllimport)
+	#define BAIDUTRANSLATE_API __declspec(dllimport)
 #endif	// BAIDUTRANSLATE_EXPORTS
+
+
+
+using TranslateInfoType = struct
+{
+	_STD string source;
+	_STD string from;
+	_STD string to;
+	_STD string appid;
+	_STD string appkey;
+};
