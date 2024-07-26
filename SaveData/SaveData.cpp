@@ -2,9 +2,10 @@
 
 #include "pch.h"
 
+#include "../ExceptionHandling/ExceptionHandling.h"
 #include "SaveData.h"
 
-#include <array>
+#include <source_location>
 #include <cstddef>
 #include <exception>
 #include <format>
@@ -13,32 +14,19 @@
 #include <iostream>
 #include <iterator>
 #include <string>
+#include <vector>
 #include <version>
 
 #include <openssl/evp.h>
+#include <openssl/md5.h>
 
-namespace ERR_DEF
-{
-	class FileError final: public _STD exception
-	{
-	public:
-		explicit FileError(const char* msg): _STD exception(msg) {}
-	};
 
-	class MD5Error final: public _STD exception
-	{
-	public:
-		explicit MD5Error(const char* msg): _STD exception(msg) {}
-	};
 
-	class IDError final: public _STD exception
-	{
-	public:
-		explicit IDError(const char* msg): _STD exception(msg) {}
-	};
+#ifndef EXCEPTIONHADLING
+	#define EXCEPTIONHADLING ::
+#endif	// !EXCEPTIONHADLING
 
-	using OtherError = _STD exception;
-}  // namespace ERR_DEF
+
 
 SaveData::SaveData(void) noexcept
 {
@@ -48,7 +36,12 @@ SaveData::SaveData(void) noexcept
 
 		if (ctx == nullptr)
 		{
-			throw ERR_DEF::IDError("EVP_MD_CTX_new error");
+			const auto&			   source_location { _STD source_location::current() };
+
+			throw EXCEPTIONHADLING AppIDError("EVP_MD_CTX_new error",
+											  source_location.file_name(),
+											  source_location.function_name(),
+											  source_location.line());
 		}
 
 		if (EVP_DigestInit_ex(ctx, EVP_md5(), nullptr) != 1)
@@ -57,12 +50,17 @@ SaveData::SaveData(void) noexcept
 
 			ctx = nullptr;
 
-			throw ::ERR_DEF::MD5Error("EVP_DigestInit_ex error");
+			const auto&			   source_location { _STD source_location::current() };
+
+			throw EXCEPTIONHADLING MD5Error("EVP_DigestInit_ex error",
+											source_location.file_name(),
+											source_location.function_name(),
+											source_location.line());
 		}
 	}
 	catch (const _STD exception& e)
 	{
-		HandleException(e);
+		EXCEPTIONHADLING HandleException(e);
 	}
 }
 
@@ -82,7 +80,7 @@ _STD string SaveData::GetMD5(const _STD string& str) const noexcept
 	}
 	catch (const _STD exception& e)
 	{
-		HandleException(e);
+		EXCEPTIONHADLING HandleException(e);
 
 		return "";
 	}
@@ -96,7 +94,7 @@ _NODISCARD bool SaveData::SaveDataToLocal(const _STD string& appid, const _STD s
 	}
 	catch (const _STD exception& e)
 	{
-		HandleException(e);
+		EXCEPTIONHADLING HandleException(e);
 
 		return false;
 	}
@@ -110,7 +108,7 @@ AppIDAndKey SaveData::GetDataFromLocal() const noexcept
 	}
 	catch (const _STD exception& e)
 	{
-		HandleException(e);
+		EXCEPTIONHADLING HandleException(e);
 
 		return { "", "" };
 	}
@@ -120,27 +118,47 @@ _STD string SaveData::InterGetMD5(const _STD string& str) const noexcept(false)
 {
 	if (ctx == nullptr)
 	{
-		throw ERR_DEF::IDError("EVP_MD_CTX_new error");
+		const auto&			   source_location { _STD source_location::current() };
+
+		throw EXCEPTIONHADLING AppIDError("EVP_MD_CTX_new error",
+										  source_location.file_name(),
+										  source_location.function_name(),
+										  source_location.line());
 	}
 
 	if (EVP_DigestUpdate(ctx, str.c_str(), str.size()) != 1)
 	{
-		throw ::ERR_DEF::MD5Error("EVP_DigestUpdate error");
+		const auto&			   source_location { _STD source_location::current() };
+
+		throw EXCEPTIONHADLING MD5Error("EVP_DigestUpdate error",
+										source_location.file_name(),
+										source_location.function_name(),
+										source_location.line());
 	}
 
-	_STD array<unsigned char, EVP_MAX_MD_SIZE> hash = {};
+	_STD vector<unsigned char> hash(MD5_DIGEST_LENGTH, 0);
 
 	if (unsigned int hash_len = 0; EVP_DigestFinal_ex(ctx, hash.data(), &hash_len) != 1)
 	{
-		throw ::ERR_DEF::MD5Error("EVP_DigestFinal_ex error");
+		const auto&			   source_location { _STD source_location::current() };
+
+		throw EXCEPTIONHADLING MD5Error("EVP_DigestFinal_ex error",
+										source_location.file_name(),
+										source_location.function_name(),
+										source_location.line());
 	}
 
 	if (EVP_DigestInit_ex(ctx, EVP_md5(), nullptr) != 1)
 	{
-		throw ::ERR_DEF::MD5Error("EVP_DigestInit_ex error");
+		const auto&			   source_location { _STD source_location::current() };
+
+		throw EXCEPTIONHADLING MD5Error("EVP_DigestInit_ex error",
+										source_location.file_name(),
+										source_location.function_name(),
+										source_location.line());
 	}
 
-	_STD string result;
+	_STD string result {};
 
 	for (const auto& ch: hash)
 	{
@@ -184,7 +202,12 @@ bool SaveData::InterSaveData(const _STD string& appid, const _STD string& appkey
 
 	if (!file.is_open())
 	{
-		throw ERR_DEF::FileError("File open error");
+		const auto&			   source_location { _STD source_location::current() };
+
+		throw EXCEPTIONHADLING FileError("File open error",
+										 source_location.file_name(),
+										 source_location.function_name(),
+										 source_location.line());
 	}
 
 	file << InterEncryption(appid) << _STD	endl;
@@ -201,11 +224,16 @@ AppIDAndKey SaveData::InterGetData() const noexcept(false)
 
 	if (!file.is_open())
 	{
-		throw ERR_DEF::FileError("File open error");
+		const auto&			   source_location { _STD source_location::current() };
+
+		throw EXCEPTIONHADLING FileError("File open error",
+										 source_location.file_name(),
+										 source_location.function_name(),
+										 source_location.line());
 	}
 
-	_STD string appid;
-	_STD string appkey;
+	_STD string appid {};
+	_STD string appkey {};
 
 	_STD		getline(file, appid);
 	_STD		getline(file, appkey);
@@ -213,9 +241,4 @@ AppIDAndKey SaveData::InterGetData() const noexcept(false)
 	file.close();
 
 	return { InterDecryption(appid), InterDecryption(appkey) };
-}
-
-void SaveData::HandleException(const _STD exception& e) const noexcept
-{
-	_STD format_to(_STD ostream_iterator<char>(_STD cerr), "{}\n", e.what());
 }

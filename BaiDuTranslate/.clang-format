@@ -1481,7 +1481,7 @@ BreakAdjacentStringLiterals: true
 #       return;
 #     }
 #
-BreakAfterAttributes: Never
+BreakAfterAttributes: Leave
 # ^^^^^^
 
 # vvvvvv

@@ -1,14 +1,24 @@
 #pragma once
 
-#include "pch.h"
+/*
+* 此文件中大量使用了 C++20 的新特性，因此使用此文件之前请确保你的编译器支持并开启 C++20
+* 此文件中大量使用了 C++20 的新特性，因此使用此文件之前请确保你的编译器支持并开启 C++20
+* 此文件中大量使用了 C++20 的新特性，因此使用此文件之前请确保你的编译器支持并开启 C++20
+*/
 
-#include "../SaveData/SaveData.h"
-#include "__inter__AttributeDefinition.h"
+#include <version>
 
-#include <curl/curl.h>
-#include <exception>
-#include <memory>
-#include <string>
+#if defined(_HAS_CXX20)
+
+	#include "pch.h"
+
+	#include "../SaveData/SaveData.h"
+	#include "__inter__AttributeDefinition.h"
+
+	#include <curl/curl.h>
+	#include <exception>
+	#include <memory>
+	#include <string>
 
 class BaiduTranslate final
 {
@@ -37,22 +47,20 @@ public:
 											 const _STD string& to) noexcept;
 
 private:
-	TranslateInfoType TranslateInfo		= {};
-
-	CURL*			  curl				= nullptr;
-
-	_STD unique_ptr<SaveData> pSaveData = nullptr;
+	TranslateInfoType TranslateInfo {};
+	CURL*			  curl { nullptr };
+	_STD unique_ptr<SaveData> pSaveData { nullptr };
 
 	// 写回调函数必须是静态的
-	static _STD size_t WriteCallback(const char* data, _STD size_t size, _STD size_t nmemb, _STD string* userdata);
+	static _STD size_t InterWriteCallback(const char* data, _STD size_t size, _STD size_t nmemb, _STD string* userdata);
 
-	_STD string		   SourceEncode(const _STD string& source) const;
+	_STD string		   InterSourceEncode(const _STD string& source) const;
 
-	_STD string		   GetURL(void);
+	_STD string		   InterGetURL(void) noexcept(false);
 
-	_STD string		   GetErrorInfo(const _STD string& errorCode) const noexcept;
+	_STD string		   InterGetErrorInfo(const _STD string& errorCode) const noexcept;
 
-	_STD string		   InterTranslate(void);
-
-	void			   HandleException(const _STD exception& e) const noexcept;
+	_STD string		   InterTranslate(void) noexcept(false);
 };
+
+#endif	// defined(_HAS_CXX20)

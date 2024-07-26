@@ -1,12 +1,22 @@
 #pragma once
 
-#include "pch.h"
+/*
+* 此文件中大量使用了 C++20 的新特性，因此使用此文件之前请确保你的编译器支持并开启 C++20
+* 此文件中大量使用了 C++20 的新特性，因此使用此文件之前请确保你的编译器支持并开启 C++20
+* 此文件中大量使用了 C++20 的新特性，因此使用此文件之前请确保你的编译器支持并开启 C++20
+*/
 
-#include "__inter__AttributeDefinition.h"
+#include <version>
 
-#include <string>
+#if defined(_HAS_CXX20)
 
-#include <openssl/types.h>
+	#include "pch.h"
+
+	#include "__inter__AttributeDefinition.h"
+
+	#include <string>
+
+	#include <openssl/types.h>
 
 class SaveData final
 {
@@ -49,6 +59,6 @@ private:
 	_NODISCARD bool InterSaveData(const _STD string& appid, const _STD string& appkey) const noexcept(false);
 
 	AppIDAndKey		InterGetData() const noexcept(false);
-
-	void			HandleException(const _STD exception& e) const noexcept;
 };
+
+#endif	// defined(_HAS_CXX20)

@@ -2,15 +2,16 @@
 
 #include "pch.h"
 
+#include "../ExceptionHandling/ExceptionHandling.h"
 #include "../SaveData/SaveData.h"
 #include "BaiDuTranslate.h"
 
+#include <source_location>
 #include <type_traits>
 #include <cctype>
 #include <chrono>
 #include <exception>
 #include <format>
-#include <iostream>
 #include <iterator>
 #include <map>
 #include <memory>
@@ -23,39 +24,24 @@
 #include <json/reader.h>
 #include <json/value.h>
 
-namespace ERR_DEF
-{
-	class NetworkError final: public _STD exception
-	{
-	public:
-		explicit NetworkError(const char* msg): _STD exception(msg) {}
-	};
 
-	class JSONAnalysisError final: public _STD exception
-	{
-	public:
-		explicit JSONAnalysisError(const char* msg): _STD exception(msg) {}
-	};
 
-	class TranslateError final: public _STD exception
-	{
-	public:
-		explicit TranslateError(const char* msg): _STD exception(msg) {}
-	};
+#ifndef EXCEPTIONHADLING
+	#define EXCEPTIONHADLING ::
+#endif	// !EXCEPTIONHADLING
 
-	using OtherError = _STD exception;
-}  // namespace ERR_DEF
+
 
 namespace STATIC_INFO
 {
 	struct ErrorCodeInfo
 	{
-		_STD string meaning;
-		_STD string solution;
+		_STD string meaning {};
+		_STD string solution {};
 	};
 
 	// clang-format off
-	static const _STD map<_STD string, ErrorCodeInfo, _STD less<>> errorCodeMap = {
+	static const _STD map<_STD string, ErrorCodeInfo, _STD less<>> errorCodeMap {
 		{ "52000", { "成功", "成功" } },
 		{ "52001", { "请求超时", "检查请求原文是否超长，以及原文或译文参数是否在支持的语种列表里" } },
 		{ "52002", { "系统错误", "请重试" } },
@@ -82,7 +68,12 @@ BaiduTranslate::BaiduTranslate(const _STD string& appid, const _STD string& appk
 	{
 		if (curl_global_init(CURL_GLOBAL_ALL) != CURLE_OK)
 		{
-			throw ::ERR_DEF::NetworkError("curl_global_init error");
+			const auto&			   source_location { _STD source_location::current() };
+
+			throw EXCEPTIONHADLING NetworkError("初始化时 [curl_global_init(CURL_GLOBAL_ALL)] not ok",
+												source_location.file_name(),
+												source_location.function_name(),
+												source_location.line());
 		}
 
 		curl = curl_easy_init();
@@ -91,14 +82,19 @@ BaiduTranslate::BaiduTranslate(const _STD string& appid, const _STD string& appk
 		{
 			curl_global_cleanup();
 
-			throw ::ERR_DEF::NetworkError("curl_easy_init error");
+			const auto&			   source_location { _STD source_location::current() };
+
+			throw EXCEPTIONHADLING NetworkError("初始化时 [curl_easy_init()] return null",
+												source_location.file_name(),
+												source_location.function_name(),
+												source_location.line());
 		}
 
 		curl_easy_setopt(curl, CURLOPT_SSLVERSION, CURL_SSLVERSION_LAST);
 	}
 	catch (const _STD exception& e)
 	{
-		HandleException(e);
+		EXCEPTIONHADLING HandleException(e);
 	}
 
 	pSaveData = _STD make_unique<SaveData>();
@@ -145,24 +141,23 @@ _STD string BaiduTranslate::Translate(const _STD string& source,
 	}
 	catch (const _STD exception& e)
 	{
-		HandleException(e);
-
-		return "";
+		return EXCEPTIONHADLING HandleException(e);
 	}
 }
 
-_STD size_t BaiduTranslate::WriteCallback(const char* data, _STD size_t size, _STD size_t nmemb, _STD string* userdata)
+_STD size_t BaiduTranslate::
+	InterWriteCallback(const char* data, _STD size_t size, _STD size_t nmemb, _STD string* userdata)
 {
-	const _STD size_t totalSize = size * nmemb;
+	const auto& totalSize { size * nmemb };
 
 	userdata->append(data, totalSize);
 
 	return totalSize;
 }
 
-_STD string BaiduTranslate::SourceEncode(const _STD string& source) const
+_STD string BaiduTranslate::InterSourceEncode(const _STD string& source) const
 {
-	_STD string encodedStr = {};
+	_STD string encodedStr {};
 
 	for (const auto& ch: source)
 	{
@@ -183,37 +178,47 @@ _STD string BaiduTranslate::SourceEncode(const _STD string& source) const
 	return _STD move(encodedStr);
 }
 
-_STD string BaiduTranslate::GetURL(void)
+_STD string BaiduTranslate::InterGetURL(void) noexcept(false)
 {
-	const auto [appid, appkey] = pSaveData->GetDataFromLocal();
-	const auto salt			   = _STD chrono::system_clock::to_time_t(_STD chrono::system_clock::now());
+	const auto& [appid, appkey] { pSaveData->GetDataFromLocal() };
+	const auto& salt { _STD chrono::system_clock::to_time_t(_STD chrono::system_clock::now()) };
 
-	_STD string			   msg = {};
-	_STD				   format_to(_STD back_inserter(msg), "{}{}{}{}", appid, TranslateInfo.source, salt, appkey);
+	_STD string msg {};
+	_STD		format_to(_STD back_inserter(msg), "{}{}{}{}", appid, TranslateInfo.source, salt, appkey);
 
-	const auto			   sign = pSaveData->GetMD5(msg);
+	const auto& sign { pSaveData->GetMD5(msg) };
 
-	_STD string			   url {};
-	_STD				   format_to(_STD back_inserter(url),
-									 "http://api.fanyi.baidu.com/api/trans/vip/translate?q={}&from={}&to={}&appid={}&salt={}&sign={}",
-									 SourceEncode(TranslateInfo.source),
-									 TranslateInfo.from,
-									 TranslateInfo.to,
-									 appid,
-									 salt,
-									 sign);
+	if (sign.empty())
+	{
+		const auto&			   source_location { _STD source_location::current() };
 
-	return _STD			   move(url);
+		throw EXCEPTIONHADLING MD5Error("pSaveData->GetMD5(msg) err",
+										source_location.file_name(),
+										source_location.function_name(),
+										source_location.line());
+	}
+
+	_STD string url {};
+	_STD		format_to(_STD back_inserter(url),
+						  "http://api.fanyi.baidu.com/api/trans/vip/translate?q={}&from={}&to={}&appid={}&salt={}&sign={}",
+						  InterSourceEncode(TranslateInfo.source),
+						  TranslateInfo.from,
+						  TranslateInfo.to,
+						  appid,
+						  salt,
+						  sign);
+
+	return _STD move(url);
 }
 
-_STD string BaiduTranslate::GetErrorInfo(const _STD string& errorCode) const noexcept
+_STD string BaiduTranslate::InterGetErrorInfo(const _STD string& errorCode) const noexcept
 {
-	_STD string errorInfo = {};
+	_STD string errorInfo {};
 
-	if (auto it = ::STATIC_INFO::errorCodeMap.find(errorCode); it != ::STATIC_INFO::errorCodeMap.end())
+	if (const auto& it { ::STATIC_INFO::errorCodeMap.find(errorCode) }; it != ::STATIC_INFO::errorCodeMap.end())
 	{
 		_STD format_to(_STD back_inserter(errorInfo),
-					   "错误代码：{}\n含义：{}\t建议解决方案：{}",
+					   "错误码：{}\t含义：{}\n建议解决方案：{}\n",
 					   errorCode,
 					   it->second.meaning,
 					   it->second.solution);
@@ -221,7 +226,7 @@ _STD string BaiduTranslate::GetErrorInfo(const _STD string& errorCode) const noe
 	else
 	{
 		_STD format_to(_STD back_inserter(errorInfo),
-					   "错误代码:{}\n含义：{}\t建议解决方案：{}",
+					   "错误代码:{}\t含义：{}\n建议解决方案：{}\n",
 					   errorCode,
 					   "未定义的错误代码！",
 					   "请联系技术支持");
@@ -230,37 +235,62 @@ _STD string BaiduTranslate::GetErrorInfo(const _STD string& errorCode) const noe
 	return errorInfo;
 }
 
-_STD string BaiduTranslate::InterTranslate(void)
+_STD string BaiduTranslate::InterTranslate(void) noexcept(false)
 {
-	_STD string readBuffer = {};
+	_STD string readBuffer {};
+	_STD string url {};
 
-	curl_easy_setopt(curl, CURLOPT_URL, GetURL().data());
+	try
+	{
+		url = InterGetURL();
+	}
+	catch (const _STD exception&)
+	{
+		const auto&			   source_location { _STD source_location::current() };
 
-	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, &BaiduTranslate::WriteCallback);
+		throw EXCEPTIONHADLING URLError("InterGetURL error",
+										source_location.file_name(),
+										source_location.function_name(),
+										source_location.line());
+	}
+
+	curl_easy_setopt(curl, CURLOPT_URL, url.data());
+
+	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, &BaiduTranslate::InterWriteCallback);
 
 	curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
 
-	if (auto res = curl_easy_perform(curl); res != CURLE_OK)
+	if (const auto& res { curl_easy_perform(curl) }; res != CURLE_OK)
 	{
-		throw ::ERR_DEF::NetworkError(curl_easy_strerror(res));
+		const auto&			   source_location { _STD source_location::current() };
+
+		throw EXCEPTIONHADLING NetworkError(curl_easy_strerror(res),
+											source_location.file_name(),
+											source_location.function_name(),
+											source_location.line());
 	}
 
-	Json::Value root = {};
+	Json::Value root {};
 
 	if (Json::Reader reader; !reader.parse(readBuffer, root))
 	{
-		throw ::ERR_DEF::JSONAnalysisError("JSON analysis error");
+		const auto&			   source_location { _STD source_location::current() };
+
+		throw EXCEPTIONHADLING JSONAnalysisError("JSON analysis error",
+												 source_location.file_name(),
+												 source_location.function_name(),
+												 source_location.line());
 	}
 
-	if (_STD string error_code = root["error_code"].asString(); (error_code != "") && (error_code != "52000"))
+	if (const auto& error_code { root["error_code"].asString() }; (error_code != "") && (error_code != "52000"))
 	{
-		throw ::ERR_DEF::TranslateError(GetErrorInfo(error_code).c_str());
+		const auto&			   source_location { _STD source_location::current() };
+
+		throw EXCEPTIONHADLING URLError(InterGetErrorInfo(error_code).c_str(),
+										source_location.file_name(),
+										source_location.function_name(),
+										source_location.line());
 	}
 
 	return root["trans_result"][0]["dst"].asString();
-}
-
-void BaiduTranslate::HandleException(const _STD exception& e) const noexcept
-{
-	_STD format_to(_STD ostream_iterator<char>(_STD cerr), "{}\n", e.what());
 }

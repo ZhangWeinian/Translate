@@ -1,8 +1,11 @@
 #pragma once
 
-#include "./BaiDuTranslate/BaiDuTranslate.h"
-
 #include <iostream>
+#include <version>
+
+#if defined(_HAS_CXX20)
+	#include "./BaiDuTranslate/BaiDuTranslate.h"
+#endif	// defined(_HAS_CXX20)
 
 using namespace std;
 
