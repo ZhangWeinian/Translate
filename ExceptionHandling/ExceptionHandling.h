@@ -35,23 +35,37 @@ public:
 		_STD runtime_error(errMsg)
 	{
 		// clang-format off
-		_STD format_to(_STD back_inserter(what_str),
-					   "[信息]: {}\n\n[文件]: {}\n\n[函数]: \"{}\"\n\n[行号]: {}\n",
+		_STD format_to(_STD back_inserter(logMsg),
+					   "[信息]: {}\n\n[发生在]: {}\n\n[抛出异常的函数]: \"{}\"\n\n[所在行号]: {}\n",
 					   errMsg,
 					   errFile,
 					   errFunc,
 					   errLine);	 // clang-format on
+
+		_STD format_to(_STD back_inserter(showMsg), "{}", errMsg);
 	}
 
 	~__inter__RunTimeError(void) noexcept override = default;
 
 	const char* what(void) const final
 	{
-		return what_str.c_str() != nullptr ? what_str.c_str() : "未知";
+		if (!logMsg.empty())
+		{
+			InterSetLog();
+		}
+
+		return showMsg.c_str() != nullptr ? showMsg.c_str() : "错误信息未知";
 	}
 
 private:
-	_STD string what_str {};
+	_STD string showMsg {};
+	_STD string logMsg {};
+
+	/// <summary>
+	/// 设置日志
+	/// </summary>
+	/// <param name=""></param>
+	void InterSetLog(void) const noexcept;
 };
 
 /// <summary>

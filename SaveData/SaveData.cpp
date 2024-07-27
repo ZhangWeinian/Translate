@@ -80,9 +80,7 @@ _STD string SaveData::GetMD5(const _STD string& str) const noexcept
 	}
 	catch (const _STD exception& e)
 	{
-		EXCEPTIONHADLING HandleException(e);
-
-		return "";
+		return EXCEPTIONHADLING HandleException(e);
 	}
 }
 
@@ -198,9 +196,7 @@ _STD string SaveData::InterDecryption(const _STD string& str) const noexcept
 
 bool SaveData::InterSaveDataToLocal(const _STD string& appid, const _STD string& appkey) const noexcept(false)
 {
-	_STD ofstream file("./setting.ini", _STD ios::out | _STD ios::trunc);
-
-	if (!file.is_open())
+	if (_STD ofstream file("./setting.ini", _STD ios::out | _STD ios::trunc); !file.is_open())
 	{
 		const auto&			   source_location { _STD source_location::current() };
 
@@ -209,20 +205,23 @@ bool SaveData::InterSaveDataToLocal(const _STD string& appid, const _STD string&
 										 source_location.function_name(),
 										 source_location.line());
 	}
+	else
+	{
+		file << InterEncryption(appid) << _STD	endl;
+		file << InterEncryption(appkey) << _STD endl;
 
-	file << InterEncryption(appid) << _STD	endl;
-	file << InterEncryption(appkey) << _STD endl;
-
-	file.close();
+		file.close();
+	}
 
 	return true;
 }
 
 AppIDAndKey SaveData::InterGetDataFromLocal() const noexcept(false)
 {
-	_STD ifstream file("./setting.ini");
+	_STD string appid {};
+	_STD string appkey {};
 
-	if (!file.is_open())
+	if (_STD ifstream file("./setting.ini"); !file.is_open())
 	{
 		const auto&			   source_location { _STD source_location::current() };
 
@@ -231,14 +230,23 @@ AppIDAndKey SaveData::InterGetDataFromLocal() const noexcept(false)
 										 source_location.function_name(),
 										 source_location.line());
 	}
+	else
+	{
+		_STD getline(file, appid);
+		_STD getline(file, appkey);
 
-	_STD string appid {};
-	_STD string appkey {};
+		file.close();
+	}
 
-	_STD		getline(file, appid);
-	_STD		getline(file, appkey);
+	if (appid.empty() || appkey.empty())
+	{
+		const auto&			   source_location { _STD source_location::current() };
 
-	file.close();
+		throw EXCEPTIONHADLING FileError("读取 setting.ini 的内容为空",
+										 source_location.file_name(),
+										 source_location.function_name(),
+										 source_location.line());
+	}
 
 	return { InterDecryption(appid), InterDecryption(appkey) };
 }

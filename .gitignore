@@ -361,3 +361,10 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/BaiDuTranslate/.clang-format
+/ExceptionHandling/.clang-format
+/SaveData/.clang-format
+/.clang-format
+/TranslateGUI/.clang-format
+/TranslateModernGUI/.clang-format
+/main.cpp

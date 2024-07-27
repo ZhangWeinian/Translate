@@ -15,6 +15,10 @@
 	#define _CSTD ::
 #endif	// !_CSTD
 
+#ifndef _CHRONO
+	#define _CHRONO ::std::chrono::
+#endif	// !_CHRONO
+
 #ifndef _NODISCARD
 	#define _NODISCARD [[nodiscard]]
 #endif	// !_NODISCARD

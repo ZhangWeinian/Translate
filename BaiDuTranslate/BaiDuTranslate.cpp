@@ -103,12 +103,22 @@ BaiduTranslate::BaiduTranslate(const _STD string& appid, const _STD string& appk
 
 	pSaveData = _STD make_unique<SaveData>();
 
+	if (appid.empty() || appkey.empty())
+	{
+		return;
+	}
+
 	SetAppID(appid, appkey);
 }
 
 BaiduTranslate::BaiduTranslate(void) noexcept
 {
 	const auto& [appid, appkey] { pSaveData->GetDataFromLocal() };
+
+	if (appid.empty() || appkey.empty())
+	{
+		return;
+	}
 
 	TranslateInfo.appid	 = appid;
 	TranslateInfo.appkey = appkey;
@@ -193,7 +203,7 @@ _STD string BaiduTranslate::InterSourceEncode(const _STD string& source) const
 _STD string BaiduTranslate::InterGetURL(void) noexcept(false)
 {
 	const auto& [appid, appkey] { pSaveData->GetDataFromLocal() };
-	const auto& salt { _STD chrono::system_clock::to_time_t(_STD chrono::system_clock::now()) };
+	const auto& salt { _CHRONO system_clock::to_time_t(_CHRONO system_clock::now()) };
 
 	_STD string msg {};
 
@@ -201,11 +211,11 @@ _STD string BaiduTranslate::InterGetURL(void) noexcept(false)
 
 	const auto& sign { pSaveData->GetMD5(msg) };
 
-	if (sign.empty())
+	if (sign.size() != 32)
 	{
 		const auto&			   source_location { _STD source_location::current() };
 
-		throw EXCEPTIONHADLING MD5Error("获取字符串 md5 值意外为空",
+		throw EXCEPTIONHADLING MD5Error("获取字符串 md5 值错误",
 										source_location.file_name(),
 										source_location.function_name(),
 										source_location.line());
@@ -251,6 +261,16 @@ _STD string BaiduTranslate::InterGetErrorInfo(const _STD string& errorCode) cons
 
 _STD string BaiduTranslate::InterTranslate(void) noexcept(false)
 {
+	if (TranslateInfo.appid.empty() || TranslateInfo.appkey.empty())
+	{
+		const auto&			   source_location { _STD source_location::current() };
+
+		throw EXCEPTIONHADLING AppIDError("AppID 或 AppKey 为空",
+										  source_location.file_name(),
+										  source_location.function_name(),
+										  source_location.line());
+	}
+
 	_STD string readBuffer {};
 	_STD string url {};
 

@@ -49,7 +49,9 @@ public:
 
 private:
 	TranslateInfoType TranslateInfo {};
+
 	CURL*			  curl { nullptr };
+
 	_STD unique_ptr<SaveData> pSaveData { nullptr };
 
 	// 写回调函数必须是静态的

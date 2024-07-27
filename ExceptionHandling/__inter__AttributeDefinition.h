@@ -14,6 +14,10 @@
 	#define _CSTD ::
 #endif	// !_CSTD
 
+#ifndef _SPDLOG
+	#define _SPDLOG ::spdlog::
+#endif	// !_SPDLOG
+
 
 
 #ifdef EXCEPTIONHANDLING_EXPORTS
