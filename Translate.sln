@@ -10,6 +10,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SaveData", "SaveData\SaveDa
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ExceptionHandling", "ExceptionHandling\ExceptionHandling.vcxproj", "{57FB4125-65BF-4DE5-B2A8-8CAD53CBCDFB}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TranslateGUI", "TranslateGUI\TranslateGUI.vcxproj", "{FD9F819F-0ED7-4208-B9CB-C939C5809D7D}"
+EndProject
 Global
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {369D899D-DA7C-4737-983E-98B13E8714AF}
@@ -47,6 +49,14 @@ Global
 		{6596B5B1-4770-485F-A80A-A4F3A6AE7012}.Release|x64.Build.0 = Release|x64
 		{6596B5B1-4770-485F-A80A-A4F3A6AE7012}.Release|x86.ActiveCfg = Release|Win32
 		{6596B5B1-4770-485F-A80A-A4F3A6AE7012}.Release|x86.Build.0 = Release|Win32
+		{FD9F819F-0ED7-4208-B9CB-C939C5809D7D}.Debug|x64.ActiveCfg = Debug|x64
+		{FD9F819F-0ED7-4208-B9CB-C939C5809D7D}.Debug|x64.Build.0 = Debug|x64
+		{FD9F819F-0ED7-4208-B9CB-C939C5809D7D}.Debug|x86.ActiveCfg = Debug|x64
+		{FD9F819F-0ED7-4208-B9CB-C939C5809D7D}.Debug|x86.Build.0 = Debug|x64
+		{FD9F819F-0ED7-4208-B9CB-C939C5809D7D}.Release|x64.ActiveCfg = Release|x64
+		{FD9F819F-0ED7-4208-B9CB-C939C5809D7D}.Release|x64.Build.0 = Release|x64
+		{FD9F819F-0ED7-4208-B9CB-C939C5809D7D}.Release|x86.ActiveCfg = Release|x64
+		{FD9F819F-0ED7-4208-B9CB-C939C5809D7D}.Release|x86.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64

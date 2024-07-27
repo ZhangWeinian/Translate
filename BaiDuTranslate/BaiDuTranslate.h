@@ -16,7 +16,6 @@
 	#include "__inter__AttributeDefinition.h"
 
 	#include <curl/curl.h>
-	#include <exception>
 	#include <memory>
 	#include <string>
 
@@ -24,6 +23,8 @@ class BaiduTranslate final
 {
 public:
 	BAIDUTRANSLATE_API explicit BaiduTranslate(const _STD string& appid, const _STD string& appkey) noexcept;
+
+	BAIDUTRANSLATE_API explicit BaiduTranslate(void) noexcept;
 
 	BAIDUTRANSLATE_API ~BaiduTranslate(void) noexcept;
 

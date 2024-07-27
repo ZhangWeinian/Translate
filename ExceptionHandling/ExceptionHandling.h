@@ -34,8 +34,6 @@ public:
 						  const _STD uint_least32_t& errLine = 0) noexcept:
 		_STD runtime_error(errMsg)
 	{
-		what_str.clear();
-
 		// clang-format off
 		_STD format_to(_STD back_inserter(what_str),
 					   "[信息]: {}\n\n[文件]: {}\n\n[函数]: \"{}\"\n\n[行号]: {}\n",
@@ -71,10 +69,10 @@ public:
 												const _STD string_view	   errFile,
 												const _STD string_view	   errFunc,
 												const _STD uint_least32_t& errLine) noexcept:
-		__inter__RunTimeError(errMsg, errFile, errFunc, errLine)
+		__inter__RunTimeError("curl 错误：" + errMsg, errFile, errFunc, errLine)
 	{}
 
-	~NetworkError(void) noexcept override = default;
+	EXCEPTIONHANDLING_API ~NetworkError(void) noexcept override = default;
 };
 
 /// <summary>
@@ -92,10 +90,10 @@ public:
 													 const _STD string_view		errFile,
 													 const _STD string_view		errFunc,
 													 const _STD uint_least32_t& errLine) noexcept:
-		__inter__RunTimeError(errMsg, errFile, errFunc, errLine)
+		__inter__RunTimeError("json 错误：" + errMsg, errFile, errFunc, errLine)
 	{}
 
-	~JSONAnalysisError(void) noexcept override = default;
+	EXCEPTIONHANDLING_API ~JSONAnalysisError(void) noexcept override = default;
 };
 
 /// <summary>
@@ -113,10 +111,10 @@ public:
 											const _STD string_view	   errFile,
 											const _STD string_view	   errFunc,
 											const _STD uint_least32_t& errLine) noexcept:
-		__inter__RunTimeError(errMsg, errFile, errFunc, errLine)
+		__inter__RunTimeError("url 错误：" + errMsg, errFile, errFunc, errLine)
 	{}
 
-	~URLError(void) noexcept override = default;
+	EXCEPTIONHANDLING_API ~URLError(void) noexcept override = default;
 };
 
 /// <summary>
@@ -134,10 +132,10 @@ public:
 											 const _STD string_view		errFile,
 											 const _STD string_view		errFunc,
 											 const _STD uint_least32_t& errLine) noexcept:
-		__inter__RunTimeError(errMsg, errFile, errFunc, errLine)
+		__inter__RunTimeError("文件流错误：" + errMsg, errFile, errFunc, errLine)
 	{}
 
-	~FileError(void) noexcept override = default;
+	EXCEPTIONHANDLING_API ~FileError(void) noexcept override = default;
 };
 
 /// <summary>
@@ -155,10 +153,10 @@ public:
 											const _STD string_view	   errFile,
 											const _STD string_view	   errFunc,
 											const _STD uint_least32_t& errLine) noexcept:
-		__inter__RunTimeError(errMsg, errFile, errFunc, errLine)
+		__inter__RunTimeError("md5 错误：" + errMsg, errFile, errFunc, errLine)
 	{}
 
-	~MD5Error(void) noexcept override = default;
+	EXCEPTIONHANDLING_API ~MD5Error(void) noexcept override = default;
 };
 
 /// <summary>
@@ -176,10 +174,10 @@ public:
 											  const _STD string_view	 errFile,
 											  const _STD string_view	 errFunc,
 											  const _STD uint_least32_t& errLine) noexcept:
-		__inter__RunTimeError(errMsg, errFile, errFunc, errLine)
+		__inter__RunTimeError("用户信息错误：" + errMsg, errFile, errFunc, errLine)
 	{}
 
-	~AppIDError(void) noexcept override = default;
+	EXCEPTIONHANDLING_API ~AppIDError(void) noexcept override = default;
 };
 
 /// <summary>
@@ -197,10 +195,10 @@ public:
 											  const _STD string_view	 errFile,
 											  const _STD string_view	 errFunc,
 											  const _STD uint_least32_t& errLine) noexcept:
-		__inter__RunTimeError(errMsg, errFile, errFunc, errLine)
+		__inter__RunTimeError("其他错误：" + errMsg, errFile, errFunc, errLine)
 	{}
 
-	~OtherError(void) noexcept override = default;
+	EXCEPTIONHANDLING_API ~OtherError(void) noexcept override = default;
 };
 
 /// <summary>
@@ -209,5 +207,6 @@ public:
 /// <param name="e">标准库异常及其派生类</param>
 /// <returns></returns>
 EXCEPTIONHANDLING_API _STD string HandleException(const _STD exception& e) noexcept;
+
 
 #endif	// _HAS_CXX20

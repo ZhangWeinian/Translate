@@ -43,7 +43,6 @@ public:
 	/// <summary>
 	/// 获取本地数据
 	/// </summary>
-	/// <param name="dentifyingCode">唯一身份凭证码</param>
 	/// <returns>返回一个 pair ，分别对应与身份码关联的 AppID 和对应的 key</returns>
 	SAVEDATA_API AppIDAndKey GetDataFromLocal() const noexcept;
 
@@ -56,9 +55,9 @@ private:
 
 	_STD string		InterDecryption(const _STD string& str) const noexcept;
 
-	_NODISCARD bool InterSaveData(const _STD string& appid, const _STD string& appkey) const noexcept(false);
+	_NODISCARD bool InterSaveDataToLocal(const _STD string& appid, const _STD string& appkey) const noexcept(false);
 
-	AppIDAndKey		InterGetData() const noexcept(false);
+	AppIDAndKey		InterGetDataFromLocal() const noexcept(false);
 };
 
 #endif	// defined(_HAS_CXX20)

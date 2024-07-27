@@ -38,7 +38,7 @@ SaveData::SaveData(void) noexcept
 		{
 			const auto&			   source_location { _STD source_location::current() };
 
-			throw EXCEPTIONHADLING AppIDError("EVP_MD_CTX_new error",
+			throw EXCEPTIONHADLING AppIDError("EVP_MD_CTX_new() 错误",
 											  source_location.file_name(),
 											  source_location.function_name(),
 											  source_location.line());
@@ -52,7 +52,7 @@ SaveData::SaveData(void) noexcept
 
 			const auto&			   source_location { _STD source_location::current() };
 
-			throw EXCEPTIONHADLING MD5Error("EVP_DigestInit_ex error",
+			throw EXCEPTIONHADLING MD5Error("EVP_DigestInit_ex(ctx, EVP_md5(), nullptr) 返回值不为 1",
 											source_location.file_name(),
 											source_location.function_name(),
 											source_location.line());
@@ -90,7 +90,7 @@ _NODISCARD bool SaveData::SaveDataToLocal(const _STD string& appid, const _STD s
 {
 	try
 	{
-		return InterSaveData(appid, appkey);
+		return InterSaveDataToLocal(appid, appkey);
 	}
 	catch (const _STD exception& e)
 	{
@@ -104,7 +104,7 @@ AppIDAndKey SaveData::GetDataFromLocal() const noexcept
 {
 	try
 	{
-		return InterGetData();
+		return InterGetDataFromLocal();
 	}
 	catch (const _STD exception& e)
 	{
@@ -120,7 +120,7 @@ _STD string SaveData::InterGetMD5(const _STD string& str) const noexcept(false)
 	{
 		const auto&			   source_location { _STD source_location::current() };
 
-		throw EXCEPTIONHADLING AppIDError("EVP_MD_CTX_new error",
+		throw EXCEPTIONHADLING AppIDError("ctx 为空",
 										  source_location.file_name(),
 										  source_location.function_name(),
 										  source_location.line());
@@ -130,7 +130,7 @@ _STD string SaveData::InterGetMD5(const _STD string& str) const noexcept(false)
 	{
 		const auto&			   source_location { _STD source_location::current() };
 
-		throw EXCEPTIONHADLING MD5Error("EVP_DigestUpdate error",
+		throw EXCEPTIONHADLING MD5Error("EVP_DigestUpdate(ctx, str.c_str(), str.size()) 不为 1",
 										source_location.file_name(),
 										source_location.function_name(),
 										source_location.line());
@@ -142,7 +142,7 @@ _STD string SaveData::InterGetMD5(const _STD string& str) const noexcept(false)
 	{
 		const auto&			   source_location { _STD source_location::current() };
 
-		throw EXCEPTIONHADLING MD5Error("EVP_DigestFinal_ex error",
+		throw EXCEPTIONHADLING MD5Error("EVP_DigestFinal_ex(ctx, hash.data(), &hash_len) 不为 1",
 										source_location.file_name(),
 										source_location.function_name(),
 										source_location.line());
@@ -152,7 +152,7 @@ _STD string SaveData::InterGetMD5(const _STD string& str) const noexcept(false)
 	{
 		const auto&			   source_location { _STD source_location::current() };
 
-		throw EXCEPTIONHADLING MD5Error("EVP_DigestInit_ex error",
+		throw EXCEPTIONHADLING MD5Error("EVP_DigestInit_ex(ctx, EVP_md5(), nullptr) 不为 1",
 										source_location.file_name(),
 										source_location.function_name(),
 										source_location.line());
@@ -196,7 +196,7 @@ _STD string SaveData::InterDecryption(const _STD string& str) const noexcept
 	return decrypted;
 }
 
-bool SaveData::InterSaveData(const _STD string& appid, const _STD string& appkey) const noexcept(false)
+bool SaveData::InterSaveDataToLocal(const _STD string& appid, const _STD string& appkey) const noexcept(false)
 {
 	_STD ofstream file("./setting.ini", _STD ios::out | _STD ios::trunc);
 
@@ -204,7 +204,7 @@ bool SaveData::InterSaveData(const _STD string& appid, const _STD string& appkey
 	{
 		const auto&			   source_location { _STD source_location::current() };
 
-		throw EXCEPTIONHADLING FileError("File open error",
+		throw EXCEPTIONHADLING FileError("打开 setting.ini 错误",
 										 source_location.file_name(),
 										 source_location.function_name(),
 										 source_location.line());
@@ -218,7 +218,7 @@ bool SaveData::InterSaveData(const _STD string& appid, const _STD string& appkey
 	return true;
 }
 
-AppIDAndKey SaveData::InterGetData() const noexcept(false)
+AppIDAndKey SaveData::InterGetDataFromLocal() const noexcept(false)
 {
 	_STD ifstream file("./setting.ini");
 
@@ -226,7 +226,7 @@ AppIDAndKey SaveData::InterGetData() const noexcept(false)
 	{
 		const auto&			   source_location { _STD source_location::current() };
 
-		throw EXCEPTIONHADLING FileError("File open error",
+		throw EXCEPTIONHADLING FileError("打开 setting.ini 错误",
 										 source_location.file_name(),
 										 source_location.function_name(),
 										 source_location.line());

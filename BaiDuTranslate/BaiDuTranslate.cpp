@@ -26,6 +26,10 @@
 
 
 
+#ifndef _SAVEDATA
+	#define _SAVEDATA ::
+#endif	// !_SAVEDATA
+
 #ifndef EXCEPTIONHADLING
 	#define EXCEPTIONHADLING ::
 #endif	// !EXCEPTIONHADLING
@@ -70,7 +74,7 @@ BaiduTranslate::BaiduTranslate(const _STD string& appid, const _STD string& appk
 		{
 			const auto&			   source_location { _STD source_location::current() };
 
-			throw EXCEPTIONHADLING NetworkError("初始化时 [curl_global_init(CURL_GLOBAL_ALL)] not ok",
+			throw EXCEPTIONHADLING NetworkError("curl_global_init(CURL_GLOBAL_ALL) 返回错误值",
 												source_location.file_name(),
 												source_location.function_name(),
 												source_location.line());
@@ -84,7 +88,7 @@ BaiduTranslate::BaiduTranslate(const _STD string& appid, const _STD string& appk
 
 			const auto&			   source_location { _STD source_location::current() };
 
-			throw EXCEPTIONHADLING NetworkError("初始化时 [curl_easy_init()] return null",
+			throw EXCEPTIONHADLING NetworkError("curl_easy_init()] 返回空",
 												source_location.file_name(),
 												source_location.function_name(),
 												source_location.line());
@@ -100,6 +104,14 @@ BaiduTranslate::BaiduTranslate(const _STD string& appid, const _STD string& appk
 	pSaveData = _STD make_unique<SaveData>();
 
 	SetAppID(appid, appkey);
+}
+
+BaiduTranslate::BaiduTranslate(void) noexcept
+{
+	const auto& [appid, appkey] { pSaveData->GetDataFromLocal() };
+
+	TranslateInfo.appid	 = appid;
+	TranslateInfo.appkey = appkey;
 }
 
 BaiduTranslate::~BaiduTranslate(void) noexcept
@@ -184,6 +196,7 @@ _STD string BaiduTranslate::InterGetURL(void) noexcept(false)
 	const auto& salt { _STD chrono::system_clock::to_time_t(_STD chrono::system_clock::now()) };
 
 	_STD string msg {};
+
 	_STD		format_to(_STD back_inserter(msg), "{}{}{}{}", appid, TranslateInfo.source, salt, appkey);
 
 	const auto& sign { pSaveData->GetMD5(msg) };
@@ -192,13 +205,14 @@ _STD string BaiduTranslate::InterGetURL(void) noexcept(false)
 	{
 		const auto&			   source_location { _STD source_location::current() };
 
-		throw EXCEPTIONHADLING MD5Error("pSaveData->GetMD5(msg) err",
+		throw EXCEPTIONHADLING MD5Error("获取字符串 md5 值意外为空",
 										source_location.file_name(),
 										source_location.function_name(),
 										source_location.line());
 	}
 
 	_STD string url {};
+
 	_STD		format_to(_STD back_inserter(url),
 						  "http://api.fanyi.baidu.com/api/trans/vip/translate?q={}&from={}&to={}&appid={}&salt={}&sign={}",
 						  InterSourceEncode(TranslateInfo.source),
@@ -248,7 +262,7 @@ _STD string BaiduTranslate::InterTranslate(void) noexcept(false)
 	{
 		const auto&			   source_location { _STD source_location::current() };
 
-		throw EXCEPTIONHADLING URLError("InterGetURL error",
+		throw EXCEPTIONHADLING URLError("获取 url 错误",
 										source_location.file_name(),
 										source_location.function_name(),
 										source_location.line());
@@ -276,7 +290,7 @@ _STD string BaiduTranslate::InterTranslate(void) noexcept(false)
 	{
 		const auto&			   source_location { _STD source_location::current() };
 
-		throw EXCEPTIONHADLING JSONAnalysisError("JSON analysis error",
+		throw EXCEPTIONHADLING JSONAnalysisError("初始化 json 数据错误",
 												 source_location.file_name(),
 												 source_location.function_name(),
 												 source_location.line());
@@ -286,11 +300,23 @@ _STD string BaiduTranslate::InterTranslate(void) noexcept(false)
 	{
 		const auto&			   source_location { _STD source_location::current() };
 
-		throw EXCEPTIONHADLING URLError(InterGetErrorInfo(error_code).c_str(),
-										source_location.file_name(),
-										source_location.function_name(),
-										source_location.line());
+		throw EXCEPTIONHADLING JSONAnalysisError(InterGetErrorInfo(error_code).c_str(),
+												 source_location.file_name(),
+												 source_location.function_name(),
+												 source_location.line());
 	}
 
-	return root["trans_result"][0]["dst"].asString();
+	try
+	{
+		return root["trans_result"][0]["dst"].asString();
+	}
+	catch (const _STD exception&)
+	{
+		const auto&			   source_location { _STD source_location::current() };
+
+		throw EXCEPTIONHADLING JSONAnalysisError("返回的 json 数据无法被正确解析",
+												 source_location.file_name(),
+												 source_location.function_name(),
+												 source_location.line());
+	}
 }
