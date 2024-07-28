@@ -196,7 +196,7 @@ _STD string SaveData::InterDecryption(const _STD string& str) const noexcept
 
 bool SaveData::InterSaveDataToLocal(const _STD string& appid, const _STD string& appkey) const noexcept(false)
 {
-	if (_STD ofstream file("./setting.ini", _STD ios::out | _STD ios::trunc); !file.is_open())
+	if (_STD ofstream file("./setting/setting.ini", _STD ios::out | _STD ios::trunc); !file.is_open())
 	{
 		const auto&			   source_location { _STD source_location::current() };
 
@@ -221,7 +221,7 @@ AppIDAndKey SaveData::InterGetDataFromLocal() const noexcept(false)
 	_STD string appid {};
 	_STD string appkey {};
 
-	if (_STD ifstream file("./setting.ini"); !file.is_open())
+	if (_STD ifstream file("./setting/setting.ini"); !file.is_open())
 	{
 		const auto&			   source_location { _STD source_location::current() };
 
