@@ -1,27 +1,31 @@
 #pragma once
 
 #include "MainWindow.g.h"
+#include "MainWindow.xaml.g.h"
+#include "winrt/base.h"
+#include "winrt/impl/Microsoft.UI.Xaml.2.h"
+
+#include <cstdint>
 
 namespace winrt::TranslateModernGUI::implementation
 {
-    struct MainWindow : MainWindowT<MainWindow>
-    {
-        MainWindow()
-        {
-            // Xaml objects should not call InitializeComponent during construction.
-            // See https://github.com/microsoft/cppwinrt/tree/master/nuget#initializecomponent
-        }
+	struct MainWindow: MainWindowT<MainWindow>
+	{
+		// Xaml objects should not call InitializeComponent during construction.
+		// See https://github.com/microsoft/cppwinrt/tree/master/nuget#initializecomponent
 
-        int32_t MyProperty();
-        void MyProperty(int32_t value);
+		MainWindow(void) = default;
 
-        void myButton_Click(IInspectable const& sender, Microsoft::UI::Xaml::RoutedEventArgs const& args);
-    };
-}
+		int32_t MyProperty(void) const;
+
+		void	MyProperty(int32_t value) const;
+
+		void	myButton_Click(const IInspectable& sender, const Microsoft::UI::Xaml::RoutedEventArgs& args);
+	};
+}  // namespace winrt::TranslateModernGUI::implementation
 
 namespace winrt::TranslateModernGUI::factory_implementation
 {
-    struct MainWindow : MainWindowT<MainWindow, implementation::MainWindow>
-    {
-    };
-}
+	struct MainWindow: MainWindowT<MainWindow, implementation::MainWindow>
+	{};
+}  // namespace winrt::TranslateModernGUI::factory_implementation

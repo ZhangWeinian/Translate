@@ -28,6 +28,15 @@
 class __inter__RunTimeError: public _STD runtime_error
 {
 public:
+
+	/// <summary>
+	/// 接受错误信息、错误文件（可省略）、错误函数（可省略）、错误行号（可省略）的构造函数
+	/// </summary>
+	/// <param name="errMsg">错误信息</param>
+	/// <param name="errFile">发生错误的文件</param>
+	/// <param name="errFunc">发生错误的函数</param>
+	/// <param name="errLine">发生错误的行号</param>
+	/// <returns>无返回值</returns>
 	__inter__RunTimeError(const _STD string&		 errMsg,
 						  const _STD string_view	 errFile = "",
 						  const _STD string_view	 errFunc = "",
@@ -45,8 +54,18 @@ public:
 		_STD format_to(_STD back_inserter(showMsg), "{}", errMsg);
 	}
 
+	/// <summary>
+	/// 析构函数
+	/// </summary>
+	/// <param name="">无参数</param>
+	/// <returns>无返回值</returns>
 	~__inter__RunTimeError(void) noexcept override = default;
 
+	/// <summary>
+	/// 重写 what() 函数
+	/// </summary>
+	/// <param name="">无参数</param>
+	/// <returns>返回错误信息</returns>
 	const char* what(void) const final
 	{
 		if (!logMsg.empty())
@@ -58,14 +77,23 @@ public:
 	}
 
 private:
+
+	/// <summary>
+	/// 记录简略的错误信息，向用户展示
+	/// </summary>
 	_STD string showMsg {};
+
+	/// <summary>
+	/// 记录详细的错误信息，写入日志文件
+	/// </summary>
 	_STD string logMsg {};
 
 	/// <summary>
-	/// 设置日志
+	/// 把有关的信息写入日志文件
 	/// </summary>
-	/// <param name=""></param>
-	void InterSetLog(void) const noexcept;
+	/// <param name="">无参数</param>
+	/// <returns>无返回值</returns>
+	EXCEPTIONHANDLING_API void InterSetLog(void) const noexcept;
 };
 
 /// <summary>
@@ -75,7 +103,7 @@ private:
 /// <param name="errFile">抛出异常的文件路径</param>
 /// <param name="errFunc">抛出异常的函数名</param>
 /// <param name="errLine">抛出异常的所在行</param>
-/// <returns></returns>
+/// <returns>本身无返回值，但是可以用 HandleException() 函数拿到错误信息</returns>
 class NetworkError final: public __inter__RunTimeError
 {
 public:
@@ -96,7 +124,7 @@ public:
 /// <param name="errFile">抛出异常的文件路径</param>
 /// <param name="errFunc">抛出异常的函数名</param>
 /// <param name="errLine">抛出异常的所在行</param>
-/// <returns></returns>
+/// <returns>本身无返回值，但是可以用 HandleException() 函数拿到错误信息</returns>
 class JSONAnalysisError final: public __inter__RunTimeError
 {
 public:
@@ -117,7 +145,7 @@ public:
 /// <param name="errFile">抛出异常的文件路径</param>
 /// <param name="errFunc">抛出异常的函数名</param>
 /// <param name="errLine">抛出异常的所在行</param>
-/// <returns></returns>
+/// <returns>本身无返回值，但是可以用 HandleException() 函数拿到错误信息</returns>
 class URLError final: public __inter__RunTimeError
 {
 public:
@@ -138,7 +166,7 @@ public:
 /// <param name="errFile">抛出异常的文件路径</param>
 /// <param name="errFunc">抛出异常的函数名</param>
 /// <param name="errLine">抛出异常的所在行</param>
-/// <returns></returns>
+/// <returns>本身无返回值，但是可以用 HandleException() 函数拿到错误信息</returns>
 class FileError final: public __inter__RunTimeError
 {
 public:
@@ -159,7 +187,7 @@ public:
 /// <param name="errFile">抛出异常的文件路径</param>
 /// <param name="errFunc">抛出异常的函数名</param>
 /// <param name="errLine">抛出异常的所在行</param>
-/// <returns></returns>
+/// <returns>本身无返回值，但是可以用 HandleException() 函数拿到错误信息</returns>
 class MD5Error final: public __inter__RunTimeError
 {
 public:
@@ -180,7 +208,7 @@ public:
 /// <param name="errFile">抛出异常的文件路径</param>
 /// <param name="errFunc">抛出异常的函数名</param>
 /// <param name="errLine">抛出异常的所在行</param>
-/// <returns></returns>
+/// <returns>本身无返回值，但是可以用 HandleException() 函数拿到错误信息</returns>
 class AppIDError final: public __inter__RunTimeError
 {
 public:
@@ -201,7 +229,7 @@ public:
 /// <param name="errFile">抛出异常的文件路径</param>
 /// <param name="errFunc">抛出异常的函数名</param>
 /// <param name="errLine">抛出异常的所在行</param>
-/// <returns></returns>
+/// <returns>本身无返回值，但是可以用 HandleException() 函数拿到错误信息</returns>
 class OtherError final: public __inter__RunTimeError
 {
 public:
@@ -219,7 +247,7 @@ public:
 /// 异常处理函数
 /// </summary>
 /// <param name="e">标准库异常及其派生类</param>
-/// <returns></returns>
+/// <returns>返回简略的错误信息，同时把详细的错误信息记录到日志</returns>
 EXCEPTIONHANDLING_API _STD string HandleException(const _STD exception& e) noexcept;
 
 

@@ -1,12 +1,17 @@
 #pragma once
 
+/*
+* 此处用于实现使用 百度翻译 API 进行翻译的功能
+*/
+
 #include "pch.h"
 
 #include "../ExceptionHandling/ExceptionHandling.h"
 #include "../SaveData/SaveData.h"
-#include "BaiDuTranslate.h"
+#include "TranslateAPI.h"
 
 #include <source_location>
+#include <string_view>
 #include <type_traits>
 #include <cctype>
 #include <chrono>
@@ -88,7 +93,7 @@ BaiduTranslate::BaiduTranslate(const _STD string& appid, const _STD string& appk
 
 			const auto&			   source_location { _STD source_location::current() };
 
-			throw EXCEPTIONHADLING NetworkError("curl_easy_init()] 返回空",
+			throw EXCEPTIONHADLING NetworkError("curl_easy_init() 返回空",
 												source_location.file_name(),
 												source_location.function_name(),
 												source_location.line());
@@ -149,9 +154,7 @@ _NODISCARD bool BaiduTranslate::SetAppID(const _STD string& appid, const _STD st
 	}
 }
 
-_STD string BaiduTranslate::Translate(const _STD string& source,
-									  const _STD string& from,
-									  const _STD string& to) noexcept
+_STD string BaiduTranslate::Translate(_STD string_view source, _STD string_view from, _STD string_view to) noexcept
 {
 	TranslateInfo.source = source;
 	TranslateInfo.from	 = from;
@@ -203,6 +206,7 @@ _STD string BaiduTranslate::InterSourceEncode(const _STD string& source) const
 _STD string BaiduTranslate::InterGetURL(void) noexcept(false)
 {
 	const auto& [appid, appkey] { pSaveData->GetDataFromLocal() };
+
 	const auto& salt { _CHRONO system_clock::to_time_t(_CHRONO system_clock::now()) };
 
 	_STD string msg {};

@@ -25,11 +25,11 @@
 
 
 
-#ifdef BAIDUTRANSLATE_EXPORTS
-	#define BAIDUTRANSLATE_API __declspec(dllexport)
+#ifdef TRANSLATEAPI_EXPORTS
+	#define TRANSLATEAPI_API __declspec(dllexport)
 #else
-	#define BAIDUTRANSLATE_API __declspec(dllimport)
-#endif	// BAIDUTRANSLATE_EXPORTS
+	#define TRANSLATEAPI_API __declspec(dllimport)
+#endif	// TRANSLATEAPI_EXPORTS
 
 
 

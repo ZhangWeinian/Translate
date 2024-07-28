@@ -138,7 +138,7 @@
     <None Include=".clang-format" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="BaiDuTranslate\BaiDuTranslate.vcxproj">
+    <ProjectReference Include="TranslateAPI\TranslateAPI.vcxproj">
       <Project>{254092f4-ae6e-416a-aed4-072776cfa94f}</Project>
     </ProjectReference>
   </ItemGroup>

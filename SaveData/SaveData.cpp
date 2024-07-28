@@ -98,7 +98,7 @@ _NODISCARD bool SaveData::SaveDataToLocal(const _STD string& appid, const _STD s
 	}
 }
 
-AppIDAndKey SaveData::GetDataFromLocal() const noexcept
+AppIDAndKey SaveData::GetDataFromLocal(void) const noexcept
 {
 	try
 	{

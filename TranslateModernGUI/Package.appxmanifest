@@ -8,11 +8,11 @@
   IgnorableNamespaces="uap rescap">
 
   <Identity
-    Name="26f8bc32-4ecc-41e7-89ba-31614814517e"
+    Name="5a771b2a-72ab-4da7-a4ee-b2223bb64c1f"
     Publisher="CN=ZhangWeinian"
     Version="1.0.0.0" />
 
-  <mp:PhoneIdentity PhoneProductId="26f8bc32-4ecc-41e7-89ba-31614814517e" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+  <mp:PhoneIdentity PhoneProductId="5a771b2a-72ab-4da7-a4ee-b2223bb64c1f" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
     <DisplayName>TranslateModernGUI</DisplayName>

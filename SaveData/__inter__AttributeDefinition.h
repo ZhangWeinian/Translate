@@ -3,7 +3,6 @@
 #include "pch.h"
 
 #include <string>
-#include <utility>
 #include <version>
 
 
@@ -29,4 +28,8 @@
 #endif	// SAVEDATA_EXPORTS
 
 
-using AppIDAndKey = _STD pair<_STD string, _STD string>;
+using AppIDAndKey = struct
+{
+	_STD string appid;
+	_STD string appkey;
+};

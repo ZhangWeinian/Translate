@@ -1,19 +1,18 @@
-#pragma once
-
-#include "stdafx.h"
-
-#include "TranslateGUI.h"
-
-#include <QtWidgets/QApplication>
-#include <qapplication.h>
+#include <QGuiApplication>
+#include <QQmlApplicationEngine>
 
 int main(int argc, char *argv[])
 {
-	QApplication a(argc, argv);
+#if defined(Q_OS_WIN) && QT_VERSION_CHECK(5, 6, 0) <= QT_VERSION && QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+#endif
 
-	TranslateGUI w;
+    QGuiApplication app(argc, argv);
 
-	w.show();
+    QQmlApplicationEngine engine;
+    engine.load(QUrl(QStringLiteral("qrc:/qt/qml/translategui/main.qml")));
+    if (engine.rootObjects().isEmpty())
+        return -1;
 
-	return QApplication::exec();
+    return app.exec();
 }
