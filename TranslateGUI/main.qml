@@ -6,6 +6,7 @@ Window {
     width: 640
     height: 480
     title: "TranslateGUI"
+
     Text {
         anchors.fill: parent
         horizontalAlignment: Text.AlignHCenter

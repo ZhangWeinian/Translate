@@ -1,18 +1,28 @@
+#include <qguiapplication.h>
 #include <QGuiApplication>
+#include <qqmlapplicationengine.h>
 #include <QQmlApplicationEngine>
+#include <qstringliteral.h>
+#include <qsystemdetection.h>
+#include <qtversionchecks.h>
+#include <qurl.h>
 
 int main(int argc, char *argv[])
 {
 #if defined(Q_OS_WIN) && QT_VERSION_CHECK(5, 6, 0) <= QT_VERSION && QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+	QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #endif
 
-    QGuiApplication app(argc, argv);
+	QGuiApplication		  app(argc, argv);
 
-    QQmlApplicationEngine engine;
-    engine.load(QUrl(QStringLiteral("qrc:/qt/qml/translategui/main.qml")));
-    if (engine.rootObjects().isEmpty())
-        return -1;
+	QQmlApplicationEngine engine;
 
-    return app.exec();
+	engine.load(QUrl(QStringLiteral("qrc:/qt/qml/translategui/main.qml")));
+
+	if (engine.rootObjects().isEmpty())
+	{
+		return -1;
+	}
+
+	return QGuiApplication::exec();
 }
