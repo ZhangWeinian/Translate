@@ -6,11 +6,11 @@
 	#include "MainWindow.g.cpp"
 #endif
 
+#include <winrt/impl/Microsoft.UI.Xaml.2.h>
 #include <cstdint>
 
 #include "winrt/base.h"
 #include "winrt/Windows.Foundation.h"
-#include <winrt/impl/Microsoft.UI.Xaml.2.h>
 
 using namespace winrt;
 using namespace Microsoft::UI::Xaml;
