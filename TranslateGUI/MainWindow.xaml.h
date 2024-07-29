@@ -1,11 +1,11 @@
 #pragma once
 
-#include <winrt/impl/Microsoft.UI.Xaml.2.h>
 #include <cstdint>
 
 #include "MainWindow.g.h"
 #include "MainWindow.xaml.g.h"
 #include "winrt/base.h"
+#include "winrt/impl/Microsoft.UI.Xaml.2.h"
 
 namespace winrt::TranslateGUI::implementation
 {

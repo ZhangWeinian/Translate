@@ -6,10 +6,10 @@
 	#include "MainWindow.g.cpp"
 #endif
 
-#include <winrt/impl/Microsoft.UI.Xaml.2.h>
 #include <cstdint>
 
 #include "winrt/base.h"
+#include "winrt/impl/Microsoft.UI.Xaml.2.h"
 #include "winrt/Windows.Foundation.h"
 
 using namespace winrt;
@@ -32,8 +32,8 @@ namespace winrt::TranslateGUI::implementation
 }  // namespace winrt::TranslateGUI::implementation
 
 void winrt::TranslateGUI::implementation::MainWindow::myButton_Click(
-	[[maybe_unused]] const winrt::Windows::Foundation::IInspectable	   &sender,
-	[[maybe_unused]] const winrt::Microsoft::UI::Xaml::RoutedEventArgs &e)
+	[[maybe_unused]] const winrt::Windows::Foundation::IInspectable&	sender,
+	[[maybe_unused]] const winrt::Microsoft::UI::Xaml::RoutedEventArgs& e)
 {
 	myButton().Content(box_value(L"Clicked"));
 }
