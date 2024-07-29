@@ -167,6 +167,11 @@
     <None Include=".clang-format" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TranslateAPI\TranslateAPI.vcxproj">
+      <Project>{254092f4-ae6e-416a-aed4-072776cfa94f}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <!--
     Defining the "HasPackageAndPublishMenuAddedByProject" property here allows the Solution
     Explorer "Package and Publish" context menu entry to be enabled for this project even if
