@@ -106,8 +106,6 @@ BaiduTranslate::BaiduTranslate(const _STD string& appid, const _STD string& appk
 		EXCEPTIONHADLING HandleException(e);
 	}
 
-	pSaveData = _STD make_unique<SaveData>();
-
 	if (appid.empty() || appkey.empty())
 	{
 		return;
@@ -118,7 +116,7 @@ BaiduTranslate::BaiduTranslate(const _STD string& appid, const _STD string& appk
 
 BaiduTranslate::BaiduTranslate(void) noexcept
 {
-	const auto& [appid, appkey] { pSaveData->GetDataFromLocal() };
+	const auto& [appid, appkey] { _SAVEDATA SaveData::GetDataFromLocal() };
 
 	if (appid.empty() || appkey.empty())
 	{
@@ -141,7 +139,7 @@ BaiduTranslate::~BaiduTranslate(void) noexcept
 
 _NODISCARD bool BaiduTranslate::SetAppID(const _STD string& appid, const _STD string& appkey) noexcept
 {
-	if (pSaveData->SaveDataToLocal(appid, appkey))
+	if (_SAVEDATA SaveData::SaveDataToLocal(appid, appkey))
 	{
 		TranslateInfo.appid	 = appid;
 		TranslateInfo.appkey = appkey;
@@ -180,7 +178,7 @@ _STD size_t BaiduTranslate::
 	return totalSize;
 }
 
-_STD string BaiduTranslate::InterSourceEncode(const _STD string& source) const
+_STD string BaiduTranslate::InterSourceEncode(const _STD string& source)
 {
 	_STD string encodedStr {};
 
@@ -203,9 +201,10 @@ _STD string BaiduTranslate::InterSourceEncode(const _STD string& source) const
 	return _STD move(encodedStr);
 }
 
-_STD string BaiduTranslate::InterGetURL(void) noexcept(false)
+_STD string BaiduTranslate::InterGetURL(const _STD string& source, const _STD string& from, const _STD string& to)
+	noexcept(false)
 {
-	const auto& [appid, appkey] { pSaveData->GetDataFromLocal() };
+	const auto& [appid, appkey] { SaveData::GetDataFromLocal() };
 
 	const auto& salt { _CHRONO system_clock::to_time_t(_CHRONO system_clock::now()) };
 
@@ -229,9 +228,9 @@ _STD string BaiduTranslate::InterGetURL(void) noexcept(false)
 
 	_STD		format_to(_STD back_inserter(url),
 						  "http://api.fanyi.baidu.com/api/trans/vip/translate?q={}&from={}&to={}&appid={}&salt={}&sign={}",
-						  InterSourceEncode(TranslateInfo.source),
-						  TranslateInfo.from,
-						  TranslateInfo.to,
+						  InterSourceEncode(source),
+						  from,
+						  to,
 						  appid,
 						  salt,
 						  sign);
@@ -239,7 +238,7 @@ _STD string BaiduTranslate::InterGetURL(void) noexcept(false)
 	return _STD move(url);
 }
 
-_STD string BaiduTranslate::InterGetErrorInfo(const _STD string& errorCode) const noexcept
+_STD string BaiduTranslate::InterGetErrorInfo(const _STD string& errorCode) noexcept
 {
 	_STD string errorInfo {};
 
@@ -280,7 +279,7 @@ _STD string BaiduTranslate::InterTranslate(void) noexcept(false)
 
 	try
 	{
-		url = InterGetURL();
+		url = InterGetURL(TranslateInfo.source, TranslateInfo.from, TranslateInfo.to);
 	}
 	catch (const _STD exception&)
 	{

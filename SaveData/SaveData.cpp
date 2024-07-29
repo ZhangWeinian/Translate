@@ -32,9 +32,9 @@ SaveData::SaveData(void) noexcept
 {
 	try
 	{
-		ctx = EVP_MD_CTX_new();
+		myCtx = EVP_MD_CTX_new();
 
-		if (ctx == nullptr)
+		if (myCtx == nullptr)
 		{
 			const auto&			   source_location { _STD source_location::current() };
 
@@ -44,11 +44,11 @@ SaveData::SaveData(void) noexcept
 											  source_location.line());
 		}
 
-		if (EVP_DigestInit_ex(ctx, EVP_md5(), nullptr) != 1)
+		if (EVP_DigestInit_ex(myCtx, EVP_md5(), nullptr) != 1)
 		{
-			EVP_MD_CTX_free(ctx);
+			EVP_MD_CTX_free(myCtx);
 
-			ctx = nullptr;
+			myCtx = nullptr;
 
 			const auto&			   source_location { _STD source_location::current() };
 
@@ -66,13 +66,13 @@ SaveData::SaveData(void) noexcept
 
 SaveData::~SaveData(void) noexcept
 {
-	if (ctx != nullptr)
+	if (myCtx != nullptr)
 	{
-		EVP_MD_CTX_free(ctx);
+		EVP_MD_CTX_free(myCtx);
 	}
 }
 
-_STD string SaveData::GetMD5(const _STD string& str) const noexcept
+_STD string SaveData::GetMD5(const _STD string& str) noexcept
 {
 	try
 	{
@@ -84,7 +84,7 @@ _STD string SaveData::GetMD5(const _STD string& str) const noexcept
 	}
 }
 
-_NODISCARD bool SaveData::SaveDataToLocal(const _STD string& appid, const _STD string& appkey) const noexcept
+_NODISCARD bool SaveData::SaveDataToLocal(const _STD string& appid, const _STD string& appkey) noexcept
 {
 	try
 	{
@@ -98,7 +98,7 @@ _NODISCARD bool SaveData::SaveDataToLocal(const _STD string& appid, const _STD s
 	}
 }
 
-AppIDAndKey SaveData::GetDataFromLocal(void) const noexcept
+AppIDAndKey SaveData::GetDataFromLocal(void) noexcept
 {
 	try
 	{
@@ -112,9 +112,9 @@ AppIDAndKey SaveData::GetDataFromLocal(void) const noexcept
 	}
 }
 
-_STD string SaveData::InterGetMD5(const _STD string& str) const noexcept(false)
+_STD string SaveData::InterGetMD5(const _STD string& str) noexcept(false)
 {
-	if (ctx == nullptr)
+	if (myCtx == nullptr)
 	{
 		const auto&			   source_location { _STD source_location::current() };
 
@@ -124,7 +124,7 @@ _STD string SaveData::InterGetMD5(const _STD string& str) const noexcept(false)
 										  source_location.line());
 	}
 
-	if (EVP_DigestUpdate(ctx, str.c_str(), str.size()) != 1)
+	if (EVP_DigestUpdate(myCtx, str.c_str(), str.size()) != 1)
 	{
 		const auto&			   source_location { _STD source_location::current() };
 
@@ -136,7 +136,7 @@ _STD string SaveData::InterGetMD5(const _STD string& str) const noexcept(false)
 
 	_STD vector<unsigned char> hash(MD5_DIGEST_LENGTH, 0);
 
-	if (unsigned int hash_len = 0; EVP_DigestFinal_ex(ctx, hash.data(), &hash_len) != 1)
+	if (unsigned int hash_len = 0; EVP_DigestFinal_ex(myCtx, hash.data(), &hash_len) != 1)
 	{
 		const auto&			   source_location { _STD source_location::current() };
 
@@ -146,7 +146,7 @@ _STD string SaveData::InterGetMD5(const _STD string& str) const noexcept(false)
 										source_location.line());
 	}
 
-	if (EVP_DigestInit_ex(ctx, EVP_md5(), nullptr) != 1)
+	if (EVP_DigestInit_ex(myCtx, EVP_md5(), nullptr) != 1)
 	{
 		const auto&			   source_location { _STD source_location::current() };
 
@@ -166,7 +166,7 @@ _STD string SaveData::InterGetMD5(const _STD string& str) const noexcept(false)
 	return result;
 }
 
-_STD string SaveData::InterEncryption(const _STD string& str) const noexcept
+_STD string SaveData::InterEncryption(const _STD string& str) noexcept
 {
 	_STD string encrypted {};
 
@@ -180,7 +180,7 @@ _STD string SaveData::InterEncryption(const _STD string& str) const noexcept
 	return encrypted;
 }
 
-_STD string SaveData::InterDecryption(const _STD string& str) const noexcept
+_STD string SaveData::InterDecryption(const _STD string& str) noexcept
 {
 	_STD string decrypted {};
 
@@ -194,7 +194,7 @@ _STD string SaveData::InterDecryption(const _STD string& str) const noexcept
 	return decrypted;
 }
 
-bool SaveData::InterSaveDataToLocal(const _STD string& appid, const _STD string& appkey) const noexcept(false)
+bool SaveData::InterSaveDataToLocal(const _STD string& appid, const _STD string& appkey) noexcept(false)
 {
 	if (_STD ofstream file("./setting/setting.ini", _STD ios::out | _STD ios::trunc); !file.is_open())
 	{
@@ -216,7 +216,7 @@ bool SaveData::InterSaveDataToLocal(const _STD string& appid, const _STD string&
 	return true;
 }
 
-AppIDAndKey SaveData::InterGetDataFromLocal() const noexcept(false)
+AppIDAndKey SaveData::InterGetDataFromLocal(void) noexcept(false)
 {
 	_STD string appid {};
 	_STD string appkey {};

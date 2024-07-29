@@ -84,7 +84,7 @@ private:
 	/// <summary>
 	/// 一个 SaveData 的委托，用于保存和读取 AppID 和 AppKey ，以及处理给定字符串的 md5 值
 	/// </summary>
-	_STD unique_ptr<SaveData> pSaveData { nullptr };
+	_STD unique_ptr<::SaveData> pSaveData { nullptr };
 
 	/// <summary>
 	/// 此函数仅供内部使用。用于接收数据的回调函数，此函数必须是静态的
@@ -101,21 +101,21 @@ private:
 	/// </summary>
 	/// <param name="source">要被编码的字符串</param>
 	/// <returns>编码后的字符串</returns>
-	_STD string InterSourceEncode(const _STD string& source) const;
+	static _STD string InterSourceEncode(const _STD string& source);
 
 	/// <summary>
 	/// 此函数仅供内部使用。用于获取 url
 	/// </summary>
 	/// <param name="">无参数</param>
 	/// <returns>返回一个浏览器可接受的 url </returns>
-	_STD string InterGetURL(void) noexcept(false);
+	_STD string InterGetURL(const _STD string& source, const _STD string& from, const _STD string& to) noexcept(false);
 
 	/// <summary>
 	/// 此函数仅供内部使用。访问 url 成功但是返回一个错误信息，用于获取错误信息
 	/// </summary>
 	/// <param name="errorCode">百度翻译 API 预定的错误码</param>
 	/// <returns>对应信息</returns>
-	_STD string InterGetErrorInfo(const _STD string& errorCode) const noexcept;
+	static _STD string InterGetErrorInfo(const _STD string& errorCode) noexcept;
 
 	/// <summary>
 	/// 此函数仅供内部使用。用于翻译文本

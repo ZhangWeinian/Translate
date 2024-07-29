@@ -14,11 +14,11 @@
 int main(int argc, char* argv[])
 {
 	_STD string	   appid {};
-	_STD		   cout << "请输入 appid: 123";
+	_STD		   cout << "请输入 appid: ";
 	_STD		   cin >> appid;
 
 	_STD string	   appkey {};
-	_STD		   cout << "请输入 appkey: 311";
+	_STD		   cout << "请输入 appkey: ";
 	_STD		   cin >> appkey;
 
 	BaiduTranslate baiduTranslate(appid, appkey);

@@ -1,5 +1,0 @@
-<RCC>
-    <qresource prefix="/qt/qml/translategui">
-        <file>main.qml</file>
-    </qresource>
-</RCC>
