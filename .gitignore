@@ -369,3 +369,5 @@ FodyWeavers.xsd
 /TranslateModernGUI/.clang-format
 /main.cpp
 /TranslateModernGUI/Generated Files/module.g.cpp
+/APILinkCSharp/.clang-format
+/TranslateAPI/.clang-format

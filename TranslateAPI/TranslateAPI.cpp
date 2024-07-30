@@ -60,8 +60,3 @@ _STD string BaiduTranslate::whatHappened(void) const noexcept
 {
 	return m_pBaiduTranslateRuntimeStatus->message;
 }
-
-void BaiduTranslate::iSolved(void) noexcept
-{
-	m_pBaiduTranslateRuntimeStatus->Resetting();
-}

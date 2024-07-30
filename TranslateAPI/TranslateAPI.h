@@ -77,13 +77,6 @@ public:
 	/// <returns>返回运行状态的详细信息，空值表示无异常</returns>
 	TRANSLATEAPI_API _STD string whatHappened(void) const noexcept;
 
-	/// <summary>
-	/// 重置运行状态
-	/// </summary>
-	/// <param name="">无参数</param>
-	/// <returns>无返回值</returns>
-	void iSolved(void) noexcept;
-
 private:
 
 	/// <summary>
