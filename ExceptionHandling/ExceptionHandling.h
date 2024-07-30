@@ -250,5 +250,32 @@ public:
 /// <returns>返回简略的错误信息，同时把详细的错误信息记录到日志</returns>
 EXCEPTIONHANDLING_API _STD string HandleException(const _STD exception& e) noexcept;
 
+/// <summary>
+/// 记录运行状态
+/// </summary>
+class RuntimeStatus
+{
+public:
+	/// <summary>
+	/// 运行状态是否正常
+	/// </summary>
+	bool isOK { true };
+
+	/// <summary>
+	/// 运行状态的详细信息
+	/// </summary>
+	_STD string message { "一切正常" };
+
+	/// <summary>
+	/// 重置运行状态
+	/// </summary>
+	/// <param name="">无参数</param>
+	/// <returns>无返回值</returns>
+	void Resetting(void) noexcept
+	{
+		isOK	= true;
+		message = "一切正常";
+	}
+};
 
 #endif	// _HAS_CXX20

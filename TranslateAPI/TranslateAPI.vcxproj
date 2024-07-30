@@ -154,6 +154,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="InterBaiduTranslateAPI.h" />
     <ClInclude Include="TranslateAPI.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="pch.h" />
@@ -162,7 +163,8 @@
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="pch.cpp" />
-    <ClCompile Include="BaiduTranslate.cpp" />
+    <ClCompile Include="InterBaiduTranslateAPI.cpp" />
+    <ClCompile Include="TranslateAPI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".clang-format" />

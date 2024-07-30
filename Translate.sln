@@ -16,8 +16,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "解决方案项", "解决�
 		readme.md = readme.md
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TranslateGUI", "TranslateGUI\TranslateGUI.vcxproj", "{B9619269-8659-450E-865F-CC080E5C70C7}"
-EndProject
 Global
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {369D899D-DA7C-4737-983E-98B13E8714AF}
@@ -71,9 +69,20 @@ Global
 		{6596B5B1-4770-485F-A80A-A4F3A6AE7012}.Release|x64.Build.0 = Release|x64
 		{6596B5B1-4770-485F-A80A-A4F3A6AE7012}.Release|x86.ActiveCfg = Release|Win32
 		{6596B5B1-4770-485F-A80A-A4F3A6AE7012}.Release|x86.Build.0 = Release|Win32
-		{B9619269-8659-450E-865F-CC080E5C70C7}.Debug|ARM64.ActiveCfg = Debug|ARM64
-		{B9619269-8659-450E-865F-CC080E5C70C7}.Debug|ARM64.Build.0 = Debug|ARM64
-		{B9619269-8659-450E-865F-CC080E5C70C7}.Debug|ARM64.Deploy.0 = Debug|ARM64
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|ARM64 = Debug|ARM64
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|ARM64 = Release|ARM64
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
+ebug|ARM64
 		{B9619269-8659-450E-865F-CC080E5C70C7}.Debug|x64.ActiveCfg = Debug|x64
 		{B9619269-8659-450E-865F-CC080E5C70C7}.Debug|x64.Build.0 = Debug|x64
 		{B9619269-8659-450E-865F-CC080E5C70C7}.Debug|x64.Deploy.0 = Debug|x64
