@@ -13,26 +13,26 @@
 	</Window.SystemBackdrop>
 
 	<Grid RowDefinitions="*,5*,5*">
-
-		<Grid Grid.Row="0" Margin="16,16,16,6" ColumnDefinitions="8*,2*">
-
+		<Grid Grid.Row="0"
+			  Margin="16,16,16,6"
+			  ColumnDefinitions="8*,2*">
 			<StackPanel Grid.Column="0"
-						Margin="2,0,0,0"
-						VerticalAlignment="Center"
+						Margin="2,0,0,0" VerticalAlignment="Center"
 						Orientation="Horizontal">
-				<ComboBox Width="100" PlaceholderText="自动">
+				<ComboBox Width="100"
+						  FontFamily="{StaticResource HarmonyOSSansSC}"
+						  PlaceholderText="自动">
 					<ComboBoxItem Content="自动" />
 					<ComboBoxItem Content="中文" />
 					<ComboBoxItem Content="英文" />
 				</ComboBox>
-
 				<Button Margin="4,0,4,0"
-						Background="Transparent"
-						BorderBrush="Transparent"
+						Background="Transparent" BorderBrush="Transparent"
 						Content="&#xE8AB;"
 						FontFamily="{StaticResource SegoeMDL2Assets}" />
-
-				<ComboBox Width="100" PlaceholderText="英文">
+				<ComboBox Width="100"
+						  FontFamily="{StaticResource HarmonyOSSansSC}"
+						  PlaceholderText="英文">
 					<ComboBoxItem Content="中文" />
 					<ComboBoxItem Content="英文" />
 				</ComboBox>
@@ -40,8 +40,8 @@
 
 			<ComboBox Grid.Column="1"
 					  Width="80"
-					  Margin="0,0,2,0"
-					  HorizontalAlignment="Right"
+					  Margin="0,0,2,0" HorizontalAlignment="Right"
+					  FontFamily="{StaticResource HarmonyOSSansSC}"
 					  PlaceholderText="更多">
 				<ComboBoxItem Content="设置" />
 				<ComboBoxItem Content="关于" />
@@ -51,15 +51,20 @@
 		<Grid Grid.Row="1" Margin="16,6,16,6">
 			<Border Background="White"
 					BorderBrush="{x:Bind MainVM.BorderBrushColor, Mode=OneWay}"
-					BorderThickness="3"
-					CornerRadius="16">
-				<TextBox Margin="10,10" FontSize="15" Text="这里输入原文" />
+					BorderThickness="3" CornerRadius="16">
+				<TextBox Margin="10,10"
+						 FontFamily="{StaticResource HarmonyOSSansSC}"
+						 FontSize="{x:Bind MainVM.DefaultFontSize, Mode=OneWay}"
+						 Text="这里输入原文" />
 			</Border>
 		</Grid>
 
 		<Grid Grid.Row="2" Margin="16,6,16,16">
 			<Border CornerRadius="16">
-				<TextBlock Margin="10,2" FontSize="15" Text="这里显示译文" />
+				<TextBlock Margin="10,2"
+						   FontFamily="{StaticResource HarmonyOSSansSC}"
+						   FontSize="{x:Bind MainVM.DefaultFontSize, Mode=OneWay}"
+						   Text="这里显示译文" />
 			</Border>
 		</Grid>
 	</Grid>

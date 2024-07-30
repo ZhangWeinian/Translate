@@ -11,6 +11,7 @@
 			</ResourceDictionary.MergedDictionaries>
 			<!--  Other app resources here  -->
 			<FontFamily x:Key="SegoeMDL2Assets">Segoe MDL2 Assets</FontFamily>
+			<FontFamily x:Key="HarmonyOSSansSC">HarmonyOS Sans SC</FontFamily>
 		</ResourceDictionary>
 	</Application.Resources>
 </Application>

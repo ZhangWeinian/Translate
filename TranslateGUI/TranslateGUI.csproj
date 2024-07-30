@@ -12,9 +12,10 @@
     <UseWinUI>true</UseWinUI>
     <EnableMsixTooling>true</EnableMsixTooling>
     <PackageReadmeFile></PackageReadmeFile>
+    <DefaultLanguage>zh-cn</DefaultLanguage>
   </PropertyGroup>
   <ItemGroup>
-    <Content Remove="Assets\Segoe MDL2 Assets.ttf" />
+    <None Remove="Assets\HarmonyOS Sans SC.ttf" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,7 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Assets\Segoe MDL2 Assets.ttf">
+    <EmbeddedResource Include="Assets\HarmonyOS Sans SC.ttf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
