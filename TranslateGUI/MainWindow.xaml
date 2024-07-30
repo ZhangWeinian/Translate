@@ -5,12 +5,89 @@
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 		xmlns:local="using:TranslateGUI"
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		Title="翻译"
 		mc:Ignorable="d">
 
-	<StackPanel HorizontalAlignment="Center"
-				VerticalAlignment="Center"
-				Orientation="Horizontal">
-		<Button x:Name="myButton"
-				Click="myButton_Click">Click Me</Button>
-	</StackPanel>
+	<Grid Background="AliceBlue">
+		<!--  整体分为 3 行  -->
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="5*" />
+			<RowDefinition Height="5*" />
+		</Grid.RowDefinitions>
+
+		<!--  第一行：设置与选择用的按钮  -->
+		<Grid Grid.Row="0" Margin="16,16,16,8">
+
+			<!--  再分为 2 列  -->
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="7*" />
+				<ColumnDefinition Width="3*" />
+			</Grid.ColumnDefinitions>
+
+			<!--  左侧：关于语言类型  -->
+			<Grid Grid.Column="0">
+				<StackPanel Orientation="Horizontal">
+					<!--  选择原文语言类型  -->
+					<ComboBox Width="125"
+							  Margin="0,0,5,0"
+							  PlaceholderText="原语言"
+							  SelectionChanged="ChooseFrom">
+						<x:String>自动</x:String>
+						<x:String>中文</x:String>
+						<x:String>英文</x:String>
+					</ComboBox>
+
+					<!--  交换原文和译文的语言类型  -->
+					<Button Background="AliceBlue"
+							BorderThickness="0"
+							Click="ClickedToExchange"
+							Content="123" />
+
+					<!--  选择目标语言类型  -->
+					<ComboBox Width="125"
+							  Margin="5,0,0,0"
+							  PlaceholderText="翻译为"
+							  SelectionChanged="ChooseTo">
+						<x:String>中文</x:String>
+						<x:String>英文</x:String>
+					</ComboBox>
+				</StackPanel>
+			</Grid>
+
+			<!--  右侧：翻译按钮  -->
+			<Button x:Name="TranslateButton"
+					Grid.Column="1"
+					Width="90"
+					HorizontalAlignment="Right"
+					VerticalAlignment="Top"
+					Click="ClickedToTranslate"
+					Content="翻译" />
+		</Grid>
+
+		<!--  第二行：原文  -->
+		<Grid Grid.Row="1">
+			<Border Margin="16,8,16,8"
+					Background="White"
+					BorderBrush="LightBlue"
+					BorderThickness="3"
+					CornerRadius="10">
+				<TextBlock Margin="8"
+						   FontSize="17"
+						   Text="这里填入原文"
+						   TextWrapping="WrapWholeWords" />
+			</Border>
+		</Grid>
+
+		<!--  第三行：译文  -->
+		<Grid Grid.Row="2">
+			<Border Margin="16,8,16,16" CornerRadius="10">
+				<TextBlock x:Name="OriginalTextBox"
+						   Margin="8"
+						   FontSize="17"
+						   Text="这里给出译文"
+						   TextWrapping="WrapWholeWords" />
+			</Border>
+		</Grid>
+	</Grid>
 </Window>

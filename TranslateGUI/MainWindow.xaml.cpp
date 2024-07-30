@@ -1,3 +1,5 @@
+#pragma once
+
 #include "pch.h"
 
 #include "MainWindow.xaml.h"
@@ -10,6 +12,7 @@
 
 #include "winrt/base.h"
 #include "winrt/impl/Microsoft.UI.Xaml.2.h"
+#include "winrt/impl/Microsoft.UI.Xaml.Controls.2.h"
 #include "winrt/Windows.Foundation.h"
 
 using namespace winrt;
@@ -31,9 +34,24 @@ namespace winrt::TranslateGUI::implementation
 	}
 }  // namespace winrt::TranslateGUI::implementation
 
-void winrt::TranslateGUI::implementation::MainWindow::myButton_Click(
+void winrt::TranslateGUI::implementation::MainWindow::ClickedToTranslate(
 	[[maybe_unused]] const winrt::Windows::Foundation::IInspectable&	sender,
 	[[maybe_unused]] const winrt::Microsoft::UI::Xaml::RoutedEventArgs& e)
 {
-	myButton().Content(box_value(L"Clicked"));
+	TranslateButton().Content(box_value(L"Clicked"));
 }
+
+void winrt::TranslateGUI::implementation::MainWindow::ChooseFrom(
+	[[maybe_unused]] const winrt::Windows::Foundation::IInspectable&						sender,
+	[[maybe_unused]] const winrt::Microsoft::UI::Xaml::Controls::SelectionChangedEventArgs& e)
+{}
+
+void winrt::TranslateGUI::implementation::MainWindow::ChooseTo(
+	[[maybe_unused]] const winrt::Windows::Foundation::IInspectable&						sender,
+	[[maybe_unused]] const winrt::Microsoft::UI::Xaml::Controls::SelectionChangedEventArgs& e)
+{}
+
+void winrt::TranslateGUI::implementation::MainWindow::ClickedToExchange(
+	[[maybe_unused]] const winrt::Windows::Foundation::IInspectable&	sender,
+	[[maybe_unused]] const winrt::Microsoft::UI::Xaml::RoutedEventArgs& e)
+{}
