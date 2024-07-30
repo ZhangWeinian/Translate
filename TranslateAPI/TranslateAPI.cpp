@@ -6,7 +6,7 @@
 #include <string>
 #include <version>
 
-#include "InterBaiduTranslateAPI.h"
+#include "__inter__BaiduTranslateAPI.h"
 #include "TranslateAPI.h"
 
 BaiduTranslate::BaiduTranslate(const _STD string& appid, const _STD string& appkey) noexcept

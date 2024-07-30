@@ -15,8 +15,8 @@
 	#include <memory>
 	#include <string>
 
-	#include "InterBaiduTranslateAPI.h"
 	#include "__inter__AttributeDefinition.h"
+	#include "__inter__BaiduTranslateAPI.h"
 	#include "../ExceptionHandling/ExceptionHandling.h"
 
 	#ifndef _EXCEPTIONHADLING

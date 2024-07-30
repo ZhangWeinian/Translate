@@ -27,7 +27,7 @@
     <ClInclude Include="pch.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="InterBaiduTranslateAPI.h">
+    <ClInclude Include="__inter__BaiduTranslateAPI.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -35,7 +35,7 @@
     <ClCompile Include="dllmain.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="InterBaiduTranslateAPI.cpp">
+    <ClCompile Include="__inter__BaiduTranslateAPI.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp">

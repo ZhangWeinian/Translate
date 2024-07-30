@@ -8,7 +8,7 @@
 
 #include "../ExceptionHandling/ExceptionHandling.h"
 #include "../SaveData/SaveData.h"
-#include "InterBaiduTranslateAPI.h"
+#include "__inter__BaiduTranslateAPI.h"
 
 #include <source_location>
 #include <string_view>

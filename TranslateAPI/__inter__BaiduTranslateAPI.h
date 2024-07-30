@@ -18,8 +18,8 @@
 	#include <curl/curl.h>
 
 	#include "../SaveData/SaveData.h"
-	#include "__inter__AttributeDefinition.h"
 	#include "../ExceptionHandling/ExceptionHandling.h"
+	#include "__inter__AttributeDefinition.h"
 
 	#ifndef _SAVEDATA
 		#define _SAVEDATA ::
