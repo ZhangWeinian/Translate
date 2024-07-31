@@ -1,5 +1,3 @@
-using System;
-
 using Microsoft.UI;
 using Microsoft.UI.Xaml;
 
@@ -7,13 +5,13 @@ using TranslateGUI.ViewModel;
 
 using WinRT.Interop;
 
-// To learn more about WinUI, the WinUI project structure, and more about our project templates,
-// see: http://aka.ms/winui-project-info.
 
-using MainWindow = Microsoft.UI.Windowing.AppWindow;
 
 namespace TranslateGUI.View
 {
+	using MainWindow = Microsoft.UI.Windowing.AppWindow;
+	using WinUIColor = Windows.UI.Color;
+
 	/// <summary>
 	/// An empty window that can be used on its own or navigated to within a Frame.
 	/// </summary>
@@ -29,14 +27,14 @@ namespace TranslateGUI.View
 
 			m_AppWindow = GetAppWindowForCurrentWindow();
 
-			m_AppWindow.Resize(new(1300, 1500));
+			m_AppWindow.Resize(new(1600, 1350));
 
 			this.Activated += OnFocusChanged;
 		}
 
 		private MainWindow GetAppWindowForCurrentWindow()
 		{
-			IntPtr hWnd = WindowNative.GetWindowHandle(this);
+			System.IntPtr hWnd = WindowNative.GetWindowHandle(this);
 
 			WindowId myWndId = Win32Interop.GetWindowIdFromWindow(hWnd);
 
@@ -48,8 +46,8 @@ namespace TranslateGUI.View
 			var hasFocus = (args.WindowActivationState != WindowActivationState.Deactivated);
 
 			MainVM.BorderBrushColor = hasFocus
-				? new(Windows.UI.Color.FromArgb(255, 3, 150, 255))
-				: new(Windows.UI.Color.FromArgb(255, 126, 201, 255));
+				? new(WinUIColor.FromArgb(255, 3, 150, 255))
+				: new(WinUIColor.FromArgb(255, 126, 201, 255));
 		}
 	}
 }

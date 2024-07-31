@@ -10,7 +10,7 @@
 				<!--  Other merged dictionaries here  -->
 			</ResourceDictionary.MergedDictionaries>
 			<!--  Other app resources here  -->
-			<FontFamily x:Key="SegoeMDL2Assets">Segoe MDL2 Assets</FontFamily>
+			<FontFamily x:Key="SegoeFluentIcons">Segoe Fluent Icons</FontFamily>
 			<FontFamily x:Key="HarmonyOSSansSC">HarmonyOS Sans SC</FontFamily>
 		</ResourceDictionary>
 	</Application.Resources>

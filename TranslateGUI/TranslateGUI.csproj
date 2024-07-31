@@ -15,6 +15,9 @@
     <DefaultLanguage>zh-cn</DefaultLanguage>
   </PropertyGroup>
   <ItemGroup>
+    <Content Remove="Assets\Segoe Fluent Icons.ttf" />
+  </ItemGroup>
+  <ItemGroup>
     <None Remove="Assets\HarmonyOS Sans SC.ttf" />
   </ItemGroup>
 
@@ -30,6 +33,9 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Assets\HarmonyOS Sans SC.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Assets\Segoe Fluent Icons.ttf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>

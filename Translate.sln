@@ -18,7 +18,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "解决方案项", "解决�
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "APILinkCSharp", "APILinkCSharp\APILinkCSharp.vcxproj", "{CAB0EF4C-7803-46A8-8852-73332F8612FF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TranslateGUI", "TranslateGUI\TranslateGUI.csproj", "{CFA2C4F2-9A72-4638-A95C-EC1CE8519D2D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TranslateGUI", "TranslateGUI\TranslateGUI.csproj", "{CFA2C4F2-9A72-4638-A95C-EC1CE8519D2D}"
 EndProject
 Global
 	GlobalSection(ExtensibilityGlobals) = postSolution
