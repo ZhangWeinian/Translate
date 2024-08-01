@@ -2,30 +2,34 @@
 
 #include "pch.h"
 
+#include <type_traits>
 #include <memory>
 #include <string>
 #include <version>
 
+#include "../ExceptionHandling/ExceptionHandling.h"
 #include "__inter__BaiduTranslateAPI.h"
 #include "TranslateAPI.h"
 
+#ifndef _EXCEPTIONHADLING
+	#define _EXCEPTIONHADLING ::
+#endif	// !_EXCEPTIONHADLING
+
 BaiduTranslate::BaiduTranslate(const _STD string& appid, const _STD string& appkey) noexcept
 {
-	m_pBaiduTranslateAPI = _STD make_unique<BaiduTranslateAPI>(appid, appkey);
+	m_pBaiduTranslateAPI = _STD make_unique<InterBaiduTranslateAPI>(appid, appkey);
 
 	if (m_pBaiduTranslateAPI == nullptr)
 	{
-		m_pBaiduTranslateRuntimeStatus			= _STD make_unique<BaiduTranslateRuntimeStatus>();
-
-		m_pBaiduTranslateRuntimeStatus->isOK	= false;
-		m_pBaiduTranslateRuntimeStatus->message = "创建 BaiduTranslateAPI 对象失败";
+		m_isOK	  = false;
+		m_message = "创建 InterBaiduTranslateAPI 对象失败";
 	}
 	else
 	{
-		const auto* tmp							= m_pBaiduTranslateAPI->whatHappened();
+		const auto* tmp = m_pBaiduTranslateAPI->whatHappened();
 
-		m_pBaiduTranslateRuntimeStatus->isOK	= tmp->isOK;
-		m_pBaiduTranslateRuntimeStatus->message = tmp->message;
+		m_isOK			= tmp->isOK;
+		m_message		= tmp->message;
 	}
 }
 
@@ -36,7 +40,7 @@ bool BaiduTranslate::SetAppID(const _STD string& appid, const _STD string& appke
 		return false;
 	}
 
-	return m_pBaiduTranslateAPI->BaiduTranslateSetAppID(appid, appkey);
+	return (m_pBaiduTranslateAPI != nullptr) ? m_pBaiduTranslateAPI->InterBaiduTranslateSetAppID(appid, appkey) : false;
 }
 
 _STD string BaiduTranslate::Translate(const _STD string& source,
@@ -45,18 +49,37 @@ _STD string BaiduTranslate::Translate(const _STD string& source,
 {
 	if (!isOK())
 	{
-		return m_pBaiduTranslateRuntimeStatus->message;
+		return (m_pBaiduTranslateAPI != nullptr) ? m_pBaiduTranslateAPI->m_pBaiduTranslateAPIRuntimeStatus->message
+												 : m_message;
 	}
 
-	return m_pBaiduTranslateAPI->BaiduTranslateTranslate(source, from, to);
+	return (m_pBaiduTranslateAPI != nullptr) ? m_pBaiduTranslateAPI->InterBaiduTranslateTranslate(source, from, to)
+											 : m_message;
 }
 
-bool BaiduTranslate::isOK(void) const noexcept
+bool BaiduTranslate::isOK(void) noexcept
 {
-	return m_pBaiduTranslateRuntimeStatus->isOK;
+	if (m_pBaiduTranslateAPI == nullptr)
+	{
+		m_message = _STD move(_STD string("InterBaiduTranslateAPI 对象为空"));
+
+		return false;
+	}
+
+	if ((m_pBaiduTranslateAPI->m_pBaiduTranslateAPIRuntimeStatus->isOK) && m_isOK)
+	{
+		return true;
+	}
+	else
+	{
+		m_message = m_pBaiduTranslateAPI->m_pBaiduTranslateAPIRuntimeStatus->message;
+
+		return false;
+	}
 }
 
-_STD string BaiduTranslate::whatHappened(void) const noexcept
+_STD string BaiduTranslate::whatHappened(void) noexcept
 {
-	return m_pBaiduTranslateRuntimeStatus->message;
+	return (m_pBaiduTranslateAPI != nullptr) ? m_pBaiduTranslateAPI->m_pBaiduTranslateAPIRuntimeStatus->message
+											 : m_message;
 }

@@ -18,7 +18,7 @@
 
 #include <spdlog/spdlog.h>
 
-_STD string HandleException(const _STD exception& e) noexcept
+inline _STD string HandleException(const _STD exception& e) noexcept
 {
 	_STD string str {};
 

@@ -8,8 +8,6 @@
 
 
 
-#include "pch.h"
-
 #include <source_location>
 #include <string_view>
 #include <type_traits>
@@ -31,7 +29,7 @@
 
 #include "../ExceptionHandling/ExceptionHandling.h"
 #include "../SaveData/SaveData.h"
-#include "__inter__BaiduTranslateAPI.h"
+#include "__inter__BaiduTranslateAPIStatic.h"
 
 namespace STATIC_INFO
 {

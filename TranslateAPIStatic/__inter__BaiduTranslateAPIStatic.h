@@ -10,8 +10,6 @@
 
 #if defined(_HAS_CXX20)
 
-	#include "pch.h"
-
 	#include <memory>
 	#include <string>
 	#include <string_view>

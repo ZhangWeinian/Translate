@@ -10,20 +10,7 @@
 
 #if defined(_HAS_CXX20)
 
-	#include "pch.h"
-
-	#include <memory>
 	#include <string>
-
-	#include "__inter__AttributeDefinition.h"
-	#include "__inter__BaiduTranslateAPI.h"
-	#include "../ExceptionHandling/ExceptionHandling.h"
-
-	#ifndef _EXCEPTIONHADLING
-		#define _EXCEPTIONHADLING ::
-	#endif	// !_EXCEPTIONHADLING
-
-using BaiduTranslateRuntimeStatus = _EXCEPTIONHADLING RuntimeStatus;
 
 class BaiduTranslate final
 {
@@ -35,14 +22,14 @@ public:
 	/// <param name="appid">百度翻译 AppID</param>
 	/// <param name="appkey">对应的 key</param>
 	/// <returns>无返回值</returns>
-	TRANSLATEAPI_API BaiduTranslate(const _STD string& appid, const _STD string& appkey) noexcept;
+	BaiduTranslate(const _STD string& appid, const _STD string& appkey) noexcept;
 
 	/// <summary>
 	/// 析构函数。由于使用了智能指针，因此无需手动释放资源
 	/// </summary>
 	/// <param name="">无参数</param>
 	/// <returns>无返回值</returns>
-	TRANSLATEAPI_API ~BaiduTranslate(void) noexcept = default;
+	~BaiduTranslate(void) noexcept;
 
 	/// <summary>
 	/// 调用此函数设置百度翻译 API 的 AppID 和 AppKey
@@ -50,7 +37,7 @@ public:
 	/// <param name="appid">百度翻译 AppID</param>
 	/// <param name="appkey">对应的 key</param>
 	/// <returns>返回值确认是否设置成功</returns>
-	TRANSLATEAPI_API _NODISCARD bool SetAppID(const _STD string& appid, const _STD string& appkey) noexcept;
+	_NODISCARD bool SetAppID(const _STD string& appid, const _STD string& appkey) noexcept;
 
 	/// <summary>
 	/// 此函数调用百度翻译 API 进行翻译
@@ -59,34 +46,40 @@ public:
 	/// <param name="from">原文语言类型</param>
 	/// <param name="to">目标语言类型</param>
 	/// <returns>翻译后的译文 或 错误信息</returns>
-	TRANSLATEAPI_API _NODISCARD _STD string Translate(const _STD string& source,
-													  const _STD string& from,
-													  const _STD string& to) noexcept;
+	_NODISCARD _STD string Translate(const _STD string& source,
+									 const _STD string& from,
+									 const _STD string& to) noexcept;
 
 	/// <summary>
 	/// 检查 InterBaiduTranslateAPI 对象的运行状态是否正确
 	/// </summary>
 	/// <param name="">无参数</param>
 	/// <returns>返回值表示当前状态是否正确</returns>
-	TRANSLATEAPI_API bool isOK(void) noexcept;
+	bool isOK(void) noexcept;
 
 	/// <summary>
 	/// 获取 InterBaiduTranslateAPI 对象的运行状态的详细信息
 	/// </summary>
 	/// <param name="">无参数</param>
 	/// <returns>返回运行状态的详细信息，空值表示无异常</returns>
-	TRANSLATEAPI_API _STD string whatHappened(void) noexcept;
+	_STD string whatHappened(void) noexcept;
 
 private:
 
 	/// <summary>
-	/// 用委托的方式管理 BaiduTranslateAPI 对象
+	/// 用委托的方式管理 InterBaiduTranslateAPI 对象
 	/// </summary>
-	_STD unique_ptr<InterBaiduTranslateAPI> m_pBaiduTranslateAPI { nullptr };
+	void* m_pBaiduTranslateAPI { nullptr };
 
-	bool									m_isOK { true };
+	/// <summary>
+	/// 记录 InterBaiduTranslateAPI 对象的运行状态
+	/// </summary>
+	bool m_isOK { true };
 
-	_STD string								m_message { "" };
+	/// <summary>
+	/// 记录 InterBaiduTranslateAPI 对象的运行状态的详细信息
+	/// </summary>
+	_STD string m_message { "" };
 };
 
 #endif	// defined(_HAS_CXX20)

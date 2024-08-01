@@ -6,7 +6,6 @@ using TranslateGUI.ViewModel;
 using WinRT.Interop;
 
 
-
 namespace TranslateGUI.View
 {
 	using MainWindow = Microsoft.UI.Windowing.AppWindow;
@@ -47,7 +46,16 @@ namespace TranslateGUI.View
 
 			MainVM.BorderBrushColor = hasFocus
 				? new(WinUIColor.FromArgb(255, 3, 150, 255))
-				: new(WinUIColor.FromArgb(255, 126, 201, 255));
+				: new(WinUIColor.FromArgb(255, 201, 222, 245));
+		}
+
+		private void ClickedTotranslate(object sender, RoutedEventArgs e)
+		{
+			MainVM.TranslateAns = "ok! " + MainVM.TranslateSource;
+		}
+
+		private void ClickedToExchanged(object sender, RoutedEventArgs e)
+		{
 		}
 	}
 }

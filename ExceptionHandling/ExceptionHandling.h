@@ -248,7 +248,7 @@ public:
 /// </summary>
 /// <param name="e">标准库异常及其派生类</param>
 /// <returns>返回简略的错误信息，同时把详细的错误信息记录到日志</returns>
-EXCEPTIONHANDLING_API _STD string HandleException(const _STD exception& e) noexcept;
+EXCEPTIONHANDLING_API inline _STD string HandleException(const _STD exception& e) noexcept;
 
 /// <summary>
 /// 记录运行状态
@@ -256,6 +256,7 @@ EXCEPTIONHANDLING_API _STD string HandleException(const _STD exception& e) noexc
 class RuntimeStatus
 {
 public:
+
 	/// <summary>
 	/// 运行状态是否正常
 	/// </summary>

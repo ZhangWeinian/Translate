@@ -12,7 +12,7 @@
     <UseWinUI>true</UseWinUI>
     <EnableMsixTooling>true</EnableMsixTooling>
     <PackageReadmeFile></PackageReadmeFile>
-    <DefaultLanguage>zh-cn</DefaultLanguage>
+    <DefaultLanguage>en-us</DefaultLanguage>
   </PropertyGroup>
   <ItemGroup>
     <Content Remove="Assets\Segoe Fluent Icons.ttf" />
@@ -44,6 +44,7 @@
     <PackageReference Include="CommunityToolkit.Diagnostics" Version="8.2.2" />
     <PackageReference Include="CommunityToolkit.HighPerformance" Version="8.2.2" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+    <PackageReference Include="CommunityToolkit.WinUI.UI.Controls" Version="7.1.2" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.1" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.5.240627000" />
     <Manifest Include="$(ApplicationManifest)" />
@@ -59,9 +60,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Model\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\APILinkCSharp\APILinkCSharp.vcxproj" />
   </ItemGroup>
 
   <!--

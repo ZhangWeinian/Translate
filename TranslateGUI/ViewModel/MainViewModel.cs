@@ -15,6 +15,12 @@ namespace TranslateGUI.ViewModel
 		[ObservableProperty]
 		private int defaultFontSize = 16;
 
+		[ObservableProperty]
+		private string translateSource =  string.Empty;
+
+		[ObservableProperty]
+		private string translateAns = string.Empty;
+
 		public MainViewModel()
 		{
 		}
