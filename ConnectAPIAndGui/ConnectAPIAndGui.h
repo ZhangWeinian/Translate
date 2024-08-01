@@ -10,8 +10,6 @@
 
 	#include <string>
 
-	#include "../TranslateAPI/TranslateAPIStatic.h"
-
 using namespace System;
 
 namespace ConnectAPIAndGui
@@ -34,9 +32,13 @@ public
 		String ^ whatHappened(void);
 
 	private:
-		BaiduTranslate* m_pBaiduTranslate;
+		void* m_pBaiduTranslate { nullptr };
 
-		_STD string		SysstrToStdstr(String ^ s);
+		bool  m_isOK { true };
+
+		String ^ m_message { "" };
+
+		_STD string SysstrToStdstr(String ^ s);
 
 		String ^ StdstrToSysstr(const _STD string& s);
 	};

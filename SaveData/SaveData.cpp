@@ -1,9 +1,7 @@
 #pragma once
 
-#include "pch.h"
-
-#include "../ExceptionHandling/ExceptionHandling.h"
 #include "SaveData.h"
+#include "../ExceptionHandling/ExceptionHandling.h"
 
 #include <source_location>
 #include <cstddef>

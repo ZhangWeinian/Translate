@@ -97,8 +97,8 @@ InterBaiduTranslateAPI::InterBaiduTranslateAPI(const _STD string& appid, const _
 	}
 	catch (const _STD exception& e)
 	{
-		m_pBaiduTranslateAPIRuntimeStatus->isOK	   = false;
-		m_pBaiduTranslateAPIRuntimeStatus->message = _EXCEPTIONHADLING HandleException(e);
+		m_isOK	  = false;
+		m_message = _EXCEPTIONHADLING HandleException(e);
 	}
 
 	try
@@ -131,8 +131,8 @@ InterBaiduTranslateAPI::InterBaiduTranslateAPI(const _STD string& appid, const _
 	}
 	catch (const _STD exception& e)
 	{
-		m_pBaiduTranslateAPIRuntimeStatus->isOK	   = false;
-		m_pBaiduTranslateAPIRuntimeStatus->message = _EXCEPTIONHADLING HandleException(e);
+		m_isOK	  = false;
+		m_message = _EXCEPTIONHADLING HandleException(e);
 	}
 }
 
@@ -149,6 +149,11 @@ InterBaiduTranslateAPI::~InterBaiduTranslateAPI(void) noexcept
 _NODISCARD bool InterBaiduTranslateAPI::InterBaiduTranslateSetAppID(const _STD string& appid,
 																	const _STD string& appkey) noexcept
 {
+	if (!isOK())
+	{
+		return false;
+	}
+
 	if (_SAVEDATA SaveData::SaveDataToLocal(appid, appkey))
 	{
 		m_TranslateInfo.appid  = appid;
@@ -166,6 +171,11 @@ _STD string InterBaiduTranslateAPI::InterBaiduTranslateTranslate(_STD string_vie
 																 _STD string_view from,
 																 _STD string_view to) noexcept
 {
+	if (!isOK())
+	{
+		return m_message;
+	}
+
 	m_TranslateInfo.source = source;
 	m_TranslateInfo.from   = from;
 	m_TranslateInfo.to	   = to;
@@ -176,16 +186,11 @@ _STD string InterBaiduTranslateAPI::InterBaiduTranslateTranslate(_STD string_vie
 	}
 	catch (const _STD exception& e)
 	{
-		m_pBaiduTranslateAPIRuntimeStatus->isOK	   = false;
-		m_pBaiduTranslateAPIRuntimeStatus->message = _EXCEPTIONHADLING HandleException(e);
+		m_isOK	  = false;
+		m_message = _EXCEPTIONHADLING HandleException(e);
 
-		return m_pBaiduTranslateAPIRuntimeStatus->message;
+		return m_message;
 	}
-}
-
-InterBaiduTranslateAPIRuntimeStatus* InterBaiduTranslateAPI::whatHappened(void) const noexcept
-{
-	return m_pBaiduTranslateAPIRuntimeStatus.get();
 }
 
 _STD size_t InterBaiduTranslateAPI::

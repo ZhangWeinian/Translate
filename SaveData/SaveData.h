@@ -10,8 +10,6 @@
 
 #if defined(_HAS_CXX20)
 
-	#include "pch.h"
-
 	#include "__inter__AttributeDefinition.h"
 
 	#include <string>

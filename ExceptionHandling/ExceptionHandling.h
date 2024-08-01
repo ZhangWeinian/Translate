@@ -10,8 +10,6 @@
 
 #if defined(_HAS_CXX20)
 
-	#include "pch.h"
-
 	#include "__inter__AttributeDefinition.h"
 
 	#include <exception>
@@ -249,23 +247,5 @@ public:
 /// <param name="e">标准库异常及其派生类</param>
 /// <returns>返回简略的错误信息，同时把详细的错误信息记录到日志</returns>
 EXCEPTIONHANDLING_API inline _STD string HandleException(const _STD exception& e) noexcept;
-
-/// <summary>
-/// 记录运行状态
-/// </summary>
-class RuntimeStatus
-{
-public:
-
-	/// <summary>
-	/// 运行状态是否正常
-	/// </summary>
-	bool isOK { true };
-
-	/// <summary>
-	/// 运行状态的详细信息
-	/// </summary>
-	_STD string message { "一切正常" };
-};
 
 #endif	// _HAS_CXX20

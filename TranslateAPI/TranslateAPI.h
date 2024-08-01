@@ -10,20 +10,9 @@
 
 #if defined(_HAS_CXX20)
 
-	#include "pch.h"
-
-	#include <memory>
 	#include <string>
 
 	#include "__inter__AttributeDefinition.h"
-	#include "__inter__BaiduTranslateAPI.h"
-	#include "../ExceptionHandling/ExceptionHandling.h"
-
-	#ifndef _EXCEPTIONHADLING
-		#define _EXCEPTIONHADLING ::
-	#endif	// !_EXCEPTIONHADLING
-
-using BaiduTranslateRuntimeStatus = _EXCEPTIONHADLING RuntimeStatus;
 
 class BaiduTranslate final
 {
@@ -42,7 +31,7 @@ public:
 	/// </summary>
 	/// <param name="">无参数</param>
 	/// <returns>无返回值</returns>
-	TRANSLATEAPI_API ~BaiduTranslate(void) noexcept = default;
+	TRANSLATEAPI_API ~BaiduTranslate(void) noexcept;
 
 	/// <summary>
 	/// 调用此函数设置百度翻译 API 的 AppID 和 AppKey
@@ -82,11 +71,11 @@ private:
 	/// <summary>
 	/// 用委托的方式管理 BaiduTranslateAPI 对象
 	/// </summary>
-	_STD unique_ptr<InterBaiduTranslateAPI> m_pBaiduTranslateAPI { nullptr };
+	void*		m_pBaiduTranslateAPI { nullptr };
 
-	bool									m_isOK { true };
+	bool		m_isOK { true };
 
-	_STD string								m_message { "" };
+	_STD string m_message { "" };
 };
 
 #endif	// defined(_HAS_CXX20)

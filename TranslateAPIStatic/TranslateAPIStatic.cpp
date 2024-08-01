@@ -1,11 +1,9 @@
 #pragma once
 
 #include <type_traits>
-#include <memory>
 #include <string>
 #include <version>
 
-#include "../ExceptionHandling/ExceptionHandling.h"
 #include "__inter__BaiduTranslateAPIStatic.h"
 #include "TranslateAPIStatic.h"
 
@@ -24,10 +22,8 @@ BaiduTranslate::BaiduTranslate(const _STD string& appid, const _STD string& appk
 	}
 	else
 	{
-		const auto* tmp = ((InterBaiduTranslateAPI*)m_pBaiduTranslateAPI)->whatHappened();
-
-		m_isOK			= tmp->isOK;
-		m_message		= tmp->message;
+		m_isOK	  = ((InterBaiduTranslateAPI*)m_pBaiduTranslateAPI)->isOK();
+		m_message = ((InterBaiduTranslateAPI*)m_pBaiduTranslateAPI)->whatHappened();
 	}
 }
 
@@ -59,9 +55,8 @@ _STD string BaiduTranslate::Translate(const _STD string& source,
 {
 	if (!isOK())
 	{
-		return (m_pBaiduTranslateAPI != nullptr)
-				   ? ((InterBaiduTranslateAPI*)m_pBaiduTranslateAPI)->m_pBaiduTranslateAPIRuntimeStatus->message
-				   : m_message;
+		return (m_pBaiduTranslateAPI != nullptr) ? ((InterBaiduTranslateAPI*)m_pBaiduTranslateAPI)->whatHappened()
+												 : m_message;
 	}
 
 	return (m_pBaiduTranslateAPI != nullptr)
@@ -78,13 +73,13 @@ bool BaiduTranslate::isOK(void) noexcept
 		return false;
 	}
 
-	if ((((InterBaiduTranslateAPI*)m_pBaiduTranslateAPI)->m_pBaiduTranslateAPIRuntimeStatus->isOK) && m_isOK)
+	if ((((InterBaiduTranslateAPI*)m_pBaiduTranslateAPI)->isOK()) && m_isOK)
 	{
 		return true;
 	}
 	else
 	{
-		m_message = ((InterBaiduTranslateAPI*)m_pBaiduTranslateAPI)->m_pBaiduTranslateAPIRuntimeStatus->message;
+		m_message = ((InterBaiduTranslateAPI*)m_pBaiduTranslateAPI)->whatHappened();
 
 		return false;
 	}
@@ -92,7 +87,6 @@ bool BaiduTranslate::isOK(void) noexcept
 
 _STD string BaiduTranslate::whatHappened(void) noexcept
 {
-	return (m_pBaiduTranslateAPI != nullptr)
-			   ? ((InterBaiduTranslateAPI*)m_pBaiduTranslateAPI)->m_pBaiduTranslateAPIRuntimeStatus->message
-			   : m_message;
+	return (m_pBaiduTranslateAPI != nullptr) ? ((InterBaiduTranslateAPI*)m_pBaiduTranslateAPI)->whatHappened()
+											 : m_message;
 }

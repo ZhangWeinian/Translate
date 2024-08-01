@@ -1,9 +1,7 @@
 #pragma once
 
-#include "pch.h"
-
-#include "__inter__AttributeDefinition.h"
 #include "ExceptionHandling.h"
+#include "__inter__AttributeDefinition.h"
 
 #include <source_location>
 #include <type_traits>

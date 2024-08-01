@@ -16,7 +16,6 @@
 	#include <curl/curl.h>
 
 	#include "../SaveData/SaveData.h"
-	#include "../ExceptionHandling/ExceptionHandling.h"
 	#include "__inter__AttributeDefinition.h"
 
 	#ifndef _SAVEDATA
@@ -27,11 +26,6 @@
 		#define _EXCEPTIONHADLING ::
 	#endif	// !_EXCEPTIONHADLING
 
-
-/// <summary>
-/// 记录百度翻译 API 的运行状态
-/// </summary>
-using InterBaiduTranslateAPIRuntimeStatus = _EXCEPTIONHADLING RuntimeStatus;
 
 /// <summary>
 /// 使用百度翻译 API 进行翻译，需要提供 AppID 和 AppKey
@@ -75,20 +69,36 @@ public:
 											 _STD string_view to) noexcept;
 
 	/// <summary>
-	/// 获取运行状态
+	/// 判断当前对象的运行状态是否正确
 	/// </summary>
 	/// <param name="">无参数</param>
-	/// <returns>返回一个 InterBaiduTranslateAPIRuntimeStatus 对象指针</returns>
-	InterBaiduTranslateAPIRuntimeStatus* whatHappened(void) const noexcept;
+	/// <returns>返回状态</returns>
+	bool isOK(void) const noexcept
+	{
+		return m_isOK;
+	}
 
 	/// <summary>
-	/// 用委托的方式记录 InterBaiduTranslateAPI 对象的运行状态
+	/// 获取当前对象的运行状态的详细信息
 	/// </summary>
-	_STD unique_ptr<_EXCEPTIONHADLING InterBaiduTranslateAPIRuntimeStatus> m_pBaiduTranslateAPIRuntimeStatus {
-		nullptr
-	};
+	/// <param name="">无参数</param>
+	/// <returns>返回状态信息</returns>
+	_STD string whatHappened(void) const noexcept
+	{
+		return m_message;
+	}
 
 private:
+
+	/// <summary>
+	/// 用于记录当前对象的运行状态
+	/// </summary>
+	bool m_isOK { true };
+
+	/// <summary>
+	/// 用于记录当前对象的运行状态的详细信息
+	/// </summary>
+	_STD string m_message {};
 
 	/// <summary>
 	/// 记录翻译信息，包括 AppID、AppKey、翻译源文本、翻译原语言、翻译目标语言
