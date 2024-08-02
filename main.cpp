@@ -2,53 +2,36 @@
 
 #include <version>
 
-
 #if defined(_HAS_CXX20)
-	#include "./TranslateAPI/TranslateAPI.h"
+	#include "./ConnectAPIAndGui/ConnectAPIAndGui.h"
 #endif	// defined(_HAS_CXX20)
-
 
 #include <iostream>
 #include <string>
 
+#ifndef _CONNECTAPIANDGUI
+	#define _CONNECTAPIANDGUI ::
+#endif	// !_CONNECTAPIANDGUI
+
 int main(int argc, char* argv[])
 {
-	_STD string appid {};
-	_STD		cout << "请输入 appid: ";
-	_STD		cin >> appid;
+	_STD string appid { "123" };
 
-	_STD string appkey {};
-	_STD		cout << "请输入 appkey: ";
-	_STD		cin >> appkey;
+	_STD string appkey { "abc" };
 
-	if (BaiduTranslate baiduTranslate(appid, appkey); !baiduTranslate.isOK())
-	{
-		_STD cout << "初始化失败: " << baiduTranslate.whatHappened() << _STD endl;
+	auto p = _CONNECTAPIANDGUI BeginBaiduTranslate(appid.c_str(), appkey.c_str());
 
-		return -1;
-	}
-	else
-	{
-		_STD string source {};
-		_STD string from { "auto" };
-		_STD string to {};
+	_CONNECTAPIANDGUI		   SetAppID(p, appid.c_str(), appkey.c_str());
 
-		while (true)
-		{
-			_STD cout << "请输入要翻译的内容: ";
-			_STD cin >> source;
+	_STD string				   src { "hello" };
 
-			_STD cout << "请输入源语言: ";
-			_STD cin >> from;
+	_STD string				   from { "en" };
 
-			_STD cout << "请输入目标语言: ";
-			_STD cin >> to;
+	_STD string				   to { "zh" };
 
-			_STD cout << "翻译结果: " << baiduTranslate.Translate(source, from, to) << _STD endl;
+	_STD cout << _CONNECTAPIANDGUI Translate(p, src.c_str(), from.c_str(), to.c_str()) << _STD endl;
 
-			_STD cout << _STD endl << _STD endl;
-		}
-	}
+	_CONNECTAPIANDGUI																		   EndBaiduTranslate(p);
 
 	return 0;
 }

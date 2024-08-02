@@ -142,12 +142,12 @@
     <None Include=".clang-format" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="TranslateAPI\TranslateAPI.vcxproj">
-      <Project>{254092f4-ae6e-416a-aed4-072776cfa94f}</Project>
-    </ProjectReference>
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp" />
+    <ProjectReference Include="ConnectAPIAndGui\ConnectAPIAndGui.vcxproj">
+      <Project>{36e55c2d-6e30-4bbb-9ca1-19be59bd76da}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

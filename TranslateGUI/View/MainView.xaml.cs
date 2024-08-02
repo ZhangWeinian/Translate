@@ -1,6 +1,7 @@
 using Microsoft.UI;
 using Microsoft.UI.Xaml;
 
+using TranslateGUI.Model;
 using TranslateGUI.ViewModel;
 
 using WinRT.Interop;
@@ -17,6 +18,8 @@ namespace TranslateGUI.View
 	public sealed partial class MainView : Window
 	{
 		public MainViewModel MainVM { get; set; } = new MainViewModel();
+
+		public MainModel MainM { get; set; } = new MainModel();
 
 		private readonly MainWindow m_AppWindow;
 
