@@ -21,7 +21,7 @@
     <ClInclude Include="__inter__AttributeDefinition.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="__inter__BaiduTranslateAPI.h">
+    <ClInclude Include="__inter__BDTranslate.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -29,7 +29,7 @@
     <ClCompile Include="dllmain.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="__inter__BaiduTranslateAPI.cpp">
+    <ClCompile Include="__inter__BDTranslate.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="TranslateAPI.cpp">

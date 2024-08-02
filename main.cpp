@@ -19,9 +19,9 @@ int main(int argc, char* argv[])
 
 	_STD string appkey { "abc" };
 
-	auto p = _CONNECTAPIANDGUI BeginBaiduTranslate(appid.c_str(), appkey.c_str());
+	auto p = _CONNECTAPIANDGUI BDTranslate_Begin(appid.c_str(), appkey.c_str());
 
-	_CONNECTAPIANDGUI		   SetAppID(p, appid.c_str(), appkey.c_str());
+	_CONNECTAPIANDGUI		   BDTranslate_SetAppID(p, appid.c_str(), appkey.c_str());
 
 	_STD string				   src { "hello" };
 
@@ -29,9 +29,9 @@ int main(int argc, char* argv[])
 
 	_STD string				   to { "zh" };
 
-	_STD cout << _CONNECTAPIANDGUI Translate(p, src.c_str(), from.c_str(), to.c_str()) << _STD endl;
+	_STD cout << _CONNECTAPIANDGUI BDTranslate_Translate(p, src.c_str(), from.c_str(), to.c_str()) << _STD endl;
 
-	_CONNECTAPIANDGUI																		   EndBaiduTranslate(p);
+	_CONNECTAPIANDGUI BDTranslate_End(p);
 
 	return 0;
 }

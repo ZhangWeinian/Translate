@@ -171,9 +171,6 @@
     <None Include=".clang-format" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TranslateAPIStatic\TranslateAPIStatic.vcxproj">
-      <Project>{ca3f6a4e-319f-4c21-8dfb-ac49a75c934f}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\TranslateAPI\TranslateAPI.vcxproj">
       <Project>{254092f4-ae6e-416a-aed4-072776cfa94f}</Project>
     </ProjectReference>

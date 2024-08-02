@@ -168,11 +168,6 @@
   <ItemGroup>
     <None Include=".clang-format" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ExceptionHandling\ExceptionHandling.vcxproj">
-      <Project>{57fb4125-65bf-4de5-b2a8-8cad53cbcdfb}</Project>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -50,57 +50,45 @@ public:
 	/// <param name="appid">要保存的 AppID</param>
 	/// <param name="appkey">要保存的 key</param>
 	/// <returns>是否保存成功</returns>
-	SAVEDATA_API static _NODISCARD bool SaveDataToLocal(const _STD string& appid, const _STD string& appkey) noexcept;
+	SAVEDATA_API _NODISCARD bool SaveDataToLocal(const _STD string& appid, const _STD string& appkey) noexcept;
 
 	/// <summary>
 	/// 获取本地数据
 	/// </summary>
 	/// <param name="">无参数</param>
 	/// <returns>返回一个包含 AppID 和 key 的结构体</returns>
-	SAVEDATA_API static AppIDAndKey GetDataFromLocal(void) noexcept;
+	SAVEDATA_API AppIDAndKey GetDataFromLocal(void) noexcept;
 
 private:
 
 	/// <summary>
-	/// 一个指向 EVP_MD_CTX 的指针，用于获取 MD5 值，避免重复创建和销毁
+	/// 用于保存加密后的 AppID ，避免重复加密和反复读写
 	/// </summary>
-	EVP_MD_CTX* myCtx;
+	_STD string m_InterEncryptionAppID { "" };
 
 	/// <summary>
-	/// 此函数仅供内部使用，获取字符串的 MD5 值
+	/// 用于保存加密后的 AppKey ，避免重复加密和反复读写
 	/// </summary>
-	/// <param name="str">源字符串</param>
-	/// <returns>对应的 md5 值，str.size() 返回 32</returns>
-	_STD string InterGetMD5(const _STD string& str) noexcept(false);
+	_STD string m_InterEncryptionAppKey { "" };
+
+	/// <summary>
+	/// 一个指向 EVP_MD_CTX 的指针，用于获取 MD5 值，避免重复创建和销毁
+	/// </summary>
+	EVP_MD_CTX* m_Ctx {};
 
 	/// <summary>
 	/// 此函数仅供内部使用，加密字符串
 	/// </summary>
 	/// <param name="str">源字符串</param>
 	/// <returns>加密后的字符串</returns>
-	static _STD string InterEncryption(const _STD string& str) noexcept;
+	_STD string InterEncryption(const _STD string& str) const noexcept;
 
 	/// <summary>
 	/// 此函数仅供内部使用，解密字符串
 	/// </summary>
 	/// <param name="str">源字符串</param>
 	/// <returns>解密后的字符串</returns>
-	static _STD string InterDecryption(const _STD string& str) noexcept;
-
-	/// <summary>
-	/// 此函数仅供内部使用，保存数据到本地
-	/// </summary>
-	/// <param name="appid">要保存的 AppID</param>
-	/// <param name="appkey">要保存的 key</param>
-	/// <returns>是否保存成功</returns>
-	static _NODISCARD bool InterSaveDataToLocal(const _STD string& appid, const _STD string& appkey) noexcept(false);
-
-	/// <summary>
-	/// 此函数仅供内部使用，获取本地数据
-	/// </summary>
-	/// <param name="">无参数</param>
-	/// <returns>返回一个包含 AppID 和 key 的结构体</returns>
-	static AppIDAndKey InterGetDataFromLocal(void) noexcept(false);
+	_STD string InterDecryption(const _STD string& str) const noexcept;
 };
 
 #endif	// defined(_HAS_CXX20)

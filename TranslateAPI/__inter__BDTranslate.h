@@ -26,16 +26,10 @@
 		#define _EXCEPTIONHADLING ::
 	#endif	// !_EXCEPTIONHADLING
 
-
-/// <summary>
-/// 记录百度翻译 API 的运行状态
-/// </summary>
-// using InterBaiduTranslateAPIRuntimeStatus = _EXCEPTIONHADLING RuntimeStatus;
-
 /// <summary>
 /// 使用百度翻译 API 进行翻译，需要提供 AppID 和 AppKey
 /// </summary>
-class InterBaiduTranslateAPI final
+class __inter__BDTranslate final
 {
 public:
 
@@ -45,14 +39,14 @@ public:
 	/// <param name="appid">百度翻译的 AppID</param>
 	/// <param name="appkey">对应的 key</param>
 	/// <returns>无返回值</returns>
-	explicit InterBaiduTranslateAPI(const _STD string& appid, const _STD string& appkey) noexcept;
+	explicit __inter__BDTranslate(const _STD string& appid, const _STD string& appkey) noexcept;
 
 	/// <summary>
 	/// 析构函数，释放资源
 	/// </summary>
 	/// <param name="">无参数</param>
 	/// <returns>无返回值</returns>
-	~InterBaiduTranslateAPI(void) noexcept;
+	~__inter__BDTranslate(void) noexcept;
 
 	/// <summary>
 	/// 设置百度翻译的 AppID 和 AppKey
@@ -123,40 +117,36 @@ private:
 	/// <summary>
 	/// 此函数仅供内部使用。用于接收数据的回调函数，此函数必须是静态的
 	/// </summary>
-	/// <param name="data"></param>
-	/// <param name="size"></param>
-	/// <param name="nmemb"></param>
-	/// <param name="userdata"></param>
-	/// <returns></returns>
-	static _STD size_t InterWriteCallback(const char* data, _STD size_t size, _STD size_t nmemb, _STD string* userdata);
+	/// <param name="data">接收到的数据</param>
+	/// <param name="size">数据大小</param>
+	/// <param name="nmemb">数据数量</param>
+	/// <param name="userdata">用户数据</param>
+	/// <returns>返回接收到的数据大小</returns>
+	_STD size_t InterWriteCallback(const char*	data,
+								   _STD size_t	size,
+								   _STD size_t	nmemb,
+								   _STD string* userdata) const noexcept;
 
 	/// <summary>
 	/// 此函数仅供内部使用。对原文进行编码，以确保 URL 正确
 	/// </summary>
 	/// <param name="source">要被编码的字符串</param>
 	/// <returns>编码后的字符串</returns>
-	static _STD string InterSourceEncode(const _STD string& source);
+	_STD string InterSourceEncode(const _STD string& source) const noexcept;
 
 	/// <summary>
 	/// 此函数仅供内部使用。用于获取 url
 	/// </summary>
 	/// <param name="">无参数</param>
 	/// <returns>返回一个浏览器可接受的 url </returns>
-	_STD string InterGetURL(const _STD string& source, const _STD string& from, const _STD string& to) noexcept(false);
+	_STD string InterGetURL(const _STD string& source, const _STD string& from, const _STD string& to) noexcept;
 
 	/// <summary>
 	/// 此函数仅供内部使用。访问 url 成功但是返回一个错误信息，用于获取错误信息
 	/// </summary>
 	/// <param name="errorCode">百度翻译 API 预定的错误码</param>
 	/// <returns>对应信息</returns>
-	static _STD string InterGetErrorInfo(const _STD string& errorCode) noexcept;
-
-	/// <summary>
-	/// 此函数仅供内部使用。用于翻译文本
-	/// </summary>
-	/// <param name="">无参数</param>
-	/// <returns>返回文本信息，可能是翻译结果，也可能是错误信息</returns>
-	_STD string InterTranslate(void) noexcept(false);
+	_STD string InterGetErrorInfo(const _STD string& errorCode) const noexcept;
 };
 
 #endif	// defined(_HAS_CXX20)

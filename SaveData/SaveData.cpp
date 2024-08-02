@@ -1,11 +1,7 @@
 #pragma once
 
-#include "SaveData.h"
-#include "../ExceptionHandling/ExceptionHandling.h"
-
-#include <source_location>
+#include <type_traits>
 #include <cstddef>
-#include <exception>
 #include <format>
 #include <fstream>
 #include <iosfwd>
@@ -18,140 +14,49 @@
 #include <openssl/evp.h>
 #include <openssl/md5.h>
 
-
-
-#ifndef _EXCEPTIONHADLING
-	#define _EXCEPTIONHADLING ::
-#endif	// !EXCEPTIONHADLING
-
-
+#include "__inter__AttributeDefinition.h"
+#include "SaveData.h"
 
 SaveData::SaveData(void) noexcept
 {
-	try
+	m_Ctx = EVP_MD_CTX_new();
+
+	if (m_Ctx == nullptr)
 	{
-		myCtx = EVP_MD_CTX_new();
-
-		if (myCtx == nullptr)
-		{
-			const auto&				source_location { _STD source_location::current() };
-
-			throw _EXCEPTIONHADLING AppIDError("EVP_MD_CTX_new() 错误",
-											   source_location.file_name(),
-											   source_location.function_name(),
-											   source_location.line());
-		}
-
-		if (EVP_DigestInit_ex(myCtx, EVP_md5(), nullptr) != 1)
-		{
-			EVP_MD_CTX_free(myCtx);
-
-			myCtx = nullptr;
-
-			const auto&				source_location { _STD source_location::current() };
-
-			throw _EXCEPTIONHADLING MD5Error("EVP_DigestInit_ex(ctx, EVP_md5(), nullptr) 返回值不为 1",
-											 source_location.file_name(),
-											 source_location.function_name(),
-											 source_location.line());
-		}
+		return;
 	}
-	catch (const _STD exception& e)
+
+	if (const auto& init_ex = EVP_DigestInit_ex(m_Ctx, EVP_md5(), nullptr); init_ex != 1)
 	{
-		_EXCEPTIONHADLING HandleException(e);
+		EVP_MD_CTX_free(m_Ctx);
+
+		m_Ctx = nullptr;
+
+		return;
 	}
 }
 
 SaveData::~SaveData(void) noexcept
 {
-	if (myCtx != nullptr)
+	if (m_Ctx != nullptr)
 	{
-		EVP_MD_CTX_free(myCtx);
+		EVP_MD_CTX_free(m_Ctx);
 	}
 }
 
 _STD string SaveData::GetMD5(const _STD string& str) noexcept
 {
-	try
+	if ((m_Ctx == nullptr) || (EVP_DigestUpdate(m_Ctx, str.c_str(), str.size()) != 1))
 	{
-		return InterGetMD5(str);
-	}
-	catch (const _STD exception& e)
-	{
-		return _EXCEPTIONHADLING HandleException(e);
-	}
-}
-
-_NODISCARD bool SaveData::SaveDataToLocal(const _STD string& appid, const _STD string& appkey) noexcept
-{
-	try
-	{
-		return InterSaveDataToLocal(appid, appkey);
-	}
-	catch (const _STD exception& e)
-	{
-		_EXCEPTIONHADLING HandleException(e);
-
-		return false;
-	}
-}
-
-AppIDAndKey SaveData::GetDataFromLocal(void) noexcept
-{
-	try
-	{
-		return InterGetDataFromLocal();
-	}
-	catch (const _STD exception& e)
-	{
-		_EXCEPTIONHADLING HandleException(e);
-
-		return { "", "" };
-	}
-}
-
-_STD string SaveData::InterGetMD5(const _STD string& str) noexcept(false)
-{
-	if (myCtx == nullptr)
-	{
-		const auto&				source_location { _STD source_location::current() };
-
-		throw _EXCEPTIONHADLING AppIDError("ctx 为空",
-										   source_location.file_name(),
-										   source_location.function_name(),
-										   source_location.line());
-	}
-
-	if (EVP_DigestUpdate(myCtx, str.c_str(), str.size()) != 1)
-	{
-		const auto&				source_location { _STD source_location::current() };
-
-		throw _EXCEPTIONHADLING MD5Error("EVP_DigestUpdate(ctx, str.c_str(), str.size()) 不为 1",
-										 source_location.file_name(),
-										 source_location.function_name(),
-										 source_location.line());
+		return "";
 	}
 
 	_STD vector<unsigned char> hash(MD5_DIGEST_LENGTH, 0);
 
-	if (unsigned int hash_len = 0; EVP_DigestFinal_ex(myCtx, hash.data(), &hash_len) != 1)
+	if (unsigned int hash_len = 0;
+		(EVP_DigestFinal_ex(m_Ctx, hash.data(), &hash_len) != 1) || (EVP_DigestInit_ex(m_Ctx, EVP_md5(), nullptr) != 1))
 	{
-		const auto&				source_location { _STD source_location::current() };
-
-		throw _EXCEPTIONHADLING MD5Error("EVP_DigestFinal_ex(ctx, hash.data(), &hash_len) 不为 1",
-										 source_location.file_name(),
-										 source_location.function_name(),
-										 source_location.line());
-	}
-
-	if (EVP_DigestInit_ex(myCtx, EVP_md5(), nullptr) != 1)
-	{
-		const auto&				source_location { _STD source_location::current() };
-
-		throw _EXCEPTIONHADLING MD5Error("EVP_DigestInit_ex(ctx, EVP_md5(), nullptr) 不为 1",
-										 source_location.file_name(),
-										 source_location.function_name(),
-										 source_location.line());
+		return "";
 	}
 
 	_STD string result {};
@@ -164,7 +69,64 @@ _STD string SaveData::InterGetMD5(const _STD string& str) noexcept(false)
 	return result;
 }
 
-_STD string SaveData::InterEncryption(const _STD string& str) noexcept
+_NODISCARD bool SaveData::SaveDataToLocal(const _STD string& appid, const _STD string& appkey) noexcept
+{
+	_STD string InterEncryptionAppID { _STD move(InterEncryption(appid)) };
+	_STD string InterEncryptionAppKey { _STD move(InterEncryption(appkey)) };
+
+	if ((InterEncryptionAppID == m_InterEncryptionAppID) && (InterEncryptionAppKey == m_InterEncryptionAppKey))
+	{
+		return true;
+	}
+
+	if (_STD ofstream file("./setting.ini", _STD ios::out | _STD ios::trunc); !file.is_open())
+	{
+		return false;
+	}
+	else
+	{
+		m_InterEncryptionAppID	= InterEncryptionAppID;
+		m_InterEncryptionAppKey = InterEncryptionAppKey;
+
+		file << InterEncryptionAppID << _STD  endl;
+		file << InterEncryptionAppKey << _STD endl;
+
+		file.close();
+	}
+
+	return true;
+}
+
+AppIDAndKey SaveData::GetDataFromLocal(void) noexcept
+{
+	if (!m_InterEncryptionAppID.empty() && !m_InterEncryptionAppKey.empty())
+	{
+		return { InterDecryption(m_InterEncryptionAppID), InterDecryption(m_InterEncryptionAppKey) };
+	}
+
+	if (_STD ifstream file("./setting.ini"); !file.is_open())
+	{
+		return { "", "" };
+	}
+	else
+	{
+		_STD getline(file, m_InterEncryptionAppID);
+		_STD getline(file, m_InterEncryptionAppKey);
+
+		file.close();
+	}
+
+	if (!m_InterEncryptionAppID.empty() && !m_InterEncryptionAppKey.empty())
+	{
+		return { InterDecryption(m_InterEncryptionAppID), InterDecryption(m_InterEncryptionAppKey) };
+	}
+	else
+	{
+		return { "", "" };
+	}
+}
+
+_STD string SaveData::InterEncryption(const _STD string& str) const noexcept
 {
 	_STD string encrypted {};
 
@@ -178,7 +140,7 @@ _STD string SaveData::InterEncryption(const _STD string& str) noexcept
 	return encrypted;
 }
 
-_STD string SaveData::InterDecryption(const _STD string& str) noexcept
+_STD string SaveData::InterDecryption(const _STD string& str) const noexcept
 {
 	_STD string decrypted {};
 
@@ -190,61 +152,4 @@ _STD string SaveData::InterDecryption(const _STD string& str) noexcept
 	}
 
 	return decrypted;
-}
-
-bool SaveData::InterSaveDataToLocal(const _STD string& appid, const _STD string& appkey) noexcept(false)
-{
-	if (_STD ofstream file("./setting/setting.ini", _STD ios::out | _STD ios::trunc); !file.is_open())
-	{
-		const auto&				source_location { _STD source_location::current() };
-
-		throw _EXCEPTIONHADLING FileError("打开 setting.ini 错误",
-										  source_location.file_name(),
-										  source_location.function_name(),
-										  source_location.line());
-	}
-	else
-	{
-		file << InterEncryption(appid) << _STD	endl;
-		file << InterEncryption(appkey) << _STD endl;
-
-		file.close();
-	}
-
-	return true;
-}
-
-AppIDAndKey SaveData::InterGetDataFromLocal(void) noexcept(false)
-{
-	_STD string appid {};
-	_STD string appkey {};
-
-	if (_STD ifstream file("./setting/setting.ini"); !file.is_open())
-	{
-		const auto&				source_location { _STD source_location::current() };
-
-		throw _EXCEPTIONHADLING FileError("打开 setting.ini 错误",
-										  source_location.file_name(),
-										  source_location.function_name(),
-										  source_location.line());
-	}
-	else
-	{
-		_STD getline(file, appid);
-		_STD getline(file, appkey);
-
-		file.close();
-	}
-
-	if (appid.empty() || appkey.empty())
-	{
-		const auto&				source_location { _STD source_location::current() };
-
-		throw _EXCEPTIONHADLING FileError("读取 setting.ini 的内容为空",
-										  source_location.file_name(),
-										  source_location.function_name(),
-										  source_location.line());
-	}
-
-	return { InterDecryption(appid), InterDecryption(appkey) };
 }

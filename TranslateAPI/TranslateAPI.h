@@ -11,10 +11,17 @@
 #if defined(_HAS_CXX20)
 
 	#include <string>
+	#include <memory>
 
 	#include "__inter__AttributeDefinition.h"
+	#include "__inter__BDTranslate.h"
 
-class BaiduTranslate final
+	#ifndef _INTERBDTRANSLATE
+		#define _INTERBDTRANSLATE ::
+	#endif	// !_INTERBDTRANSLATE
+
+
+class BDTranslate final
 {
 public:
 
@@ -24,14 +31,14 @@ public:
 	/// <param name="appid">百度翻译 AppID</param>
 	/// <param name="appkey">对应的 key</param>
 	/// <returns>无返回值</returns>
-	TRANSLATEAPI_API BaiduTranslate(const _STD string& appid, const _STD string& appkey) noexcept;
+	TRANSLATEAPI_API BDTranslate(const _STD string& appid, const _STD string& appkey) noexcept;
 
 	/// <summary>
 	/// 析构函数。由于使用了智能指针，因此无需手动释放资源
 	/// </summary>
 	/// <param name="">无参数</param>
 	/// <returns>无返回值</returns>
-	TRANSLATEAPI_API ~BaiduTranslate(void) noexcept;
+	TRANSLATEAPI_API ~BDTranslate(void) noexcept = default;
 
 	/// <summary>
 	/// 调用此函数设置百度翻译 API 的 AppID 和 AppKey
@@ -52,14 +59,14 @@ public:
 		Translate(const _STD string& source, const _STD string& from, const _STD string& to) noexcept;
 
 	/// <summary>
-	/// 检查 InterBaiduTranslateAPI 对象的运行状态是否正确
+	/// 检查 __inter__BDTranslate 对象的运行状态是否正确
 	/// </summary>
 	/// <param name="">无参数</param>
 	/// <returns>返回值表示当前状态是否正确</returns>
 	TRANSLATEAPI_API bool isOK(void) noexcept;
 
 	/// <summary>
-	/// 获取 InterBaiduTranslateAPI 对象的运行状态的详细信息
+	/// 获取 __inter__BDTranslate 对象的运行状态的详细信息
 	/// </summary>
 	/// <param name="">无参数</param>
 	/// <returns>返回运行状态的详细信息，空值表示无异常</returns>
@@ -70,7 +77,7 @@ private:
 	/// <summary>
 	/// 用委托的方式管理 BaiduTranslateAPI 对象
 	/// </summary>
-	void* m_pBaiduTranslateAPI { nullptr };
+	_STD unique_ptr<_INTERBDTRANSLATE __inter__BDTranslate> m_pBaiduTranslateAPI { nullptr };
 
 	/// <summary>
 	/// 用于记录当前对象的运行状态是否正确

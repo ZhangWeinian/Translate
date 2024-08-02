@@ -158,22 +158,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="__inter__BaiduTranslateAPI.h" />
+    <ClInclude Include="__inter__BDTranslate.h" />
     <ClInclude Include="TranslateAPI.h" />
     <ClInclude Include="__inter__AttributeDefinition.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
-    <ClCompile Include="__inter__BaiduTranslateAPI.cpp" />
+    <ClCompile Include="__inter__BDTranslate.cpp" />
     <ClCompile Include="TranslateAPI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".clang-format" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ExceptionHandling\ExceptionHandling.vcxproj">
-      <Project>{57fb4125-65bf-4de5-b2a8-8cad53cbcdfb}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\SaveData\SaveData.vcxproj">
       <Project>{6596b5b1-4770-485f-a80a-a4f3a6ae7012}</Project>
     </ProjectReference>

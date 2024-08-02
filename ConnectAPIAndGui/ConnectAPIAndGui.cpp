@@ -5,32 +5,32 @@
 #include "../TranslateAPI/TranslateAPI.h"
 #include "ConnectAPIAndGui.h"
 
-void* BeginBaiduTranslate(cstring appid, cstring appkey) noexcept
+void* BDTranslate_Begin(cstring appid, cstring appkey) noexcept
 {
-	return new BaiduTranslate(appid, appkey);
+	return new BDTranslate(appid, appkey);
 }
 
-void EndBaiduTranslate(void* p) noexcept
+void BDTranslate_End(void* p) noexcept
 {
-	delete (BaiduTranslate*)p;
+	delete (BDTranslate*)p;
 }
 
-bool SetAppID(void* p, cstring appid, cstring appkey) noexcept
+bool BDTranslate_SetAppID(void* p, cstring appid, cstring appkey) noexcept
 {
-	return ((BaiduTranslate*)p)->SetAppID(appid, appkey);
+	return ((BDTranslate*)p)->SetAppID(appid, appkey);
 }
 
-cstring Translate(void* p, cstring source, cstring from, cstring to) noexcept
+cstring BDTranslate_Translate(void* p, cstring source, cstring from, cstring to) noexcept
 {
-	return ((BaiduTranslate*)p)->Translate(source, from, to);
+	return ((BDTranslate*)p)->Translate(source, from, to);
 }
 
-bool isOK(void* p) noexcept
+bool BDTranslate_isOK(void* p) noexcept
 {
-	return ((BaiduTranslate*)p)->isOK();
+	return ((BDTranslate*)p)->isOK();
 }
 
-cstring whatHappened(void* p) noexcept
+cstring BDTranslate_whatHappened(void* p) noexcept
 {
-	return ((BaiduTranslate*)p)->whatHappened();
+	return ((BDTranslate*)p)->whatHappened();
 }
