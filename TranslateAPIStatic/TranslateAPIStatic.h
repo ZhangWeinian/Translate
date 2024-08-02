@@ -1,16 +1,7 @@
 #pragma once
 
-/*
-* 此文件中大量使用了 C++20 的新特性，因此使用此文件之前请确保你的编译器支持并开启 C++20
-* 此文件中大量使用了 C++20 的新特性，因此使用此文件之前请确保你的编译器支持并开启 C++20
-* 此文件中大量使用了 C++20 的新特性，因此使用此文件之前请确保你的编译器支持并开启 C++20
-*/
-
+#include <string>
 #include <version>
-
-#if defined(_HAS_CXX20)
-
-	#include <string>
 
 class BaiduTranslate final
 {
@@ -46,9 +37,8 @@ public:
 	/// <param name="from">原文语言类型</param>
 	/// <param name="to">目标语言类型</param>
 	/// <returns>翻译后的译文 或 错误信息</returns>
-	_NODISCARD _STD string Translate(const _STD string& source,
-									 const _STD string& from,
-									 const _STD string& to) noexcept;
+	_NODISCARD const char*
+		Translate(const _STD string& source, const _STD string& from, const _STD string& to) noexcept;
 
 	/// <summary>
 	/// 检查 InterBaiduTranslateAPI 对象的运行状态是否正确
@@ -62,7 +52,7 @@ public:
 	/// </summary>
 	/// <param name="">无参数</param>
 	/// <returns>返回运行状态的详细信息，空值表示无异常</returns>
-	_STD string whatHappened(void) noexcept;
+	const char* whatHappened(void) noexcept;
 
 private:
 
@@ -80,6 +70,9 @@ private:
 	/// 记录 InterBaiduTranslateAPI 对象的运行状态的详细信息
 	/// </summary>
 	_STD string m_message { "" };
-};
 
-#endif	// defined(_HAS_CXX20)
+	/// <summary>
+	/// 用于记录翻译结果
+	/// </summary>
+	_STD string m_ans { "" };
+};

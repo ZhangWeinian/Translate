@@ -1,47 +1,57 @@
-﻿#pragma once
+#pragma once
 
-#include <version>
+#include "../TranslateAPI/TranslateAPI.h"
+#include "__inter__AttributeDefinition.h"
 
-#if defined(_HAS_CXX20)
+/// <summary>
+/// 便于在 C# 中调用接口，使用 const char* 代替 std::string
+/// </summary>
+using cstring = const char*;
 
-	#ifndef _STD
-		#define _STD ::std::
-	#endif	// !_STD
+/// <summary>
+/// 用于初始化百度翻译 API
+/// </summary>
+/// <param name="appid">百度翻译的 AppID</param>
+/// <param name="appkey">对应的 key</param>
+/// <returns>返回一个指向实例的指针</returns>
+extern "C" CONNECTAPIANDGUI_API BaiduTranslate* BeginBaiduTranslate(cstring appid, cstring appkey) noexcept;
 
-	#include <string>
+/// <summary>
+/// 用于释放百度翻译 API
+/// </summary>
+/// <param name="p">指向实例的指针</param>
+/// <returns>无返回值</returns>
+extern "C" CONNECTAPIANDGUI_API void EndBaiduTranslate(BaiduTranslate* p) noexcept;
 
-using namespace System;
+/// <summary>
+/// 用于设置百度翻译的 AppID 和 AppKey
+/// </summary>
+/// <param name="p">指向实例的指针</param>
+/// <param name="appid">百度翻译的 AppID</param>
+/// <param name="appkey">对应的 key</param>
+/// <returns>返回是否设置成功</returns>
+extern "C" CONNECTAPIANDGUI_API bool SetAppID(BaiduTranslate* p, cstring appid, cstring appkey) noexcept;
 
-namespace ConnectAPIAndGui
-{
-public
+/// <summary>
+/// 用于翻译文本
+/// </summary>
+/// <param name="p">指向实例的指针</param>
+/// <param name="source">源文本</param>
+/// <param name="from">源语言</param>
+/// <param name="to">目标语言</param>
+/// <returns>返回翻译后的文本</returns>
+extern "C" CONNECTAPIANDGUI_API cstring Translate(BaiduTranslate* p, cstring source, cstring from, cstring to) noexcept;
 
-	ref class BaiduTranslateAPI
-	{
-	public:
-		BaiduTranslateAPI(String ^ appid, String ^ appkey);
+/// <summary>
+/// 用于获取当前翻译器状态
+/// </summary>
+/// <param name="p">指向实例的指针</param>
+/// <returns>返回是否有错误</returns>
+extern "C" CONNECTAPIANDGUI_API bool isOK(BaiduTranslate* p) noexcept;
 
-		~BaiduTranslateAPI(void);
-
-		bool SetAppID(String ^ appid, String ^ appkey);
-
-		String ^ Translate(String ^ source, String ^ from, String ^ to);
-
-		bool isOK(void);
-
-		String ^ whatHappened(void);
-
-	private:
-		void* m_pBaiduTranslate { nullptr };
-
-		bool  m_isOK { true };
-
-		String ^ m_message { "" };
-
-		_STD string SysstrToStdstr(String ^ s);
-
-		String ^ StdstrToSysstr(const _STD string& s);
-	};
-}  // namespace ConnectAPIAndGui
-
-#endif	// defined(_HAS_CXX20)
+/// <summary>
+/// 用于获取当前翻译器错误信息（如果有的话）
+/// </summary>
+/// <param name="p">指向实例的指针</param>
+/// <returns>返回错误信息</returns>
+extern "C" CONNECTAPIANDGUI_API cstring whatWrong(BaiduTranslate* p) noexcept;

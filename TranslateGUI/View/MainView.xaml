@@ -43,15 +43,15 @@
 				</NavigationViewItem.MenuItems>
 			</NavigationViewItem>
 
-			<NavigationViewItem Content="查看错误日志" ToolTipService.ToolTip="查看错误信息">
+			<NavigationViewItem Content="打开错误日志" ToolTipService.ToolTip="打开错误日志">
 				<NavigationViewItem.Icon>
-					<FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE70B;" />
+					<FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xEA39;" />
 				</NavigationViewItem.Icon>
 			</NavigationViewItem>
 
 			<NavigationViewItem Content="关于" ToolTipService.ToolTip="查看更多信息">
 				<NavigationViewItem.Icon>
-					<FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE783;" />
+					<FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE946;" />
 				</NavigationViewItem.Icon>
 			</NavigationViewItem>
 		</NavigationView.MenuItems>
@@ -135,7 +135,7 @@
 							   FontFamily="{StaticResource HarmonyOSSansSC}"
 							   FontSize="{x:Bind MainVM.DefaultFontSize, Mode=OneWay}"
 							   ScrollViewer.VerticalScrollBarVisibility="Auto"
-							   Text="{x:Bind MainVM.TranslateAns, Mode=OneWay}" />
+							   Text="{x:Bind MainVM.TranslateAns, Mode=TwoWay}" />
 				</Border>
 			</Grid>
 		</Grid>

@@ -23,7 +23,7 @@ BaiduTranslate::BaiduTranslate(const _STD string& appid, const _STD string& appk
 	else
 	{
 		m_isOK	  = ((InterBaiduTranslateAPI*)m_pBaiduTranslateAPI)->isOK();
-		m_message = ((InterBaiduTranslateAPI*)m_pBaiduTranslateAPI)->whatHappened();
+		m_message = _STD move(((InterBaiduTranslateAPI*)m_pBaiduTranslateAPI)->whatHappened());
 	}
 }
 
@@ -49,19 +49,24 @@ bool BaiduTranslate::SetAppID(const _STD string& appid, const _STD string& appke
 			   : false;
 }
 
-_STD string BaiduTranslate::Translate(const _STD string& source,
-									  const _STD string& from,
-									  const _STD string& to) noexcept
+const char*
+	BaiduTranslate::Translate(const _STD string& source, const _STD string& from, const _STD string& to) noexcept
 {
 	if (!isOK())
 	{
-		return (m_pBaiduTranslateAPI != nullptr) ? ((InterBaiduTranslateAPI*)m_pBaiduTranslateAPI)->whatHappened()
-												 : m_message;
+		m_ans = _STD move((m_pBaiduTranslateAPI != nullptr)
+							  ? ((InterBaiduTranslateAPI*)m_pBaiduTranslateAPI)->whatHappened()
+							  : m_message);
+	}
+	else
+	{
+		m_ans = _STD move(
+			(m_pBaiduTranslateAPI != nullptr)
+				? ((InterBaiduTranslateAPI*)m_pBaiduTranslateAPI)->InterBaiduTranslateTranslate(source, from, to)
+				: m_message);
 	}
 
-	return (m_pBaiduTranslateAPI != nullptr)
-			   ? ((InterBaiduTranslateAPI*)m_pBaiduTranslateAPI)->InterBaiduTranslateTranslate(source, from, to)
-			   : m_message;
+	return m_ans.c_str();
 }
 
 bool BaiduTranslate::isOK(void) noexcept
@@ -79,14 +84,17 @@ bool BaiduTranslate::isOK(void) noexcept
 	}
 	else
 	{
-		m_message = ((InterBaiduTranslateAPI*)m_pBaiduTranslateAPI)->whatHappened();
+		m_message = _STD move(((InterBaiduTranslateAPI*)m_pBaiduTranslateAPI)->whatHappened());
 
 		return false;
 	}
 }
 
-_STD string BaiduTranslate::whatHappened(void) noexcept
+const char* BaiduTranslate::whatHappened(void) noexcept
 {
-	return (m_pBaiduTranslateAPI != nullptr) ? ((InterBaiduTranslateAPI*)m_pBaiduTranslateAPI)->whatHappened()
-											 : m_message;
+	m_message =
+		_STD move((m_pBaiduTranslateAPI != nullptr) ? ((InterBaiduTranslateAPI*)m_pBaiduTranslateAPI)->whatHappened()
+													: m_message);
+
+	return m_message.c_str();
 }

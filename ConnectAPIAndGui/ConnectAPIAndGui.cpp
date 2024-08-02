@@ -1,77 +1,36 @@
 #pragma once
 
-#include <string>
-#include <version>
+#include "pch.h"
 
-#include "../TranslateAPIStatic/TranslateAPIStatic.h"
+#include "../TranslateAPI/TranslateAPI.h"
 #include "ConnectAPIAndGui.h"
 
-ConnectAPIAndGui::BaiduTranslateAPI::BaiduTranslateAPI(String ^ appid, String ^ appkey)
+BaiduTranslate* BeginBaiduTranslate(cstring appid, cstring appkey) noexcept
 {
-	m_pBaiduTranslate = new BaiduTranslate(SysstrToStdstr(appid), SysstrToStdstr(appkey));
-
-	if (m_pBaiduTranslate == nullptr)
-	{
-		m_isOK	  = false;
-
-		m_message = "创建 BaiduTranslate 对象失败";
-	}
+	return new BaiduTranslate(appid, appkey);
 }
 
-ConnectAPIAndGui::BaiduTranslateAPI::~BaiduTranslateAPI(void)
+void EndBaiduTranslate(BaiduTranslate* p) noexcept
 {
-	if (m_pBaiduTranslate != nullptr)
-	{
-		delete (BaiduTranslate*)m_pBaiduTranslate;
-
-		m_pBaiduTranslate = nullptr;
-	}
+	delete p;
 }
 
-bool ConnectAPIAndGui::BaiduTranslateAPI::SetAppID(String ^ appid, String ^ appkey)
+bool SetAppID(BaiduTranslate* p, cstring appid, cstring appkey) noexcept
 {
-	return (m_pBaiduTranslate != nullptr)
-			   ? ((BaiduTranslate*)m_pBaiduTranslate)->SetAppID(SysstrToStdstr(appid), SysstrToStdstr(appkey))
-			   : false;
+	return p->SetAppID(appid, appkey);
 }
 
-String ^ ConnectAPIAndGui::BaiduTranslateAPI::Translate(String ^ source, String ^ from, String ^ to)
+cstring Translate(BaiduTranslate* p, cstring source, cstring from, cstring to) noexcept
 {
-	return (m_pBaiduTranslate != nullptr)
-			   ? StdstrToSysstr(((BaiduTranslate*)m_pBaiduTranslate)
-									->Translate(SysstrToStdstr(source), SysstrToStdstr(from), SysstrToStdstr(to)))
-			   : m_message;
+	return p->Translate(source, from, to);
 }
 
-bool ConnectAPIAndGui::BaiduTranslateAPI::isOK(void)
+bool isOK(BaiduTranslate* p) noexcept
 {
-	return (m_pBaiduTranslate != nullptr) ? ((BaiduTranslate*)m_pBaiduTranslate)->isOK() : false;
+	return p->isOK();
 }
 
-String ^ ConnectAPIAndGui::BaiduTranslateAPI::whatHappened(void)
+cstring whatWrong(BaiduTranslate* p) noexcept
 {
-	return (m_pBaiduTranslate != nullptr) ? StdstrToSysstr(((BaiduTranslate*)m_pBaiduTranslate)->whatHappened())
-										  : m_message;
-}
-
-_STD string ConnectAPIAndGui::BaiduTranslateAPI::SysstrToStdstr(String ^ s)
-{
-	using namespace System;
-	using namespace Runtime::InteropServices;
-
-	const char* chars = (const char*)(Marshal::StringToHGlobalAnsi(s)).ToPointer();
-
-	_STD string str	  = chars;
-
-	Marshal::FreeHGlobal(IntPtr((void*)chars));
-
-	return str;
-}
-
-String ^ ConnectAPIAndGui::BaiduTranslateAPI::StdstrToSysstr(const _STD string& s)
-{
-	using namespace System;
-	using namespace Runtime::InteropServices;
-
-	return Marshal::PtrToStringAnsi((IntPtr)(char*)s.c_str());
+	return p->whatHappened();
 }

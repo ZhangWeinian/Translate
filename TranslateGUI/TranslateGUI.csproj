@@ -61,7 +61,14 @@
     <ProjectCapability Include="Msix" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Model\" />
+    <Folder Include="TranslateAPIDll\x64_Debug\" />
+    <Folder Include="TranslateAPIDll\x64_Release\" />
+    <Folder Include="TranslateAPIDll\x86_Debug\" />
+    <Folder Include="TranslateAPIDll\x86_Release\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\x64\Debug\x64_Debug_ConnectAPIAndGui.dll" Link="TranslateAPIDll\x64_Debug\x64_Debug_ConnectAPIAndGui.dll" />
+    <None Include="..\x64\Release\x64_Release_ConnectAPIAndGui.dll" Link="TranslateAPIDll\x64_Release\x64_Release_ConnectAPIAndGui.dll" />
   </ItemGroup>
 
   <!--

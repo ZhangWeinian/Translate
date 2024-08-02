@@ -48,9 +48,8 @@ public:
 	/// <param name="from">原文语言类型</param>
 	/// <param name="to">目标语言类型</param>
 	/// <returns>翻译后的译文 或 错误信息</returns>
-	TRANSLATEAPI_API _NODISCARD _STD string Translate(const _STD string& source,
-													  const _STD string& from,
-													  const _STD string& to) noexcept;
+	TRANSLATEAPI_API _NODISCARD const char*
+		Translate(const _STD string& source, const _STD string& from, const _STD string& to) noexcept;
 
 	/// <summary>
 	/// 检查 InterBaiduTranslateAPI 对象的运行状态是否正确
@@ -64,18 +63,29 @@ public:
 	/// </summary>
 	/// <param name="">无参数</param>
 	/// <returns>返回运行状态的详细信息，空值表示无异常</returns>
-	TRANSLATEAPI_API _STD string whatHappened(void) noexcept;
+	TRANSLATEAPI_API const char* whatHappened(void) noexcept;
 
 private:
 
 	/// <summary>
 	/// 用委托的方式管理 BaiduTranslateAPI 对象
 	/// </summary>
-	void*		m_pBaiduTranslateAPI { nullptr };
+	void* m_pBaiduTranslateAPI { nullptr };
 
-	bool		m_isOK { true };
+	/// <summary>
+	/// 用于记录当前对象的运行状态是否正确
+	/// </summary>
+	bool m_isOK { true };
 
+	/// <summary>
+	/// 用于记录当前对象的运行状态的详细信息
+	/// </summary>
 	_STD string m_message { "" };
+
+	/// <summary>
+	/// 用于记录翻译结果
+	/// </summary>
+	_STD string m_ans { "" };
 };
 
 #endif	// defined(_HAS_CXX20)
