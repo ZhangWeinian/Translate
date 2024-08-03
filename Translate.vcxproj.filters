@@ -16,6 +16,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include=".clang-format" />
+    <None Include="readme.md" />
+    <None Include="setting.ini" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

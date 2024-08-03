@@ -1,5 +1,7 @@
 #pragma once
 
+#include "pch.h"
+
 #include <type_traits>
 #include <cstddef>
 #include <format>
@@ -53,7 +55,7 @@ _STD string SaveData::GetMD5(const _STD string& str) noexcept
 
 	_STD vector<unsigned char> hash(MD5_DIGEST_LENGTH, 0);
 
-	if (unsigned int hash_len = 0;
+	if (unsigned int hash_len { 0 };
 		(EVP_DigestFinal_ex(m_Ctx, hash.data(), &hash_len) != 1) || (EVP_DigestInit_ex(m_Ctx, EVP_md5(), nullptr) != 1))
 	{
 		return "";
@@ -66,13 +68,13 @@ _STD string SaveData::GetMD5(const _STD string& str) noexcept
 		_STD format_to(_STD back_inserter(result), "{:02x}", ch);
 	}
 
-	return result;
+	return _STD move(result);
 }
 
 _NODISCARD bool SaveData::SaveDataToLocal(const _STD string& appid, const _STD string& appkey) noexcept
 {
-	_STD string InterEncryptionAppID { _STD move(InterEncryption(appid)) };
-	_STD string InterEncryptionAppKey { _STD move(InterEncryption(appkey)) };
+	const auto& InterEncryptionAppID { _STD move(InterEncryption(appid)) };
+	const auto& InterEncryptionAppKey { _STD move(InterEncryption(appkey)) };
 
 	if ((InterEncryptionAppID == m_InterEncryptionAppID) && (InterEncryptionAppKey == m_InterEncryptionAppKey))
 	{
@@ -130,26 +132,40 @@ _STD string SaveData::InterEncryption(const _STD string& str) const noexcept
 {
 	_STD string encrypted {};
 
+	char		x { 'x' };
+	int			count { 1 };
+	_STD byte	encryptedByte {};
+
 	for (const auto& ch: str)
 	{
-		_STD byte encryptedByte = static_cast<_STD byte>(ch) ^ static_cast<_STD byte>('x');
+		encryptedByte = _STD move(static_cast<_STD byte>(ch) ^ static_cast<_STD byte>(x));
 
 		encrypted.push_back(static_cast<char>(encryptedByte));
+
+		x += count;
+		count++;
 	}
 
-	return encrypted;
+	return _STD move(encrypted);
 }
 
 _STD string SaveData::InterDecryption(const _STD string& str) const noexcept
 {
 	_STD string decrypted {};
 
+	char		x { 'x' };
+	int			count { 1 };
+	_STD byte	decryptedByte {};
+
 	for (const auto& ch: str)
 	{
-		_STD byte decryptedByte = static_cast<_STD byte>(ch) ^ static_cast<_STD byte>('x');
+		decryptedByte = _STD move(static_cast<_STD byte>(ch) ^ static_cast<_STD byte>(x));
 
 		decrypted.push_back(static_cast<char>(decryptedByte));
+
+		x += count;
+		count++;
 	}
 
-	return decrypted;
+	return _STD move(decrypted);
 }

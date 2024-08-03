@@ -6,22 +6,41 @@
 
 #if defined(_HAS_CXX20)
 
+	#include <source_location>
 	#include <type_traits>
+	#include <format>
+	#include <iterator>
 	#include <memory>
 	#include <string>
 
-	#if defined(_TRANSLATEAPI_ITEM)
+	#if defined(_TRANSLATEAPISTATIC_ITEM)
 
 		#include "__inter__BDTranslate.h"
-		#include "TranslateAPI.h"
+		#include "TranslateAPIStatic.h"
 
-BDTranslate::BDTranslate(const _STD string& appid, const _STD string& appkey) noexcept
+int BDTranslateStatic::test_add(int a, int b)
+{
+	return a + b;
+}
+
+void BDTranslateStatic::BDTranslate(const _STD string& appid, const _STD string& appkey) noexcept
 {
 	if (m_pBaiduTranslateAPI = _STD make_unique<_INTERBDTRANSLATE __inter__BDTranslate>(appid, appkey);
 		m_pBaiduTranslateAPI == nullptr)
 	{
-		m_isOK	  = false;
-		m_message = "创建 __inter__BDTranslate 对象失败";
+		const auto& source_location { _STD source_location::current() };
+
+		m_message.clear();
+
+		_STD format_to(_STD back_inserter(m_message),
+					   "创建 __inter__BDTranslate 对象失败\n文件名：{}\n函数名：{}\n行号：{}\n",
+					   source_location.file_name(),
+					   source_location.function_name(),
+					   source_location.line());
+
+		m_isOK = false;
+
+		return;
 	}
 	else
 	{
@@ -30,7 +49,7 @@ BDTranslate::BDTranslate(const _STD string& appid, const _STD string& appkey) no
 	}
 }
 
-bool BDTranslate::SetAppID(const _STD string& appid, const _STD string& appkey) noexcept
+bool BDTranslateStatic::SetAppID(const _STD string& appid, const _STD string& appkey) noexcept
 {
 	if (!isOK())
 	{
@@ -40,7 +59,8 @@ bool BDTranslate::SetAppID(const _STD string& appid, const _STD string& appkey) 
 	return (m_pBaiduTranslateAPI != nullptr) ? m_pBaiduTranslateAPI->InterBaiduTranslateSetAppID(appid, appkey) : false;
 }
 
-const char* BDTranslate::Translate(const _STD string& source, const _STD string& from, const _STD string& to) noexcept
+const char*
+	BDTranslateStatic::Translate(const _STD string& source, const _STD string& from, const _STD string& to) noexcept
 {
 	if (!isOK())
 	{
@@ -56,7 +76,7 @@ const char* BDTranslate::Translate(const _STD string& source, const _STD string&
 	return m_ans.c_str();
 }
 
-bool BDTranslate::isOK(void) noexcept
+bool BDTranslateStatic::isOK(void) noexcept
 {
 	if (m_pBaiduTranslateAPI == nullptr)
 	{
@@ -77,12 +97,13 @@ bool BDTranslate::isOK(void) noexcept
 	}
 }
 
-const char* BDTranslate::whatHappened(void) noexcept
+const char* BDTranslateStatic::whatHappened(void) noexcept
 {
 	m_message = _STD move((m_pBaiduTranslateAPI != nullptr) ? m_pBaiduTranslateAPI->whatHappened() : m_message);
 
 	return m_message.c_str();
 }
-	#endif	// defined(_TRANSLATEAPI_ITEM)
+
+	#endif	// defined(_TRANSLATEAPISTATIC_ITEM)
 
 #endif		// defined(_HAS_CXX20)

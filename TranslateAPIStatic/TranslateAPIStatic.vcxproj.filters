@@ -15,27 +15,30 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="SaveData.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="__inter__AttributeDefinition.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="framework.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="pch.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="__inter__AttributeDefinition.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="TranslateAPIStatic.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="__inter__BDTranslate.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="dllmain.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="SaveData.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="pch.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="TranslateAPIStatic.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="__inter__BDTranslate.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

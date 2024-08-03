@@ -1,6 +1,6 @@
 ﻿// dllmain.cpp : 定义 DLL 应用程序的入口点。
 
-#include <Windows.h>
+#include "pch.h"
 
 #include "TranslateAPI.h"
 

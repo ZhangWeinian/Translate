@@ -372,3 +372,6 @@ FodyWeavers.xsd
 /APILinkCSharp/.clang-format
 /TranslateAPI/.clang-format
 /setting.ini
+/CLREncapsulation/.clang-format
+/ConnectAPIAndGui/.clang-format
+/TranslateAPIStatic/.clang-format
