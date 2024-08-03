@@ -8,11 +8,11 @@
 * 此文件中大量使用了 C++20 的新特性，因此使用此文件之前请确保你的编译器支持并开启 C++20
 */
 
-#include <memory>
-#include <string>
-#include <version>
-
 #if defined(_TRANSLATEAPI_ITEM)
+
+	#include <memory>
+	#include <string>
+	#include <version>
 
 	#include "__inter__AttributeDefinition.h"
 	#include "__inter__BDTranslate.h"
@@ -23,7 +23,7 @@
 
 #endif		// defined(_TRANSLATEAPI_ITEM)
 
-class BDTranslate final
+class BDTranslateDll final
 {
 public:
 
@@ -33,14 +33,14 @@ public:
 	/// <param name="appid">百度翻译 AppID</param>
 	/// <param name="appkey">对应的 key</param>
 	/// <returns>无返回值</returns>
-	TRANSLATEAPI_API BDTranslate(const _STD string& appid, const _STD string& appkey) noexcept;
+	TRANSLATEAPI_API BDTranslateDll(const _STD string& appid, const _STD string& appkey) noexcept;
 
 	/// <summary>
 	/// 析构函数。由于使用了智能指针，因此无需手动释放资源
 	/// </summary>
 	/// <param name="">无参数</param>
 	/// <returns>无返回值</returns>
-	TRANSLATEAPI_API ~BDTranslate(void) noexcept = default;
+	TRANSLATEAPI_API ~BDTranslateDll(void) noexcept = default;
 
 	/// <summary>
 	/// 调用此函数设置百度翻译 API 的 AppID 和 AppKey

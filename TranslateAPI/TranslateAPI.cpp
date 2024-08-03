@@ -15,7 +15,7 @@
 		#include "__inter__BDTranslate.h"
 		#include "TranslateAPI.h"
 
-BDTranslate::BDTranslate(const _STD string& appid, const _STD string& appkey) noexcept
+BDTranslateDll::BDTranslateDll(const _STD string& appid, const _STD string& appkey) noexcept
 {
 	if (m_pBaiduTranslateAPI = _STD make_unique<_INTERBDTRANSLATE __inter__BDTranslate>(appid, appkey);
 		m_pBaiduTranslateAPI == nullptr)
@@ -30,7 +30,7 @@ BDTranslate::BDTranslate(const _STD string& appid, const _STD string& appkey) no
 	}
 }
 
-bool BDTranslate::SetAppID(const _STD string& appid, const _STD string& appkey) noexcept
+bool BDTranslateDll::SetAppID(const _STD string& appid, const _STD string& appkey) noexcept
 {
 	if (!isOK())
 	{
@@ -40,24 +40,29 @@ bool BDTranslate::SetAppID(const _STD string& appid, const _STD string& appkey) 
 	return (m_pBaiduTranslateAPI != nullptr) ? m_pBaiduTranslateAPI->InterBaiduTranslateSetAppID(appid, appkey) : false;
 }
 
-const char* BDTranslate::Translate(const _STD string& source, const _STD string& from, const _STD string& to) noexcept
+const char*
+	BDTranslateDll::Translate(const _STD string& source, const _STD string& from, const _STD string& to) noexcept
 {
 	if (!isOK())
 	{
-		m_ans = _STD move((m_pBaiduTranslateAPI != nullptr) ? m_pBaiduTranslateAPI->whatHappened() : m_message);
+		m_message = _STD move((m_pBaiduTranslateAPI != nullptr) ? m_pBaiduTranslateAPI->whatHappened() : m_message);
+
+		return m_message.c_str();
 	}
 	else
 	{
 		m_ans =
 			_STD move((m_pBaiduTranslateAPI != nullptr) ? m_pBaiduTranslateAPI->InterBaiduTranslate(source, from, to)
 														: m_message);
-	}
 
-	return m_ans.c_str();
+		return m_ans.c_str();
+	}
 }
 
-bool BDTranslate::isOK(void) noexcept
+bool BDTranslateDll::isOK(void) noexcept
 {
+	m_message.clear();
+
 	if (m_pBaiduTranslateAPI == nullptr)
 	{
 		m_message = _STD move(_STD string("__inter__BDTranslate 对象为空"));
@@ -77,7 +82,7 @@ bool BDTranslate::isOK(void) noexcept
 	}
 }
 
-const char* BDTranslate::whatHappened(void) noexcept
+const char* BDTranslateDll::whatHappened(void) noexcept
 {
 	m_message = _STD move((m_pBaiduTranslateAPI != nullptr) ? m_pBaiduTranslateAPI->whatHappened() : m_message);
 

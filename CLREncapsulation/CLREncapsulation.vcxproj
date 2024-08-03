@@ -24,8 +24,8 @@
     <ProjectGuid>{ADCAA1ED-D81B-4EFF-AFAD-085E458E6408}</ProjectGuid>
     <Keyword>NetCoreCProj</Keyword>
     <RootNamespace>CLREncapsulation</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.22621.0</WindowsTargetPlatformVersion>
     <TargetFramework>net8.0</TargetFramework>
+    <WindowsTargetPlatformVersion>10.0.22621.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -84,9 +84,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
-    <Link>
-      <AdditionalDependencies />
-    </Link>
+    <Link />
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -152,6 +150,9 @@
     <None Include=".clang-format" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SaveData\SaveData.vcxproj">
+      <Project>{6596b5b1-4770-485f-a80a-a4f3a6ae7012}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\TranslateAPIStatic\TranslateAPIStatic.vcxproj">
       <Project>{35c9271a-8367-4ef7-8893-6827d230ba04}</Project>
     </ProjectReference>

@@ -64,6 +64,9 @@
     <Folder Include="TranslateAPIDll\x86_Debug\" />
     <Folder Include="TranslateAPIDll\x86_Release\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CLREncapsulation\CLREncapsulation.vcxproj" />
+  </ItemGroup>
 
   <!--
     Defining the "HasPackageAndPublishMenuAddedByProject" property here allows the Solution
