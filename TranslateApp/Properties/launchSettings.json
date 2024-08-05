@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "TranslateApp (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "TranslateApp (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Window x:Class="TranslateApp.View.MainView"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:local="using:TranslateApp.View"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:viewmodel="using:TranslateApp.ViewModel"
+		d:dataContext="{d:DesignInstance viewmodel:MainViewModel}"
+		mc:Ignorable="d">
+
+	<Window.SystemBackdrop>
+		<MicaBackdrop Kind="BaseAlt" />
+	</Window.SystemBackdrop>
+
+	<Grid MinWidth="480" MinHeight="600">
+		<!--<Grid x:Name="AppTitleBar">
+			<Image Width="16"
+				   Height="16"
+				   Margin="8,0"
+				   HorizontalAlignment="Left"
+				   Source="Assets/010.png" />
+			<TextBlock x:Name="AppTitleTextBlock"
+					   Margin="47,11,0,0"
+					   VerticalAlignment="Top"
+					   Text="Amazing！翻译"
+					   TextWrapping="NoWrap" />
+		</Grid>-->
+
+		<NavigationView x:Name="RootNavView"
+						IsTitleBarAutoPaddingEnabled="False"
+						ItemInvoked="PageInvoked"
+						PaneDisplayMode="Auto">
+
+			<!--  导航栏标题  -->
+			<NavigationView.PaneTitle>
+				选项、设置与更多
+			</NavigationView.PaneTitle>
+
+			<!--  导航栏选项  -->
+			<NavigationView.MenuItems>
+				<!--  主内容区域 的页面  -->
+				<NavigationViewItem Content="翻译主页"
+									Icon="Home"
+									Tag="DefaultPage"
+									ToolTipService.ToolTip="翻译主页" />
+
+				<!--  设置翻译源 的页面  -->
+				<NavigationViewItem Content="设置翻译源"
+									Tag="SetAPI"
+									ToolTipService.ToolTip="选择并设置翻译方式">
+					<NavigationViewItem.Icon>
+						<FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE74C;" />
+					</NavigationViewItem.Icon>
+				</NavigationViewItem>
+
+				<!--  查看错误日志 的页面  -->
+				<NavigationViewItem Content="错误日志"
+									Tag="LookingLog"
+									ToolTipService.ToolTip="打开错误日志">
+					<NavigationViewItem.Icon>
+						<FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xEA39;" />
+					</NavigationViewItem.Icon>
+				</NavigationViewItem>
+
+				<!--  关于 的页面  -->
+				<NavigationViewItem Content="关于本软件"
+									Tag="LookingMore"
+									ToolTipService.ToolTip="查看更多信息">
+					<NavigationViewItem.Icon>
+						<FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE946;" />
+					</NavigationViewItem.Icon>
+				</NavigationViewItem>
+			</NavigationView.MenuItems>
+
+			<!--  主内容区域  -->
+			<NavigationView.Content>
+				<Frame x:Name="ContentFrame" Margin="12,18" />
+			</NavigationView.Content>
+
+		</NavigationView>
+
+	</Grid>
+
+</Window>
