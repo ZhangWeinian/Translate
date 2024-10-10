@@ -1,0 +1,4231 @@
+# @format
+
+# vvvvvv
+#
+# 说明:
+#
+#     +----------------------------------------------+
+#     | SPACES-MUST-BE-USED-INSTEAD-OF-TAB-TO-INDENT |
+#     +----------------------------------------------+
+#     
+#     +----------------------------+
+#     | UTF8-ENCODING-MUST-BE-USED |
+#     +----------------------------+
+#
+#     内部版本	: FILE-VERSION-2.1.0
+#     编码格式	: UTF8
+#     责任撰写人	: 张威年
+#
+# ^^^^^^
+
+# vvvvvv
+# 文件说明（ 1 ）:
+#
+### No.[一] 
+# 在不致混淆的情况下，本文中，除非明确说明或指示（例如：关键词 clang-format.exe 明确的表示它代指 Windows 平台上一个名为 clang-format 的可执行文件），关键词 clang-format 或 .clang-format ）的含义可以是以下几种：
+# a）指代 clang-format.exe 可执行文件；
+# b）指代 .clang-format 配置文件；
+# c）指代 clang-format 有关的其他条款。
+# 在这种情况下，读者应根据上下文来理解它的含义。本文最大可能保证关键词 clang-format（或 .clang-format ）避免在上下文出现歧义。
+#
+### No.[二]  
+# 本文件是 clang-format 的配置文件，目的是用于格式化 C/C++ 代码，并未列出或定义与 C++ 完全无关的配置项，所以本文件列出的针对 C/C++ 的有效配置项（不含已声明为 弃置 的项）共 146 项 少于 官方文档（ https://clang.llvm.org/docs/ClangFormatStyleOptions.html ）（以下简称【官方文档】）中列出的配置项。
+#
+### No.[三]  
+# 本文件中的配置项是基于【官方文档】列出的配置项进行修改的（其中已经声明为 弃置 的项没有在此定义）。
+#
+### No.[四]  
+# 本文件在 Windows11 64-bit 平台中，分别使用 VSCode + MSYS2 clang64 clang-format.exe 17.0.6 与 VisualStudio2022 + VisualStudio 附带的可选 Clang 编译器中的 clang-format.exe 17.0.3（以上两环境，简称【测试环境】），均测试通过。
+#
+### No.[五] 
+# 为了方便查找与设置，本文件中的配置项是按照【官方文档】列出的的配置项顺序进行排列的（只有一个例外项 -- 本文件中 No.[80]-Language-(LanguageKind) 的配置项 -- 它被提前定义在所有配置项之前。但仅仅是定义，配置详细说明所处的的相对位置不变）。
+#
+### No.[六] 
+# 为了方便查找与设置，本文件中的每一项配置项均以 # vvvvvv 开头，以 # ^^^^^^ 结尾，中间是配置项的说明和配置值，包括正在阅读的 文件说明（ 1 ）。
+#
+### No.[七] 
+# 为了方便查找与设置，本文件中出现的一些含义不明确的关键字（例如：最佳选项 -- 仅此关键词不能指明何为最佳、是哪个平台上的最佳、基于何种比较而得出的最佳等），均在关键字后面加上了注释（例如：最佳选项（Windows 平台上的最佳选项））或注释编号指示标识（例如：最佳选项<1>…… 。（此处会另起一行）## <1>  此处指 Windows 平台上的最佳选项）来指明它的含义。
+#
+### No.[八]
+# 受限于文本格式，本文件中的配置项的说明可能不够详细（尤其是某配置项不同的值带来的实际效果差异的对比），如果需要更详细的说明，请参考【官方文档】或其它任何你认为有益的资源。
+#
+### No.[九] 
+# 始终推荐以最新版本的 Llvm clang-format 搭配运行本文件。如果你使用的是旧版本的 Llvm clang-format ，可能会有一些配置项不适用或者效果不如预期，甚至出现错误。对此，你可以尝试升级你的 Llvm clang-format 版本，或者在本文件中注释掉不适用的配置项。
+#
+### No.[十] 
+# 本文件中的某些配置项是 Llvm clang-format 为下一个版本（ calng-format 19 ）预留的配置项，它们可能在下一个版本中被添加到 Llvm clang-format 中并正式启用。故而这些配置项不适合在当前版本（ clang-format 17 ）的 Llvm clang-format 中使用。基于对【官方文档】的尊重，这些配置项被列出；基于对现实的考虑，它们被注释掉了，并在注释后面添加了一个特殊的标识符
+# +--------------------------------------------+
+# | THE-VERSION-DOES_NOT-MEET-THE-REQUIREMENTS |
+# +--------------------------------------------+
+# 以作提示 。你可以在下一个版本的 Llvm clang-format 中尝试启用它们。
+#
+### No.[十一]
+# 自 FILE-VERSION-1.1.4 版本开始，每一个配置项名称的最后，以大括号的形式标明了此配置项是从 Llvm clang-format 的那个主要版本开始支持的（显然，这也是使用此配置项的最低版本要求）。
+# 例如："Language (LanguageKind) { clang-format 3.5 }" 表示配置项 Language (LanguageKind) 是从 Llvm clang-format 3.5 版本开始支持的。这样做一是为了方便你在使用旧版本的 Llvm clang-format 时，可以快速定位到你可以使用的配置项；二是为了方便你在使用本文件之前，可以根据你的 Llvm clang-format 版本来决定是否需要注释掉一些配置项，而不必等到出错的时候再挨个注释或删除（例如：你使用了 Llvm ckang-format 17 ，那么可以快速浏览所有配置项，将那些版本要求高于 17 的配置项注释或删除）。
+#
+### No.[十二]
+# 即使出现了不合适或不可用的配置项（通常是你正在使用的 Llvm clang-format 版本低于配置项要求的最低版本），本文件也不会删除它们，而是注释掉它们（除非它被明确声明为 弃置）。这是推荐的做法：为了保持本文件的完整性，以及为了方便你在使用新版本的 Llvm clang-format 时，可以快速找到并启用它们。
+#
+# ^^^^^^
+
+# vvvvvv
+# 文件说明（ 2 ）:
+### No.[一] 
+# 此格式文件应该被视为可行的最低标准<1>文件（即使本文件可以直接使用而不做任何修改）。这意味着它没有任何针对特殊项目的配置（尤其是关于静态检测的宏的设置。可以在本文件中搜索关键词 List of Strings 快速定位它们）。虽然这是一个很好的起点（当然，你可以依据你的个性化需求对本文件列出的配置项做添加或修改），但是如无必要，请不要在此文件中添加或修改项目特定的配置，直接使用就好。
+#
+### No.[二] 
+# 如果没有特殊说明，此文件中配置项的值均是推荐值<2>。除非你明确正在修改的配置的含义，否则请勿更改预设值。但是对于本文件中没有列出的、依然受支持的配置项，你可以自由添加。
+#
+### No.[三]
+# 文件编码必须是 UTF-8 ，否则可能会导致 clang-format 无法正确解析配置文件。标识符
+# +-----------------------------+
+# | UTF8-ENCODING-MUST-BE-USED |
+# +-----------------------------+
+# 将在你浏览或修改配置时，更明确的提醒你。
+#
+### No.[四]
+# 请注意：clang-format 配置文件对有效配置项的缩进和制表符敏感，所以请确保：
+# a）你的编辑器使用空格而不是制表符来缩进；
+# b）如 No.[9]-AlignConsecutiveShortCaseStatements-(ShortCaseStatementsAlignmentStyle) 有子配置项时，子配置项的缩进是正确的。
+# 标识符
+# +----------------------------------------------+
+# | SPACES-MUST-BE-USED-INSTEAD-OF-TAB-TO-INDENT |
+# +----------------------------------------------+
+# 和
+# +---------------------------+
+# | DO-NOT-REMOVE-INDENTATION |
+# +---------------------------+
+# 将在你浏览或修改配置时，更明确的提醒你。
+# 
+## <1>  最低标准 的含义是：经作者测试，可以最大限度避免配置项在不同环境、不同平台、不同目标文件格式中出现歧义。实际上是尽可能明确定义出所有有用的配置项，即使定义出的配置项已经是 clang-format 的默认值。
+## <2>  推荐值 的含义是：经作者测试，在【测试环境】中表现效果良好的值。
+# ^^^^^^
+
+# vvvvvv
+# 文件说明（ 3 ）:
+# 什么是 clang-format？以及如何使用它？-- Clang-Format 简介
+#
+### No.[一] 
+# clang-format.exe 与 .clang-format 配置文件介绍
+#
+# clang-format.exe 是一个命令行工具，通常位于 /clang/tools/clang-format ，可用于格式化 C/C++/Java/JavaScript/Objective-C/Protobuf/C# 代码。可以在命令行中输入 clang-format --help 查看它的帮助信息。如下是一个范例:
+#
+# $ clang-format --help
+# OVERVIEW: A tool to format C/C++/Java/JavaScript/JSON/Objective-C/Protobuf/C# code.
+#
+# If no arguments are specified, it formats the code from standard input
+# and writes the result to the standard output.
+# If <file>s are given, it reformats the files. If -i is specified
+# together with <file>s, the files are edited in-place. Otherwise, the
+# result is written to the standard output.
+#
+# USAGE: clang-format.exe [options] [<file> ...]
+#
+# OPTIONS:
+#
+# Clang-format options:
+#
+#   --Werror                       - If set, changes formatting warnings to errors
+#   --Wno-error=<value>            - If set don't error out on the specified warning type.
+#     =unknown                     - If set, unknown format options are only warned about.
+#                                      This can be used to enable formatting, even if the
+#                                      configuration contains unknown (newer) options.
+#                                      Use with caution, as this might lead to dramatically
+#                                      differing format depending on an option being
+#                                      supported or not.
+#   --assume-filename=<string>     - Set filename used to determine the language and to find
+#                                    .clang-format file.
+#                                    Only used when reading from stdin.
+#                                    If this is not passed, the .clang-format file is searched
+#                                    relative to the current working directory when reading stdin.
+#                                    Unrecognized filenames are treated as C++.
+#                                    supported:
+#                                      CSharp: .cs
+#                                      Java: .java
+#                                      JavaScript: .mjs .js .ts
+#                                      Json: .json
+#                                      Objective-C: .m .mm
+#                                      Proto: .proto .protodevel
+#                                      TableGen: .td
+#                                      TextProto: .textpb .pb.txt .textproto .asciipb
+#                                      Verilog: .sv .svh .v .vh
+#   --cursor=<uint>                - The position of the cursor when invoking
+#                                    clang-format from an editor integration
+#   --dry-run                      - If set, do not actually make the formatting changes
+#   --dump-config                  - Dump configuration options to stdout and exit.
+#                                    Can be used with -style option.
+#   --fallback-style=<string>      - The name of the predefined style used as a
+#                                    fallback in case clang-format is invoked with
+#                                    -style=file, but can not find the .clang-format
+#                                    file to use. Defaults to 'LLVM'.
+#                                    Use -fallback-style=none to skip formatting.
+#   --ferror-limit=<uint>          - Set the maximum number of clang-format errors to emit
+#                                    before stopping (0 = no limit).
+#                                    Used only with --dry-run or -n
+#   --files=<filename>             - A file containing a list of files to process, one per line.
+#   -i                             - Inplace edit <file>s, if specified.
+#   --length=<uint>                - Format a range of this length (in bytes).
+#                                    Multiple ranges can be formatted by specifying
+#                                    several -offset and -length pairs.
+#                                    When only a single -offset is specified without
+#                                    -length, clang-format will format up to the end
+#                                    of the file.
+#                                    Can only be used with one input file.
+#   --lines=<string>               - <start line>:<end line> - format a range of
+#                                    lines (both 1-based).
+#                                    Multiple ranges can be formatted by specifying
+#                                    several -lines arguments.
+#                                    Can't be used with -offset and -length.
+#                                    Can only be used with one input file.
+#   -n                             - Alias for --dry-run
+#   --offset=<uint>                - Format a range starting at this byte offset.
+#                                    Multiple ranges can be formatted by specifying
+#                                    several -offset and -length pairs.
+#                                    Can only be used with one input file.
+#   --output-replacements-xml      - Output replacements as XML.
+#   --qualifier-alignment=<string> - If set, overrides the qualifier alignment style
+#                                    determined by the QualifierAlignment style flag
+#   --sort-includes                - If set, overrides the include sorting behavior
+#                                    determined by the SortIncludes style flag
+#   --style=<string>               - Set coding style. <string> can be:
+#                                    1. A preset: LLVM, GNU, Google, Chromium, Microsoft,
+#                                       Mozilla, WebKit.
+#                                    2. 'file' to load style configuration from a
+#                                       .clang-format file in one of the parent directories
+#                                       of the source file (for stdin, see --assume-filename).
+#                                       If no .clang-format file is found, falls back to
+#                                       --fallback-style.
+#                                       --style=file is the default.
+#                                    3. 'file:<format_file_path>' to explicitly specify
+#                                       the configuration file.
+#                                    4. "{key: value, ...}" to set specific parameters, e.g.:
+#                                       --style="{BasedOnStyle: llvm, IndentWidth: 8}"
+#   --verbose                      - If set, shows the list of processed files
+#
+# Generic Options:
+#
+#   --help                         - Display available options (--help-hidden for more)
+#   --help-list                    - Display list of available options (--help-list-hidden for more)
+#   --version                      - Display the version of this program
+# ...
+#
+#
+### No.[二] 
+# 关于配置样式
+#
+# clang-format 支持两种提供自定义样式选项的方式：直接在 -style= 命令行选项中指定样式配置，或者使用 -style=file 并将样式配置放在项目目录的 .clang-format（或 _clang-format ，此命名不常用。下文中使用 .clang-format 文件 泛指此二者）文件中。本文件正属于后者。
+#
+# 当使用 -style=file 时，每个输入文件的 clang-format 将尝试在输入文件最近的父目录中找到 .clang-format 文件。当使用标准输入时，搜索从当前目录开始。
+#
+# .clang-format 文件使用 YAML 格式。它包含一个或多个配置部分以及注释，每个部分都可能有一个 Language 项，用以指定配置部分适用的语言。配置部分的其余部分是键值对，键是配置项的名称，值是配置项的值。例如：
+#
+# key1: value1
+# key2: value2
+# # 一条注释。
+# ...
+#
+# 配置文件可以由几个部分组成，每个部分使用不同的语言：参数表示该配置部分针对的编程语言。有关支持的语言列表，请参阅下面语言选项的说明。第一部分可能没有设置语言，它将为所有语言设置默认样式选项。特定语言的配置节将覆盖在默认部分的设置的选项。
+#
+# 当 clang-format 格式化目标文件时，它使用文件名自动检测语言。当格式化标准输入或没有与其语言对应的扩展名的文件时，-assume-filename= 选项可以用来覆盖 clang-format 用于检测语言的文件名。
+#
+# clang-format 支持在同一文件中对多种支持的语言进行不同的配置。在这种情况下，它将使用最接近的配置部分，该部分的语言与文件中的语言匹配。
+# 将配置项 Language (LanguageKind) 置于所有配置项之前，并且在之后的配置中不再设置其它的 Language 项，这样可以确保配置文件对某种语言类型支持的功能单一性和最小完整性。
+# 始终建议至少指定一个语言并置于所有配置项之前，以确保 clang-format 使用正确的配置部分。
+# 个人建议在一个配置文件中只配置一种语言，可以定义多个不同的配置文件按项目放在不同的工作目录，以方便针对性设置而避免混淆。
+# 而如果想用在一个文件中的多种语言使用相同的配置，可以在配置文件中使用多个配置部分，每个部分都有一个 Language 项，但是其他配置项都是相同的。可以参考如下示例:
+#
+# 多语言配置文件的示例:
+# ---
+# # 我们将使用默认的 LLVM 风格，但有 4 列缩进。
+# BasedOnStyle: LLVM
+# IndentWidth: 4
+# ---
+# Language: Cpp
+# # 强制指向 C++ 类型的指针。
+# DerivePointerAlignment: false
+# PointerAlignment: Left
+# ---
+# Language: JavaScript
+# # 为 JS 使用 100 列。
+# ColumnLimit: 100
+# ---
+# Language: Proto
+# # 不要格式化 .proto 文件。
+# DisableFormat: true
+# ---
+# Language: CSharp
+# # 为 C# 使用 100 列。
+# ColumnLimit: 100
+# ...
+#
+# 获得包含所有预定义样式配置选项的有效 .clang-format 文件的一个简单方法是:
+# $ clang-format -style = llvm -dump-config > ./.clang-format
+#
+# 当在 -style= 选项中指定配置时，相同的配置将应用于所有输入文件。配置的格式为:
+# $ clang-format -style = '{key1: value1, key2: value2, ...}'
+#
+#
+#
+### No.[三]  关于禁用格式
+# Clang-format 还可以理解在带分隔符的范围内切换格式的特殊注释。注释 // clang-format off（或 /* clang-format off */）到注释 // clang-format on（或 /* clang-format on */）之间的代码不会被格式化。注释本身将被正常格式化（例如对齐）。
+#
+# int formatted_code;
+# // clang-format off
+#     void    unformatted_code   ;
+# // clang-format on
+# void formatted_code_again;
+#
+# ^^^^^^
+
+#
+#
+#
+# vvvvvvvvvvvvvvvvvvvvvvvv The Formal Configuration Items Start Here vvvvvvvvvvvvvvvvvvvvvvvvv
+#
+#
+#
+
+# vvvvvv
+Language: Cpp #<3>
+#
+## <3>  语言选项的说明：此配置详细信息请参考条款 No.[80]-Language-(LanguageKind) 与 文件说明（ 3 ）No.[二] 关于配置样式 。
+# ^^^^^^
+
+# vvvvvv
+### No.[1]  BasedOnStyle (string) {（此配置项的最小版本要求未知，原因是 【官方文档】 中没有说明）}
+# 用于配置中未特别设置的所有选项的样式。
+# 此选项仅在 clang-format 配置中支持（在 -style='{...}' 和 .clang-format 文件）。
+# 可能的值:
+# LLVM:                 一种符合 LLVM 代码规范 的样式
+# Google:               一种符合 Google C++ 风格指南 的样式
+# Chromium:             一种符合 Chromium 风格指南 的样式
+# Mozilla:              一种符合 Mozilla 风格指南 的样式
+# WebKit:               一种符合 WebKit 风格指南 的样式
+# Microsoft:            一种符合 Microsoft 风格指南 的样式
+# GNU:                  一种符合 GNU 代码规范 的样式
+# InheritParentConfig:  使用当前目录中的 .clang-format 文件（如果没有，则使用其父目录）。如果找不到父文件，它将回退到回退样式，并将更改应用到该样式。使用这个选项，您可以覆盖子目录的主样式的某些部分。这也可以通过命令行实现，例如：--style={BasedOnStyle: InheritParentConfig, ColumnLimit: 20}
+# None:                 不使用, 即自动配置, 也就是本文件中的自定义内容
+#
+BasedOnStyle: None
+# ^^^^^^
+
+# vvvvvv
+### No.[2]  AccessModifierOffset (int) { clang-format 3.3 }
+# 用于配置访问修饰符的缩进。如果为 -1 ，则使用 No.[71]-IndentWidth-(Unsigned) 的值。
+#
+AccessModifierOffset: -4
+# ^^^^^^
+
+# vvvvvv
+### No.[3]  AlignAfterOpenBracket (BracketAlignmentStyle) { clang-format 3.8 }
+# 如果为 true ，则在左大括号后对齐。
+# 这适用于圆括号、尖括号和方括号。
+# 注意：这目前仅适用于带括号的初始值设定项列表（当 No.[51]-Cpp11BracedListStyle-(Boolean) 为 true 时）和圆括号。
+# 可能的值:
+# Align: 将左括号中的参数对齐。例如：
+#     someLongFunction(argument1,
+#                      argument2);
+#
+# DontAlign: 不要对齐，而是使用 No.[50]-ContinuationIndentWidth-(Unsigned) 。例如：
+#     someLongFunction(argument1,
+#         argument2);
+#
+# AlwaysBreak: 如果参数不适合在一行中，则始终在左括号后中断。例如：
+#     someLongFunction(
+#         argument1, argument2);
+#
+# BlockIndent: 如果参数不合适在一行中，则始终在打开括号后断开在一行上。右括号将放在新行上。例如：
+#     someLongFunction(
+#         argument1, argument2
+#     )
+#
+AlignAfterOpenBracket: Align
+# ^^^^^^
+
+# vvvvvv
+### No.[4]  AlignArrayOfStructures (ArrayInitializerAlignmentStyle) { clang-format 13 }
+# 如果不是 None ，则在对结构数组使用初始化时会将字段对齐到列中。
+# 注意：从 clang-Format 15 开始，此选项仅适用于每行列数相等的数组。
+# 可能的值:
+# Left: 将字段对齐到列中。例如：
+#     struct test demo[] =
+#     {
+#         {56, 23,    "hello"},
+#         {-1, 93463, "world"},
+#         {7,  5,     "!!"   }
+#     };
+#
+# Right: 将字段对齐到列中。例如：
+#     struct test demo[] =
+#     {
+#         {56,    23, "hello"},
+#         {-1, 93463, "world"},
+#         { 7,     5,    "!!"}
+#     };
+#
+# None: 不要对齐。
+#
+AlignArrayOfStructures: Left
+# ^^^^^^
+
+# vvvvvv
+### No.[5]  AlignConsecutiveAssignments (AlignConsecutiveStyle) { clang-format 3.8 }
+# 对齐连续的赋值。
+# 可能的值:
+# None: 不要对齐。
+#
+# Consecutive: 对齐连续的赋值。例如：
+#     int a            = 1;
+#     int somelongname = 2;
+#     double c         = 3;
+#
+# AcrossEmptyLines:				对齐连续的赋值，即使它们之间有空行。
+# AcrossComments:				对齐连续的赋值，即使它们之间有注释。
+# AcrossEmptyLinesAndComments:	对齐连续的赋值，即使它们之间有空行或注释。
+#
+AlignConsecutiveAssignments: AcrossEmptyLines
+# ^^^^^^
+
+# vvvvvv
+### No.[6]  AlignConsecutiveBitFields (AlignConsecutiveStyle) { clang-format 11 }
+# 对齐连续位字段的样式。
+# 可能的值:
+# None: 不要对齐。
+#
+# Consecutive: 对齐连续的位字段。例如：
+#     int aaaa : 1;
+#     int b    : 12;
+#     int ccc  : 8;
+#
+# AcrossEmptyLines:				对齐连续的位字段，即使它们之间有空行。
+# AcrossComments:				对齐连续的位字段，即使它们之间有注释。
+# AcrossEmptyLinesAndComments:	对齐连续的位字段，即使它们之间有空行或注释。
+#
+AlignConsecutiveBitFields: AcrossEmptyLines
+# ^^^^^^
+
+# vvvvvv
+### No.[7]  AlignConsecutiveDeclarations (AlignConsecutiveStyle) { clang-format 3.8 }
+# 对齐连续的声明。
+# 可能的值:
+# None: 不要对齐。
+#
+# Consecutive: 对齐连续的声明。例如：
+#     int         aaaa = 12;
+#     float       b = 23;
+#     std::string ccc;
+#
+# AcrossEmptyLines:				对齐连续的声明，即使它们之间有空行。
+# AcrossComments:				对齐连续的声明，即使它们之间有注释。
+# AcrossEmptyLinesAndComments:	对齐连续的声明，即使它们之间有空行或注释。
+#
+AlignConsecutiveDeclarations: AcrossEmptyLines
+# ^^^^^^
+
+# vvvvvv
+### No.[8]  AlignConsecutiveMacros (AlignConsecutiveStyle) { clang-format 9 }
+# 对齐连续的宏。
+# 可能的值:
+# None: 不要对齐。
+#
+# Consecutive: 对齐连续的宏。例如：
+#     #define SHORT_NAME       42
+#     #define LONGER_NAME      0x007f
+#     #define EVEN_LONGER_NAME (2)
+#     #define foo(x)           (x * x)
+#     #define bar(y, z)        (y + z)
+#
+# AcrossEmptyLines:				对齐连续的宏，即使它们之间有空行。
+# AcrossComments:				对齐连续的宏，即使它们之间有注释。
+# AcrossEmptyLinesAndComments:	对齐连续的宏，即使它们之间有空行或注释。
+#
+AlignConsecutiveMacros: Consecutive
+# ^^^^^^
+
+# vvvvvv
+# No.[9]  AlignConsecutiveShortCaseStatements (ShortCaseStatementsAlignmentStyle) { clang-format 17 }
+# 对齐连续的短 case 语句。仅当 No.[17]-AllowShortCaseLabelsOnASingleLine-(Boolean) 为 true 时才适用。
+AlignConsecutiveShortCaseStatements:
+    #
+    # +---------------------------+
+    # | DO-NOT-REMOVE-INDENTATION |
+    # +---------------------------+
+    #
+
+    # bool Enabled: 是否启用对齐。
+    # true:
+    #     switch (level) {
+    #     case log::info:    return "info:";
+    #     case log::warning: return "warning:";
+    #     default:           return "";
+    #     }
+    #
+    # false:
+    #     switch (level) {
+    #     case log::info: return "info:";
+    #     case log::warning: return "warning:";
+    #     default: return "";
+    #     }
+    #
+    Enabled: true
+
+    # bool AcrossEmptyLines: 是否跨空行对齐。
+    # true:
+    #     switch (level) {
+    #     case log::info:    return "info:";
+    #     case log::warning: return "warning:";
+    #
+    #     default:           return "";
+    #     }
+    #
+    # false:
+    #     switch (level) {
+    #     case log::info:    return "info:";
+    #     case log::warning: return "warning:";
+    #
+    #     default: return "";
+    #     }
+    #
+    AcrossEmptyLines: false
+
+    # bool AcrossComments: 是否跨注释对齐。
+    # true:
+    #     switch (level) {
+    #     case log::info:    return "info:";
+    #     case log::warning: return "warning:";
+    #     /* A comment. */
+    #     default:           return "";
+    #     }
+    #
+    # false:
+    #     switch (level) {
+    #     case log::info:    return "info:";
+    #     case log::warning: return "warning:";
+    #     /* A comment. */
+    #     default: return "";
+    #     }
+    #
+    AcrossComments: false
+
+    # bool AlignCaseColons: 对齐的大小写标签是在冒号上对齐，还是在冒号后的标记上对齐。
+    # true:
+    #     switch (level) {
+    #     case log::info   : return "info:";
+    #     case log::warning: return "warning:";
+    #     default          : return "";
+    #     }
+    #
+    # false:
+    #     switch (level) {
+    #     case log::info:    return "info:";
+    #     case log::warning: return "warning:";
+    #     default:           return "";
+    #     }
+    #
+    AlignCaseColons: true
+# ^^^^^^
+
+# vvvvvv
+### No.[10]  AlignEscapedNewlines (EscapedNewlineAlignmentStyle) { clang-format 5 }
+# 对齐转义的换行符。
+# 可能的值:
+# DontAlign: 不要对齐。例如：
+#     #define A \
+#       int aaaa; \
+#       int b; \
+#       int dddddddddd;
+#
+# Left: 将转义的换行符对齐到左边。例如：
+#     #define A   \
+#       int aaaa; \
+#       int b;    \
+#       int dddddddddd;
+#
+# Right: 将转义的换行符对齐到右边。例如：
+#     #define A                                                        \
+#       int aaaa;                                                      \
+#       int b;                                                         \
+#       int dddddddddd;
+#
+AlignEscapedNewlines: Left
+# ^^^^^^
+
+# vvvvvv
+### No.[11]  AlignOperands (OperandAlignmentStyle) { clang-format 3.5 }
+# 对齐操作数。
+# 可能的值:
+# DontAlign: 不对齐二元和三元表达式的操作数。换行行从行开始缩进 No.[50]-ContinuationIndentWidth-(Unsigned) 空格。
+#
+# Align: 水平对齐二元和三元表达式的操作数。具体地说，这会对齐需要在多行上拆分的单个表达式的操作数，例如：
+#     int aaa = bbbbbbbbbbbbbbb +
+#               ccccccccccccccc;
+#   设置 No.[37]-BreakBeforeBinaryOperators-(BinaryOperatorStyle) 时，包装运算符与第一行上的操作数对齐。例如：
+#       int aaa = bbbbbbbbbbbbbbb
+#                 + ccccccccccccccc;
+#
+# AlignAfterOperator: 水平对齐二元和三元表达式的操作数。这类似于 Align ，除了当设置 No.[37]-BreakBeforeBinaryOperators-(BinaryOperatorStyle) 时，运算符不缩进，以便包装的操作数与第一行上的操作数对齐。例如：
+#     int aaa = bbbbbbbbbbbbbbb
+#             + ccccccccccccccc;
+#
+AlignOperands: Align
+# ^^^^^^
+
+# vvvvvv
+### No.[12]  AlignTrailingComments (TrailingCommentsAlignmentStyle) { clang-format 3.7 }
+# 如果为 true ，则对齐尾注释。换行符后的右大括号停止对齐，后面只跟其他右大括号、a(do-)while 、lambda 调用或分号。
+# 注意：从 clang-format 16 开始，这个选项即可以是 Boolean ，也可以设置为选项。传统的 Boolean 选项仍然可以像以前一样进行解析。
+#
+# Example of usage:
+# AlignTrailingComments:
+#   Kind: Always
+#   OverEmptyLines: 2
+#
+# or:
+#
+# AlignTrailingComments: true
+#
+
+AlignTrailingComments:
+    #
+    # +---------------------------+
+    # | DO-NOT-REMOVE-INDENTATION |
+    # +---------------------------+
+    #
+    
+    # TrailingCommentsAlignmentKinds Kind: 指定对齐尾随注释的方式。
+    # 可能的值:
+    # Leave: 保留尾随注释。例如：
+    #     int a;    // comment
+    #     int ab;       // comment
+    #
+    #     int abc;  // comment
+    #     int abcd;     // comment
+    #
+    # Always: 总是对齐尾注释。例如：
+    #     int a;  // comment
+    #     int ab; // comment
+    #
+    #     int abc;  // comment
+    #     int abcd; // comment
+    #
+    # Never: 请勿对齐尾随注释，但可应用其他格式化程序。
+    #     int a; // comment
+    #     int ab; // comment
+    #
+    #     int abc; // comment
+    #     int abcd; // comment
+    #
+    Kind: Always
+    
+    # unsigned OverEmptyLines: 要应用对齐的空行数。
+    # 支持 No.[86]-MaxEmptyLinesToKeep-(Unsigned) 和 OverEmptyLines 的综合设置/使用。
+    # 当 No.[86]-MaxEmptyLinesToKeep-(Unsigned) 和 OverEmptyLines 都设置为 2 时，其格式如下:
+    #     int a;      // all these
+    #
+    #     int ab;     // comments are
+    #
+    #
+    #     int abcdef; // aligned
+    # 当 No.[86]-MaxEmptyLinesToKeep-(Unsigned) 设置为 2 ，OverEmptyLines 设置为 1 时，其格式如下:
+    #     int a;  // these are
+    #
+    #     int ab; // aligned
+    #
+    #
+    #     int abcdef; // but this isn't
+    #
+    OverEmptyLines: 1
+# ^^^^^^
+
+# vvvvvv
+### No.[13]  AllowAllArgumentsOnNextLine (Boolean) { clang-format 9 }
+# 如果函数调用或支持的初始值设定项列表不适合一行，即使 No.[28]-BinPackArguments-(Boolean) 为 false ，也允许将所有参数放在下一行。例如：
+# true:
+#     callFunction(
+#         a, b, c, d);
+#
+# false:
+#     callFunction(a,
+#                  b,
+#                  c,
+#                  d);
+#
+AllowAllArgumentsOnNextLine: false
+# ^^^^^^
+
+# vvvvvv
+### No.[14]  AllowAllParametersOfDeclarationOnNextLine (Boolean) { clang-format 3.3 }
+# 如果为 true ，则允许所有声明的参数在下一行，即使 No.[29]-BinPackParameters-(Boolean) 为 false 。例如：
+# true:
+#     void myFunction(
+#         int a, int b, int c, int d, int e);
+#
+# false:
+#     void myFunction(int a,
+#                     int b,
+#                     int c,
+#                     int d,
+#                     int e);
+#
+AllowAllParametersOfDeclarationOnNextLine: false
+# ^^^^^^
+
+# vvvvvv
+# No.[15]  AllowBreakBeforeNoexceptSpecifier (BreakBeforeNoexceptSpecifierStyle) { clang-format 18 }
+# 控制 noexcept 说明符之前是否可以有换行符。
+# 可能的值:
+# Never: noexcept 说明符之前不允许换行。例如：
+#     void foo(int arg1,
+#              double arg2) noexcept;
+#
+#     void bar(int arg1, double arg2) noexcept(
+#         noexcept(baz(arg1)) &&
+#         noexcept(baz(arg2)));
+#
+# OnlyWithParen: 对于简单的 noexcept 不允许换行，但当我们有条件时就允许换行。例如：
+#     void foo(int arg1,
+#              double arg2) noexcept;
+#
+#     void bar(int arg1, double arg2)
+#         noexcept(noexcept(baz(arg1)) &&
+#                  noexcept(baz(arg2)));
+#
+# Always: 允许换行符。但请注意，由于相关处罚，clang-format 通常不愿在 noexcept 之前中断。例如：
+#     void foo(int arg1,
+#              double arg2) noexcept;
+#
+#     void bar(int arg1, double arg2)
+#         noexcept(noexcept(baz(arg1)) &&
+#                  noexcept(baz(arg2)));
+#
+AllowBreakBeforeNoexceptSpecifier: Always
+# ^^^^^^
+
+# vvvvvv
+### No.[16]  AllowShortBlocksOnASingleLine (ShortBlockStyle) { clang-format 3.5 }
+# 依赖于值，while (true) { continue; } 可以放在一行上。
+# 可能的值:
+# Never: 不要将短块放在一行上。例如：
+#     while (true) {
+#     }
+#     while (true) {
+#       continue;
+#     }
+#
+# Empty: 只有空块可以放在一行上。例如：
+#     while (true) {}
+#     while (true) {
+#       continue;
+#     }
+#
+# Always: 总是将短块放在一行上。例如：
+#     while (true) {}
+#     while (true) { continue; }
+#
+AllowShortBlocksOnASingleLine: Empty
+# ^^^^^^
+
+# vvvvvv
+### No.[17]  AllowShortCaseLabelsOnASingleLine (Boolean) { clang-format 3.6 }
+# 如果为 true ，则允许短 case 标签在一行上。
+#     true:                              false:
+#     switch (a) {              vs.      switch (a) {
+#     case 1: x = 1; break;              case 1:
+#     case 2: return;                      x = 1;
+#     }                                    break;
+#                                        case 2:
+#                                          return;
+#                                        }
+#
+AllowShortCaseLabelsOnASingleLine: false
+# ^^^^^^
+
+# vvvvvv
+### No.[18]  AllowShortCompoundRequirementOnASingleLine (Boolean) { clang-format 18 }
+# 如果为 true ，允许在单行上进行短复合要求。例如：
+# true:
+#     template <typename T>
+#     concept c = requires(T x) {
+#       { x + 1 } -> std::same_as<int>;
+#     };
+#
+# false:
+#     template <typename T>
+#     concept c = requires(T x) {
+#       {
+#        x + 1
+#       } -> std::same_as<int>;
+#    };
+#
+#
+AllowShortCompoundRequirementOnASingleLine: false
+# ^^^^^^
+
+# vvvvvv
+### No.[19]  AllowShortEnumsOnASingleLine (Boolean) { clang-format 11 }
+# 如果为 true ，则允许短枚举在一行上。例如：
+# true:
+#     enum { A, B } myEnum;
+#
+# false:
+#     enum {
+#       A,
+#       B
+#     } myEnum;
+#
+AllowShortEnumsOnASingleLine: false
+# ^^^^^^
+
+# vvvvvv
+### No.[20]  AllowShortFunctionsOnASingleLine (ShortFunctionStyle) { clang-format 3.5 }
+# 根据值，int f() { return 0; } 可以放在一行上。
+# 可能的值:
+# None: 不要将短函数放在一行上。
+#
+# InlineOnly: 仅合并类内部定义的函数。与 Inline 相同，只是它不意味着 "empty" : 即顶层空函数也不合并。例如：
+#     class Foo {
+#       void f() { foo(); }
+#     };
+#     void f() {
+#       foo();
+#     }
+#     void f() {
+#     }
+#
+# Empty: 只有空函数可以放在一行上。例如：
+#     void f() {}
+#     void f2() {
+#       bar2();
+#     }
+#
+# Inline: 仅合并类内部定义的函数。例如：
+#     class Foo {
+#       void f() { foo(); }
+#     };
+#     void f() {
+#       foo();
+#     }
+#     void f() {}
+#
+# All: 所有函数都可以放在一行上。例如：
+#     class Foo {
+#       void f() { foo(); }
+#     };
+#     void f() { bar(); }
+#
+AllowShortFunctionsOnASingleLine: Empty
+# ^^^^^^
+
+# vvvvvv
+### No.[21]  AllowShortIfStatementsOnASingleLine (ShortIfStyle) { clang-format 3.3 }
+# 根据值，if (true) continue; 可以放在一行上。
+# 可能的值:
+# Never: 不要将短 if 语句放在一行上。例如：
+#     if (a)
+#       return;
+#
+#     if (b)
+#       return;
+#     else
+#       return;
+#
+#     if (c)
+#       return;
+#     else {
+#       return;
+#     }
+#
+# WithoutElse: 只有在没有 else 语句的情况下，才在同一行加上简短的 if 。例如：
+#     if (a) return;
+#
+#     if (b)
+#       return;
+#     else
+#       return;
+#
+#     if (c)
+#       return;
+#     else {
+#       return;
+#     }
+#
+# OnlyFirstIf: 只有第一个 if 语句可以放在一行上。例如：
+#     if (a) return;
+#
+#     if (b) return;
+#     else if (b)
+#       return;
+#     else
+#       return;
+#
+#     if (c) return;
+#     else {
+#       return;
+#     }
+#
+# AllIfsAndElse: 所有 if 语句和 else 语句都可以放在一行上。例如：
+#     if (a) return;
+#
+#     if (b) return;
+#     else return;
+#
+#     if (c) return;
+#     else {
+#       return;
+#     }
+#
+AllowShortIfStatementsOnASingleLine: Never
+# ^^^^^^
+
+# vvvvvv
+### No.[22]  AllowShortLambdasOnASingleLine (ShortLambdaStyle) { clang-format 9 }
+# 根据值，auto f = [](int x) { return x; } 可以放在一行上。
+# 可能的值:
+# None: 不要将短 lambda 放在一行上。
+#
+# Empty: 只有空 lambda 可以放在一行上。例如：
+#     auto lambda = [](int a) {};
+#     auto lambda2 = [](int a) {
+#         return a;
+#     };
+#
+# Inline: 只有内联 lambda 可以放在一行上。例如：
+#     auto lambda = [](int x, int y) {
+#         return x < y;
+#     };
+#     sort(a.begin(), a.end(), [](int x, int y) { return x < y; });
+#
+# All: 所有 lambda 都可以放在一行上。例如：
+#     auto lambda = [](int a) {};
+#     auto lambda2 = [](int a) { return a; };
+#
+AllowShortLambdasOnASingleLine: Empty
+# ^^^^^^
+
+# vvvvvv
+### No.[23]  AllowShortLoopsOnASingleLine (Boolean) { clang-format 3.7 }
+# 如果为 true ，则允许 while (true) continue; 在一行上。
+#
+AllowShortLoopsOnASingleLine: false
+# ^^^^^^
+
+# vvvvvv
+### No.[24]  AlwaysBreakAfterReturnType (ReturnTypeBreakingStyle) { clang-format 3.8 }
+# 函数声明返回要使用的类型中断样式。
+# 此选项将重命名为 No.[35]-BreakAfterReturnType-(ReturnTypeBreakingStyle) （【官方文档】 中如此说明，并没有明确声明为弃置，故而在此处列出。关于此项的更多信息，请参考条款 No.[35]-BreakAfterReturnType-(ReturnTypeBreakingStyle)）。
+# 可能的值:
+# None: 返回类型后自动中断。No.[101]-PenaltyReturnTypeOnItsOwnLine-(Unsigned) 被考虑在内。例如：
+#       class A {
+#       int f() { return 0; };
+#       };
+#       int f();
+#       int f() { return 1; }
+#
+# All: 总是在返回类型后中断。例如：
+#       class A {
+#       int
+#       f() {
+#           return 0;
+#       };
+#       };
+#       int
+#       f();
+#       int
+#       f() {
+#           return 1;
+#       }
+#
+# TopLevel: 总是在顶级函数的返回类型之后中断。例如：
+#       class A {
+#           int f() { return 0; };
+#       };
+#       int
+#       f();
+#       int
+#       f() {
+#           return 1;
+#       }
+#
+# AllDefinitions: 总是在函数定义的返回类型之后中断。例如：
+#       class A {
+#       int
+#       f() {
+#           return 0;
+#       };
+#       };
+#       int f();
+#       int
+#       f() {
+#           return 1;
+#       }
+#
+# TopLevelDefinitions: 总是在顶级定义的返回类型之后中断。例如：
+#       class A {
+#           int f() { return 0; };
+#       };
+#       int f();
+#       int
+#       f() {
+#           return 1;
+#       }
+#
+AlwaysBreakAfterReturnType: None
+# ^^^^^^
+
+# vvvvvv
+### No.[25]  AlwaysBreakBeforeMultilineStrings (Boolean) { clang-format 3.4 }
+# 如果为 true ，则始终在多行字符串之前中断。
+# 这个标志是为了使文件中有多个多行字符串的情况看起来更一致。因此，只有在此时包装字符串导致从行开始的 No.[50]-ContinuationIndentWidth-(Unsigned) 空格缩进时，它才会生效。例如：
+#     true:                          false:
+#     aaaa =               vs.       aaaa = "bbbb"
+#         "bbbb"                            "cccc";
+#         "cccc";
+#
+AlwaysBreakBeforeMultilineStrings: false
+# ^^^^^^
+
+# vvvvvv
+### No.[26]  AlwaysBreakTemplateDeclarations (BreakTemplateDeclarationsStyle) { clang-format 3.4 }
+# 如果为 true ，则始终在模板声明之后中断。
+# 此选项将重命名为 No.[45]-BreakTemplateDeclarations-(BreakTemplateDeclarationsStyle)（【官方文档】中 如此说明，并没有明确声明为启用，故而在此处列出。关于此项的更多信息，请参考条款 No.[45]-BreakTemplateDeclarations-(BreakTemplateDeclarationsStyle)）。
+# 可能的值:
+# No: 不要在模板声明之后中断。No.[98]-PenaltyBreakTemplateDeclaration-(Unsigned) 被考虑在内。例如：
+#     template <typename T> T foo() {
+#     }
+#     template <typename T> T foo(int aaaaaaaaaaaaaaaaaaaaa,
+#                          int bbbbbbbbbbbbbbbbbbbbb) {
+#     }
+#
+# MultiLine: 只有当下列声明跨多行时，才在模板声明后强制中断。例如：
+#     template <typename T> T foo() {
+#           }
+#           template <typename T>
+#           T foo(int aaaaaaaaaaaaaaaaaaaaa,
+#           int bbbbbbbbbbbbbbbbbbbbb) {
+#           }
+#
+# Yes: 总是在模板声明之后中断。例如：
+#     template <typename T>
+#     T foo() {
+#     }
+#     template <typename T>
+#     T foo(int aaaaaaaaaaaaaaaaaaaaa,
+#     int bbbbbbbbbbbbbbbbbbbbb) {
+#     }
+#
+AlwaysBreakTemplateDeclarations: Yes
+# ^^^^^^
+
+# vvvvvv
+### No.[27]  AttributeMacros (List of Strings) { clang-format 12 }
+# 字符串的向量，应该被解释为属性/限定符而不是标识符。这对于语言扩展或静态分析器注释很有用。例如：
+#     x = (char *__capability)&y;
+#     int function(void) __unused;
+#     void only_writes_to_buffer(char *__output buffer);
+#
+AttributeMacros: ['__capability', '__output', '__ununsed']
+# ^^^^^^
+
+# vvvvvv
+### No.[28]  BinPackArguments (Boolean) { clang-format 3.7 }
+# 如果为 false ，则函数调用的参数要么全部在同一行，要么各有一行。例如：
+# true:
+#     void f() {
+#       f(aaaaaaaaaaaaaaaaaaaa, aaaaaaaaaaaaaaaaaaaa,
+#         aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa);
+#     }
+#
+# false:
+#     void f() {
+#       f(aaaaaaaaaaaaaaaaaaaa,
+#         aaaaaaaaaaaaaaaaaaaa,
+#         aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa);
+#     }
+#
+BinPackArguments: false
+# ^^^^^^
+
+# vvvvvv
+### No.[29]  BinPackParameters (Boolean) { clang-format 3.7 }
+# 如果为 false ，则函数声明或函数定义的参数要么都在同一行上，要么各有一行。例如：
+# true:
+#     void f(int aaaaaaaaaaaaaaaaaaaa, int aaaaaaaaaaaaaaaaaaaa,
+#           int aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa) {}
+#
+#     false:
+#     void f(int aaaaaaaaaaaaaaaaaaaa,
+#            int aaaaaaaaaaaaaaaaaaaa,
+#            int aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa) {}
+#
+BinPackParameters: false
+# ^^^^^^
+
+# vvvvvv
+### No.[30]  BitFieldColonSpacing (BitFieldColonSpacingStyle) { clang-format 12 }
+# 位字段冒号的间距样式。
+# 可能的值:
+# Both: 在冒号两边都有空格。例如：
+#     unsigned bf : 2;
+#
+# None: 冒号两边都没有空格。AlignConsecutiveBitFields 需要时除外。例如：
+#     unsigned bf:2;
+#
+# Before: 冒号前有空格。例如：
+#     unsigned bf :2;
+#
+# After: 冒号后有空格。如果 AlignConsecutiveBitFields 需要，可以在之前添加空格。例如：
+#     unsigned bf: 2;
+#
+BitFieldColonSpacing: After
+# ^^^^^^
+
+# vvvvvv
+### No.[31]  BraceWrapping (BraceWrappingFlags) { clang-format 3.8 }
+# 逐项控制大括号的换行。
+# 如果 No.[38]-BreakBeforeBraces-(BraceBreakingStyle) 被设置为 Custom ，使用这个来指定应该如何处理每个单独的大括号。否则，这将被忽略。例如：
+# Example of usage:
+#     BreakBeforeBraces: Custom
+#     BraceWrapping:
+#       AfterEnum: true
+#       AfterStruct: false
+#       SplitEmptyFunction: false
+
+BraceWrapping:
+    #
+    # +---------------------------+
+    # | DO-NOT-REMOVE-INDENTATION |
+    # +---------------------------+
+    #
+
+    # bool AfterCaseLabel: case 标签的括号。例如：
+    #     false:                            true:
+    #     switch (foo) {          vs.       switch (foo) {
+    #       case 1: {                         case 1:
+    #         bar();                          {
+    #         break;                            bar();
+    #       }                                   break;
+    #       default: {                        }
+    #         plop();                         default:
+    #       }                                 {
+    #     }                                     plop();
+    #                                         }
+    #                                       }
+    #
+    AfterCaseLabel: true
+
+    # bool AfterClass: class 定义的括号。例如：
+    # true:
+    #     class foo1
+    #     {
+    #          int x;
+    #     };
+    #
+    # false:
+    #     class foo1 {
+    #         int x;
+    #     };
+    #
+    AfterClass: true
+
+    # BraceWrappingAfterControlStatementStyle AfterControlStatement: 包含控制语句 (if/for/while/switch/…)
+    # 可能的值:
+    # Never: 不要在控制语句后面用大括号括起来。例如：
+    #     if (foo()) {
+    #     } else {
+    #     }
+    #     for (int i = 0; i < 10; ++i) {
+    #     }
+    #
+    # MultiLine: 在多行控制语句后只使用大括号。例如：
+    #     if (foo && bar &&
+    #         baz)
+    #     {
+    #       quux();
+    #     }
+    #     while (foo || bar) {
+    #     }
+    #
+    # Always: 在控制语句后面总是用大括号括起来。例如：
+    #     if (foo())
+    #     {
+    #     } else
+    #     {}
+    #     for (int i = 0; i < 10; ++i)
+    #     {}
+    #
+    AfterControlStatement: Always
+
+    # bool AfterEnum: 枚举定义的括号。例如：
+    # true:
+    #     enum X : int
+    #     {
+    #       B
+    #     };
+    #
+    # false:
+    #     enum X : int { B };
+    #
+    AfterEnum: true
+
+    # bool AfterFunction: 函数定义的括号。例如：
+    # true:
+    #     void foo()
+    #     {
+    #       bar();
+    #       bar2();
+    #     }
+    #
+    # false:
+    #     void foo() {
+    #       bar();
+    #       bar2();
+    #     }
+    #
+    AfterFunction: true
+
+    # bool AfterNamespace: 名称空间定义的括号。例如：
+    # true:
+    #     namespace
+    #     {
+    #     int foo();
+    #     int bar();
+    #     }
+    #
+    # false:
+    #     namespace {
+    #     int foo();
+    #     int bar();
+    #     }
+    #
+    AfterNamespace: true
+
+    # bool AfterStruct: 结构定义的括号。例如：
+    # true:
+    #     struct foo1
+    #     {
+    #       int x;
+    #     };
+    #
+    # false:
+    #     struct foo1 {
+    #       int x;
+    #     };
+    #
+    AfterStruct: true
+
+    # bool AfterUnion: 联合定义的括号。例如：
+    # true:
+    #     union foo
+    #     {
+    #       int x;
+    #     }
+    #
+    # false:
+    #     union foo {
+    #       int x;
+    #     }
+    #
+    AfterUnion: true
+
+    # bool AfterExternBlock: extern 块的括号。例如：
+    # true:
+    #     extern "C"
+    #     {
+    #       int foo();
+    #     }
+    #
+    # false:
+    #     extern "C" {
+    #     int foo();
+    #     }
+    #
+    AfterExternBlock: true
+
+    # bool BeforeCatch: catch 之前的括号。例如：
+    # true:
+    #     try {
+    #       foo();
+    #     }
+    #     catch () {
+    #     }
+    #
+    # false:
+    #     try {
+    #       foo();
+    #     } catch () {
+    #     }
+    #
+    BeforeCatch: true
+
+    # bool BeforeElse: else 之前的括号。例如：
+    # true:
+    #     if (foo()) {
+    #     }
+    #     else {
+    #     }
+    #
+    # false:
+    #     if (foo()) {
+    #     } else {
+    #     }
+    #
+    BeforeElse: true
+
+    # bool BeforeLambdaBody: lambda 块的括号。例如：
+    # true:
+    #     connect(
+    #       []()
+    #       {
+    #         foo();
+    #         bar();
+    #       });
+    #
+    # false:
+    #     connect([]() {
+    #       foo();
+    #       bar();
+    #     });
+    #
+    BeforeLambdaBody: true
+
+    # bool BeforeWhile: while 之前的括号。例如：
+    # true:
+    #     do {
+    #       foo();
+    #     }
+    #     while (1);
+    #
+    # false:
+    #     do {
+    #       foo();
+    #     } while (1);
+    #
+    BeforeWhile: false
+
+    # bool IndentBraces: 缩进包装的括号本身。例如：
+    # true:
+    #     switch (leave)
+    #         {
+    #             case 1:
+    #                 {
+    #                     break;
+    #                 }
+    #     
+    #             default:
+    #                 {
+    #                     break;
+    #                 }
+    #         }
+    #
+    # false:
+    #     switch (leave)
+    #     {
+    #         case 1:
+    #         {
+    #             break;
+    #         }
+    #     
+    #         default:
+    #         {
+    #             break;
+    #         }
+    #     }
+    #
+    IndentBraces: false
+
+    # bool SplitEmptyFunction:  如果为 false ，则可以将空函数体放在一行上。只有当函数的左大括号已经换行时，即设置了 AfterFunction（此配置项的前置项）大括号换行模式，并且函数不能/不应该放在一行上时，才使用此选项（根据 No.[20]-AllowShortFunctionsOnASingleLine-(ShortFunctionStyle) 和构造函数格式选项）。例如：
+    #     false:                true:
+    #     int f()         vs.   int f()
+    #     {}                    {
+    #                           }
+    #
+    SplitEmptyFunction: false
+
+    # bool SplitEmptyRecord: 如果为 false ，空记录（例如类，结构体或联合）主体可以放在一行上。此选项仅在记录的开括号已经被包装时使用，即设置了 AfterClass（此配置项的前置项）括号封装模式。例如：
+    #     false:               true:
+    #     class Foo       vs.  class Foo
+    #     {}                   {
+    #                          }
+    #
+    SplitEmptyRecord: false
+
+    # bool SplitEmptyNamespace: 如果为 false ，则空的命名空间主体可以放在一行上。该选项仅在名称空间的左大括号已经被包装时使用，即设置了 AfterNamespace（此配置项的前置项）大括号包装模式。例如：
+    #     false:               true:
+    #     namespace Foo   vs.  namespace Foo
+    #     {}                   {
+    #                          }
+    #
+    SplitEmptyNamespace: false
+# ^^^^^^
+
+# vvvvvv
+### No.[32]  BracedInitializerIndentWidth (Unsigned) { clang-format 17 }
+# 用于缩进支撑的初始化列表内容的列数。如果未设置，则使用 [50]-ContinuationIndentWidth-(Unsigned) 。例如：
+#     +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+#     * AlignAfterOpenBracket: AlwaysBreak *
+#     * BracedInitializerIndentWidth: 2    *
+#     +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+#
+#     void f() {
+#       SomeClass c{
+#         "foo",
+#         "bar",
+#         "baz",
+#       };
+#       auto s = SomeStruct{
+#         .foo = "foo",
+#         .bar = "bar",
+#         .baz = "baz",
+#       };
+#       SomeArrayT a[3] = {
+#         {
+#           foo,
+#           bar,
+#         },
+#         {
+#           foo,
+#           bar,
+#         },
+#         SomeArrayT{},
+#       };
+#     }
+#
+BracedInitializerIndentWidth: 4
+# ^^^^^^
+
+# vvvvvv
+### No.[33]  BreakAdjacentStringLiterals (Boolean) { clang-format 18 }
+# 在相邻的字符串文字之间中断。例如：
+# true:
+#     return "Code"
+#           "\0\52\26\55\55\0"
+#           "x013"
+#           "\02\xBA";
+# false:
+#     return "Code" "\0\52\26\55\55\0" "x013" "\02\xBA";
+#
+BreakAdjacentStringLiterals: true
+# ^^^^^^
+
+# vvvvvv
+### No.[34]  BreakAfterAttributes (AttributeBreakingStyle) { clang-format 16 }
+# 在变量或函数（包括构造函数/析构函数）声明/定义名称之前或控制语句（即 if、switch（包括大小写和默认标签）、for 和 while 语句）之前的一组 C+11 属性后中断。
+# 可能的值:
+# Always: 总是在属性后中断。例如：
+#     [[maybe_unused]]
+#     const int i;
+#     [[gnu::const]] [[maybe_unused]]
+#     int j;
+#
+#     [[nodiscard]]
+#     inline int f();
+#     [[gnu::const]] [[nodiscard]]
+#     int g();
+#
+#     [[likely]]
+#     if (a)
+#       f();
+#     else
+#       g();
+#
+#     switch (b) {
+#     [[unlikely]]
+#     case 1:
+#       ++b;
+#       break;
+#     [[likely]]
+#     default:
+#       return;
+#     }
+#
+# Leave: 使属性后的换行保持原样。例如：
+#     [[maybe_unused]] const int i;
+#     [[gnu::const]] [[maybe_unused]]
+#     int j;
+#
+#     [[nodiscard]] inline int f();
+#     [[gnu::const]] [[nodiscard]]
+#     int g();
+#
+#     [[likely]] if (a)
+#       f();
+#     else
+#       g();
+#
+#     switch (b) {
+#     [[unlikely]] case 1:
+#       ++b;
+#      break;
+#     [[likely]]
+#     default:
+#       return;
+#     }
+#
+# Never: 从不在属性后中断。例如：
+#     [[maybe_unused]] const int i;
+#     [[gnu::const]] [[maybe_unused]] int j;
+#
+#     [[nodiscard]] inline int f();
+#     [[gnu::const]] [[nodiscard]] int g();
+#
+#     [[likely]] if (a)
+#       f();
+#     else
+#       g();
+#
+#     switch (b) {
+#     [[unlikely]] case 1:
+#       ++b;
+#       break;
+#     [[likely]] default:
+#       return;
+#     }
+#
+BreakAfterAttributes: Leave
+# ^^^^^^
+
+# vvvvvv
+### No.[35]  BreakAfterReturnType (ReturnTypeBreakingStyle) { clang-format 19 }
+#
+# +--------------------------------------------+
+# | THE-VERSION-DOES_NOT-MEET-THE-REQUIREMENTS |
+# +--------------------------------------------+
+#
+# 函数声明返回要使用的类型样式。
+# 可能的值:
+# Automatic: 基于 No.[101]-PenaltyReturnTypeOnItsOwnLine-(Unsigned) 的返回类型后中断。例如：
+#     class A {
+#       int f() { return 0; };
+#     };
+#     int f();
+#     int f() { return 1; }
+#     int
+#     LongName::AnotherLongName();
+#
+# ExceptShorttype: 与上面的 Automatic 相同，只是短返回类型后没有中断。例如：
+#     class A {
+#       int f() { return 0; };
+#     };
+#     int f();
+#     int f() { return 1; }
+#     int LongName::
+#         AnotherLongName();
+#
+# All: 总是在返回类型后中断。例如：
+#     class A {
+#       int
+#       f() {
+#         return 0;
+#       };
+#     };
+#     int
+#     f();
+#     int
+#     f() {
+#       return 1;
+#     }
+#     int
+#     LongName::AnotherLongName();
+#
+# TopLevel: 仅在顶层函数声明的返回类型后中断。例如：
+#     class A {
+#       int f() { return 0; };
+#     };
+#     int
+#     f();
+#     int
+#     f() {
+#       return 1;
+#     }
+#     int
+#     LongName::AnotherLongName();
+#
+# AllDefinitions: 总是在函数定义的返回类型之后中断。例如：
+#     class A {
+#       int
+#       f() {
+#         return 0;
+#       };
+#     };
+#     int f();
+#     int
+#     f() {
+#       return 1;
+#     }
+#     int
+#     LongName::AnotherLongName();
+#
+# TopLevelDefinitions: 始终在顶级定义的返回类型之后中断。例如：
+#     class A {
+#       int f() { return 0; };
+#     };
+#     int f();
+#     int
+#     f() {
+#       return 1;
+#     }
+#     int
+#     LongName::AnotherLongName();
+#
+# BreakAfterReturnType: ExceptShorttype
+# ^^^^^^
+
+# vvvvvv
+### No.[36]  BreakArrays (Boolean) { clang-format 16 }
+# 如果为 true ，clang-format 将始终在 Json 数组之后中断 [否则它将扫描直到结束]，以确定是否应该在元素之间添加换行符（更美观兼容）。
+# 注意：这目前仅用于格式化 JSON 。例如：
+#     true:                          false:
+#     [                 vs.          [1, 2, 3, 4]
+#       1,
+#       2,
+#       3,
+#       4
+#     ]
+#
+BreakArrays: true
+# ^^^^^^
+
+# vvvvvv
+### No.[37]  BreakBeforeBinaryOperators (BinaryOperatorStyle) { clang-format 3.6 }
+# 包装二元运算符的方法。
+# 可能的值:
+# None: 不要在二元运算符前中断。例如：
+#     LooooooooooongType loooooooooooooooooooooongVariable =
+#         someLooooooooooooooooongFunction();
+#
+#     bool value = aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa +
+#                         aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa ==
+#                     aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa &&
+#                 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa >
+#                     ccccccccccccccccccccccccccccccccccccccccc;
+#
+# NonAssignment: 仅在非赋值二元运算符前中断。例如：
+#     LooooooooooongType loooooooooooooooooooooongVariable =
+#         someLooooooooooooooooongFunction();
+#
+#     bool value = aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+#                         + aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+#                     == aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+#                 && aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+#                         > ccccccccccccccccccccccccccccccccccccccccc;
+#
+# All: 总是在二元运算符前中断。例如：
+#     LooooooooooongType loooooooooooooooooooooongVariable
+#         = someLooooooooooooooooongFunction();
+#
+#     bool value = aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+#                         + aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+#                      == aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+#                 && aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+#                         > ccccccccccccccccccccccccccccccccccccccccc;
+#
+BreakBeforeBinaryOperators: None
+# ^^^^^^
+
+# vvvvvv
+### No.[38]  BreakBeforeBraces (BraceBreakingStyle) { clang-format 3.7 }
+# 控制大括号的换行。
+# 可能的值:
+# Attach: 始终将大括号附加到周围的上下文。例如：
+#     namespace N {
+#     enum E {
+#       E1,
+#       E2,
+#     };
+#
+#     class C {
+#     public:
+#       C();
+#     };
+#
+#     bool baz(int i) {
+#       try {
+#         do {
+#           switch (i) {
+#           case 1: {
+#             foobar();
+#             break;
+#           }
+#           default: {
+#             break;
+#           }
+#           }
+#         } while (--i);
+#         return true;
+#       } catch (...) {
+#         handleError();
+#         return false;
+#       }
+#     }
+#
+#     void foo(bool b) {
+#       if (b) {
+#         baz(2);
+#       } else {
+#         baz(5);
+#       }
+#     }
+#
+#     void bar() { foo(true); }
+#     } // namespace N
+#
+# Linux: 与 Attach 类似，但在函数、名称空间和类定义的大括号前中断。例如：
+#     namespace N
+#     {
+#     enum E {
+#       E1,
+#       E2,
+#     };
+#
+#     class C
+#     {
+#     public:
+#       C();
+#     };
+#
+#     bool baz(int i)
+#     {
+#       try {
+#         do {
+#           switch (i) {
+#           case 1: {
+#             foobar();
+#             break;
+#           }
+#           default: {
+#             break;
+#           }
+#           }
+#         } while (--i);
+#         return true;
+#       } catch (...) {
+#         handleError();
+#         return false;
+#       }
+#     }
+#
+#     void foo(bool b)
+#     {
+#       if (b) {
+#         baz(2);
+#       } else {
+#         baz(5);
+#       }
+#     }
+#
+#     void bar() { foo(true); }
+#     } // namespace N
+#
+# Mozilla: 与 Attach 类似，但在枚举、函数和记录定义的大括号前中断。例如：
+#    namespace N {
+#    enum E
+#    {
+#      E1,
+#      E2,
+#    };
+#
+#    class C
+#    {
+#    public:
+#      C();
+#    };
+#
+#    bool baz(int i)
+#    {
+#      try {
+#        do {
+#          switch (i) {
+#          case 1: {
+#            foobar();
+#            break;
+#          }
+#          default: {
+#            break;
+#          }
+#          }
+#        } while (--i);
+#        return true;
+#      } catch (...) {
+#        handleError();
+#        return false;
+#      }
+#    }
+#
+#    void foo(bool b)
+#    {
+#      if (b) {
+#        baz(2);
+#      } else {
+#        baz(5);
+#      }
+#    }
+#
+#    void bar() { foo(true); }
+#    } // namespace N
+#
+# Stroustrup: 与 Attach 类似，但在函数定义、catch 和 else 之前断开。例如：
+#    namespace N {
+#    enum E {
+#      E1,
+#      E2,
+#    };
+#
+#    class C {
+#    public:
+#      C();
+#    };
+#
+#    bool baz(int i)
+#    {
+#      try {
+#        do {
+#          switch (i) {
+#          case 1: {
+#            foobar();
+#            break;
+#          }
+#          default: {
+#            break;
+#          }
+#          }
+#        } while (--i);
+#        return true;
+#      }
+#      catch (...) {
+#        handleError();
+#        return false;
+#      }
+#    }
+#
+#    void foo(bool b)
+#    {
+#      if (b) {
+#        baz(2);
+#      }
+#      else {
+#        baz(5);
+#      }
+#    }
+#
+#    void bar() { foo(true); }
+#    } // namespace N
+#
+# Allman: 总是在大括号之前中断。例如：
+#     namespace N
+#     {
+#     enum E
+#     {
+#       E1,
+#       E2,
+#     };
+#
+#     class C
+#     {
+#     public:
+#       C();
+#     };
+#
+#     bool baz(int i)
+#     {
+#       try
+#       {
+#         do
+#         {
+#           switch (i)
+#           {
+#           case 1:
+#           {
+#             foobar();
+#             break;
+#           }
+#           default:
+#           {
+#             break;
+#           }
+#           }
+#         } while (--i);
+#         return true;
+#       }
+#       catch (...)
+#       {
+#         handleError();
+#         return false;
+#       }
+#     }
+#
+#     void foo(bool b)
+#     {
+#       if (b)
+#       {
+#         baz(2);
+#       }
+#       else
+#       {
+#         baz(5);
+#       }
+#     }
+#
+#     void bar() { foo(true); }
+#     } // namespace N
+#
+# Whitesmiths: 像 Allman 一样，但总是用大括号缩进和用大括号对齐代码。例如：
+#     namespace N
+#       {
+#     enum E
+#       {
+#       E1,
+#       E2,
+#       };
+#
+#     class C
+#       {
+#     public:
+#       C();
+#       };
+#
+#     bool baz(int i)
+#       {
+#       try
+#         {
+#         do
+#           {
+#           switch (i)
+#             {
+#             case 1:
+#             {
+#             foobar();
+#             break;
+#             }
+#             default:
+#             {
+#             break;
+#             }
+#             }
+#           } while (--i);
+#         return true;
+#         }
+#       catch (...)
+#         {
+#         handleError();
+#         return false;
+#         }
+#       }
+#
+#     void foo(bool b)
+#       {
+#       if (b)
+#         {
+#         baz(2);
+#         }
+#       else
+#         {
+#         baz(5);
+#         }
+#       }
+#
+#     void bar() { foo(true); }
+#        // namespace N
+#
+# GNU: 总是在大括号之前中断，并在控制语句的大括号中添加额外的缩进，而不是在类、函数或其他定义的大括号中。例如：
+#     namespace N
+#     {
+#     enum E
+#     {
+#       E1,
+#       E2,
+#     };
+#
+#     class C
+#     {
+#     public:
+#       C();
+#     };
+#
+#     bool baz(int i)
+#     {
+#       try
+#         {
+#           do
+#             {
+#               switch (i)
+#                 {
+#                 case 1:
+#                   {
+#                     foobar();
+#                     break;
+#                   }
+#                 default:
+#                   {
+#                     break;
+#                   }
+#                 }
+#             }
+#           while (--i);
+#           return true;
+#         }
+#       catch (...)
+#         {
+#           handleError();
+#           return false;
+#         }
+#     }
+#
+#     void foo(bool b)
+#     {
+#       if (b)
+#         {
+#           baz(2);
+#         }
+#       else
+#         {
+#           baz(5);
+#         }
+#     }
+#
+#     void bar() { foo(true); }
+#     } // namespace N
+#
+# WebKit: 类似于 Attach ，但是在函数之前中断。例如：
+#     namespace N {
+#     enum E {
+#       E1,
+#       E2,
+#     };
+#
+#     class C {
+#     public:
+#       C();
+#     };
+#
+#     bool baz(int i)
+#     {
+#       try {
+#         do {
+#           switch (i) {
+#           case 1: {
+#             foobar();
+#             break;
+#           }
+#           default: {
+#             break;
+#           }
+#           }
+#         } while (--i);
+#         return true;
+#       } catch (...) {
+#         handleError();
+#         return false;
+#       }
+#     }
+#
+#     void foo(bool b)
+#     {
+#       if (b) {
+#         baz(2);
+#       } else {
+#         baz(5);
+#       }
+#     }
+#
+#     void bar() { foo(true); }
+#     } // namespace N
+#
+# Custom: 在 No.[31]-BraceWrapping-(BraceWrappingFlags) 中配置每个单独的大括号。
+#
+BreakBeforeBraces: Custom
+# ^^^^^^
+
+# vvvvvv
+### No.[39]  BreakBeforeConceptDeclarations (BreakBeforeConceptDeclarationsStyle) { clang-format 12 }
+# 要使用的概念声明样式。
+# 可能的值:
+# Never: 从不在概念声明前中断。例如：
+#     template <typename T> concept C = ...;
+#
+# Allowed: 允许在模板声明和概念之间打断。实际行为取决于内容、违规规则和处罚。
+#
+# Always: 总是在概念声明前中断。例如：
+#     template <typename T>
+#     concept C = ...;
+#
+BreakBeforeConceptDeclarations: Always
+# ^^^^^^
+
+# vvvvvv
+### No.[40]  BreakBeforeInlineASMColon (BreakBeforeInlineASMColonStyle) { clang-format 16 }
+# 控制内联汇编冒号的换行。
+# 可能的值:
+# Never: 从不在内联汇编冒号前中断。例如：
+#     asm volatile("string", : : val);
+#
+# OnlyMultiline: 仅在内联汇编冒号前中断。例如：
+#     asm volatile("string", : : val);
+#     asm("cmoveq %1, %2, %[result]"
+#         : [result] "=r"(result)
+#         : "r"(test), "r"(new), "[result]"(old));
+#
+# Always: 总是在内联汇编冒号前中断。例如：
+#     asm volatile("string",
+#                 :
+#                 : val);
+#
+BreakBeforeInlineASMColon: OnlyMultiline
+# ^^^^^^
+
+# vvvvvv
+### No.[41]  BreakBeforeTernaryOperators (Boolean) { clang-format 3.7 }
+# 如果为 true ，则在三元操作符之前中断。例如：
+# true:
+#     veryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryLongDescription
+#         ? firstValue
+#         : SecondValueVeryVeryVeryVeryLong;
+#
+# false:
+#     veryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryLongDescription ?
+#         firstValue :
+#         SecondValueVeryVeryVeryVeryLong;
+#
+BreakBeforeTernaryOperators: true
+# ^^^^^^
+
+# vvvvvv
+### No.[42]  BreakConstructorInitializers (BreakConstructorInitializersStyle) { clang-format 5 }
+# 控制构造函数初始化列表的换行。
+# 可能的值:
+# BeforeColon: 在冒号之前和逗号之后中断构造函数初始化式。例如：
+#     Constructor()
+#         : initializer1(),
+#           initializer2()
+#
+# BeforeComma: 在冒号和逗号之前中断构造函数初始化式，并将逗号与冒号对齐。例如：
+#     Constructor()
+#         : initializer1()
+#         , initializer2()
+#
+# AfterColon: 在冒号和逗号后中断构造函数初始化式。例如：
+#     Constructor() :
+#         initializer1(),
+#         initializer2()
+#
+BreakConstructorInitializers: AfterColon
+# ^^^^^^
+
+# vvvvvv
+### No.[43]  BreakInheritanceList (BreakInheritanceListStyle) { clang-format 7 }
+# 控制继承列表的换行。
+# 可能的值:
+# BeforeColon: 在冒号之前和逗号之后中断继承列表。例如：
+#     class Foo
+#         : Base1,
+#           Base2
+#     {};
+#
+# BeforeComma: 在冒号和逗号之前中断继承列表，并将逗号与冒号对齐。例如：
+#     class Foo
+#         : Base1
+#         , Base2
+#     {};
+#
+# AfterColon: 在冒号和逗号后中断继承列表。例如：
+#     class Foo :
+#         Base1,
+#         Base2
+#     {};
+#
+# AfterComma: 仅在逗号后打断继承列表。例如：
+#     class Foo : Base1,
+#                 Base2
+#     {};
+#
+BreakInheritanceList: AfterColon
+# ^^^^^^
+
+# vvvvvv
+### No.[44]  BreakStringLiterals (Boolean) { clang-format 3.9 }
+# 如果为 true ，则允许在格式化时中断字符串文字。
+# 在 C, C++, 或 Objective-C 中，例如：
+# true:
+#     const char* x = "veryVeryVeryVeryVeryVe"
+#                     "ryVeryVeryVeryVeryVery"
+#                     "VeryLongString";
+#
+# false:
+#     const char* x =
+#         "veryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryLongString";
+#
+# 在 CSharp<4> 或 Java 中，例如：
+# true:
+#     string x = "veryVeryVeryVeryVeryVe" +
+#                "ryVeryVeryVeryVeryVery" +
+#                "VeryLongString";
+#
+# false:
+#     string x =
+#         "veryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryLongString";
+#
+## <4>  CSharp 中插值字符串没有断开。
+#
+# 在 Verilog 中，例如：
+# true:
+#     string x = {"veryVeryVeryVeryVeryVe",
+#                 "ryVeryVeryVeryVeryVery",
+#                 "VeryLongString"};
+#
+# false:
+#     string x =
+#         "veryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryLongString";
+#
+BreakStringLiterals: true
+# ^^^^^^
+
+# vvvvvv
+### No.[45]  BreakTemplateDeclarations (BreakTemplateDeclarationsStyle) { clang-format 19 }
+#
+# +--------------------------------------------+
+# | THE-VERSION-DOES_NOT-MEET-THE-REQUIREMENTS |
+# +--------------------------------------------+
+#
+# 控制模板声明的换行。
+# 可能的值:
+# Leave: 使模板声明的换行保持原样。例如：
+#     template <typename T>
+#     T foo() {
+#     }
+#     template <typename T> T foo(int aaaaaaaaaaaaaaaaaaaaa,
+#                                 int bbbbbbbbbbbbbbbbbbbbb) {
+#     }
+#
+# No: 声明前不要强行中断。No.[98]-PenaltyBreakTemplateDeclaration-(Unsigned) 会被考虑在内。例如：
+#     template <typename T> T foo() {
+#     }
+#     template <typename T> T foo(int aaaaaaaaaaaaaaaaaaaaa,
+#                                 int bbbbbbbbbbbbbbbbbbbbb) {
+#     }
+#
+# MultiLine: 仅当以下声明跨越多行时，才在模板声明后强制中断。例如：
+#     template <typename T> T foo() {
+#     }
+#     template <typename T>
+#     T foo(int aaaaaaaaaaaaaaaaaaaaa,
+#           int bbbbbbbbbbbbbbbbbbbbb) {
+#     }
+#
+# Yes: 总是在模板声明后中断。例如：
+#     template <typename T>
+#     T foo() {
+#     }
+#     template <typename T>
+#     T foo(int aaaaaaaaaaaaaaaaaaaaa,
+#           int bbbbbbbbbbbbbbbbbbbbb) {
+#     }
+#
+# BreakTemplateDeclarations: Yes
+# ^^^^^^
+
+# vvvvvv
+### No.[46]  ColumnLimit (Unsigned) { clang-format 3.7 }
+# 一行的最大长度。
+# 列限制为 0 意味着没有列限制。在这种情况下，clang-format 将在语句中尊重输入的断行决定，除非它们与其他规则相抵触。
+#
+ColumnLimit: 120
+# ^^^^^^
+
+# vvvvvv
+### No.[47]  CommentPragmas (String) { clang-format 3.7 }
+# 一个正则表达式，它描述具有特殊含义的注释，不应该将注释分成行或以其他方式更改注释。这会影响某些样式选项的默认值。例如：
+#     // CommentPragmas: '^ FOOBAR pragma:'
+#     // Will leave the following line unaffected
+#     #include <vector> // FOOBAR pragma: keep
+#
+CommentPragmas: '^ FOOBAR pragma:'
+# ^^^^^^
+
+# vvvvvv
+### No.[48]  CompactNamespaces (Boolean)
+# 如果为 true ，连续的名称空间声明将在同一行上。如果为 false ，则每个名称空间都声明在一个新的行中。例如：
+#     true:
+#     namespace Foo { namespace Bar {
+#     }}
+#
+#     false:
+#     namespace Foo {
+#     namespace Bar {
+#     }
+#     }
+#
+#     （如果它不能放在一行中，溢出的名称空间就会被包装起来:
+#     namespace Foo { namespace Bar {
+#     namespace Extra {
+#     }}}）
+#
+CompactNamespaces: false
+# ^^^^^^
+
+# vvvvvv
+### No.[49]  ConstructorInitializerIndentWidth (Unsigned) { clang-format 3.7 }
+# 构造函数初始化列表的缩进宽度。
+#
+ConstructorInitializerIndentWidth: 4
+# ^^^^^^
+
+# vvvvvv
+### No.[50]  ContinuationIndentWidth (Unsigned) { clang-format 3.7 }
+# 换行后的缩进宽度。例如：
+#
+#     +~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+#     * ContinuationIndentWidth: 2 *
+#     +~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+#
+#     int i =         //  VeryVeryVeryVeryVeryLongComment
+#       longFunction( // Again a long comment
+#         arg);
+#
+ContinuationIndentWidth: 4
+# ^^^^^^
+
+# vvvvvv
+### No.[51]  Cpp11BracedListStyle (Boolean) { clang-format 3.4 }
+# 如果为 true ，将带大括号的列表格式化为最适合 C++11 带大括号的列表。
+# 重要区别:
+# 括号内没有空格。
+# 在右括号之前不能换行。
+# 使用延续缩进，而不是使用块缩进。
+# 基本上，带大括号的 C++11 列表的格式与函数调用在其位置上的格式完全相同。如果带括号的列表跟在一个名称后面（例如，类型名或变量名），clang-format 的格式就好像 {} 是带有该名称的函数调用的圆括号一样。如果没有名称，则假定名称长度为零。
+# 例如：
+#     true:                                  false:
+#     vector<int> x{1, 2, 3, 4};     vs.     vector<int> x{ 1, 2, 3, 4 };
+#     vector<T> x{{}, {}, {}, {}};           vector<T> x{ {}, {}, {}, {} };
+#     f(MyMap[{composite, key}]);            f(MyMap[{ composite, key }]);
+#     new int[3]{1, 2, 3};                   new int[3]{ 1, 2, 3 };
+#
+Cpp11BracedListStyle: false
+# ^^^^^^
+
+# vvvvvv
+### No.[52]  DerivePointerAlignment (Boolean) { clang-format 3.7 }
+# 如果为 true ，分析格式化文件，以确定最常见的 & 和 * 对齐方式。指针和引用对齐样式将根据文件中找到的首选项进行更新。然后，No.[102]-PointerAlignment-(PointerAlignmentStyle) 仅用作后备。
+#
+DerivePointerAlignment: true
+# ^^^^^^
+
+# vvvvvv
+### No.[53]  DisableFormat (Boolean) { clang-format 3.7 }
+# 如果为 true ，则不要格式化文件。
+#
+DisableFormat: false
+# ^^^^^^
+
+# vvvvvv
+### No.[54]  EmptyLineAfterAccessModifier (EmptyLineAfterAccessModifierStyle) { clang-format 13 }
+# 定义何时在访问修饰符后放置空行。No.[55]-EmptyLineBeforeAccessModifier-(EmptyLineBeforeAccessModifierStyle) 配置处理两个访问修饰符之间的空行数。
+# 可能的值:
+# Never: 从不在访问修饰符后放置空行。例如：
+#     struct foo {
+#     private:
+#       int i;
+#     protected:
+#       int j;
+#       /* comment */
+#     public:
+#       foo() {}
+#     private:
+#     protected:
+#     };
+#
+# Leave: 在访问修饰符后放置空行，但在类成员之间不放置空行。
+# Always: 总是在访问修饰符后放置空行。例如：
+#     struct foo {
+#     private:
+#
+#       int i;
+#     protected:
+#
+#       int j;
+#       /* comment */
+#     public:
+#
+#       foo() {}
+#     private:
+#
+#     protected:
+#
+# };
+#
+EmptyLineAfterAccessModifier: Never
+# ^^^^^^
+
+# vvvvvv
+### No.[55]  EmptyLineBeforeAccessModifier (EmptyLineBeforeAccessModifierStyle) { clang-format 12 }
+# 定义何时在访问修饰符前放置空行。No.[54]-EmptyLineAfterAccessModifier-(EmptyLineAfterAccessModifierStyle) 配置处理两个访问修饰符之间的空行数。
+# 可能的值:
+# Never: 从不在访问修饰符前放置空行。例如：
+#     struct foo {
+#     private:
+#       int i;
+#     protected:
+#       int j;
+#       /* comment */
+#     public:
+#       foo() {}
+#     private:
+#     protected:
+#     };
+#
+# Leave: 在访问修饰符前放置空行，但在类成员之间不放置空行。
+#
+# LogicalBlock: 仅当访问修饰符启动新的逻辑块时才添加空行。逻辑块是一组一个或多个成员字段或函数。例如：
+#     struct foo {
+#     private:
+#       int i;
+#
+#     protected:
+#       int j;
+#       /* comment */
+#     public:
+#       foo() {}
+#
+#     private:
+#     protected:
+#     };
+#
+# Always: 除非访问修饰符位于结构或类定义的开头，否则总是在访问修饰符之前添加空行。例如：
+#     struct foo {
+#     private:
+#       int i;
+#
+#     protected:
+#       int j;
+#       /* comment */
+#
+#     public:
+#       foo() {}
+#
+#     private:
+#
+#     protected:
+#     };
+#
+EmptyLineBeforeAccessModifier: Always
+# ^^^^^^
+
+# vvvvvv
+### No.[56]  ExperimentalAutoDetectBinPacking (Boolean) { clang-format 3.7 }
+# 如果为 true, clang-format 将检测函数调用和定义是否每行使用一个参数进行格式化。
+# 每个调用都可以被包含，每行或不确定。如果它是不确定的，例如完全在一行上，但需要做出决定，clang-format 分析输入文件中是否有其他包含情况，并相应地采取行动。
+# 这是一个实验性的标志，它可能会消失或被重命名。不要在配置文件中使用它。使用时自负风险。
+#
+ExperimentalAutoDetectBinPacking: true
+# ^^^^^^
+
+# vvvvvv
+### No.[57]  FixNamespaceComments (Boolean) { clang-format 5 }
+# 如果为 true, clang-format 将为短名称空间添加缺失的名称空间结束注释，并修复无效的现有名称空间。短的由 No.[114]-ShortNamespaceLines-(Unsigned) 控制。
+# 例如：
+#     true:                                  false:
+#     namespace longNamespace {      vs.     namespace longNamespace {
+#     void foo();                            void foo();
+#     void bar();                            void bar();
+#     } // namespace a                       }
+#     namespace shortNamespace {             namespace shortNamespace {
+#     void baz();                            void baz();
+#     }                                      }
+#
+FixNamespaceComments: true
+# ^^^^^^
+
+# vvvvvv
+### No.[58]  ForEachMacros (List of Strings) { clang-format 3.7 }
+# 字符串的向量，应该被解释为 foreach 宏而不是标识符或函数调用。这对于语言扩展或静态分析器注释很有用。
+# 这些应为以下形式的宏:
+# FOREACH(<variable-declaration>, ...)
+#   <loop-body>
+#
+ForEachMacros: [EACH, FOR_EACH, RANGES_FOR, FOREACH]
+# ^^^^^^
+
+# vvvvvv
+### No.[59]  IfMacros (List of Strings) { clang-format 13 }
+# 字符串的向量，应该被解释为 if 宏而不是标识符或函数调用。这对于语言扩展或静态分析器注释很有用。
+# 这些应为以下形式的宏:
+# IF(...)
+#   <conditional-body>
+# else IF(...)
+#   <conditional-body>
+#
+IfMacros: ['IF', 'IF_NOT', 'IF_NULL', 'IF_NOT_NULL']
+# ^^^^^^
+
+# vvvvvv
+### No.[60]  IncludeBlocks (IncludeBlocksStyle) { clang-format 6 }
+# 根据这个值，可以将多个 #include 块按类别排序。
+# 可能的值:
+# Preserve: 分别对每个 #include 块进行排序。例如：
+#     #include "b.h"               into      #include "b.h"
+#
+#     #include <lib/main.h>                  #include "a.h"
+#     #include "a.h"                         #include <lib/main.h>
+#
+# Merge: 将多个 #include 块合并在一起，并按一个排序。例如：
+#     #include "b.h"               into      #include "a.h"
+#                                            #include "b.h"
+#     #include <lib/main.h>                  #include <lib/main.h>
+#     #include "a.h"
+#
+# Regroup: 将多个 #include 块合并在一起，并按一个排序。然后根据类别优先级分组。参考 No.[61]-IncludeCategories-(List of IncludeCategories) 。例如：
+#     #include "b.h"               into      #include "a.h"
+#                                            #include "b.h"
+#     #include <lib/main.h>
+#     #include "a.h"                         #include <lib/main.h>
+#
+IncludeBlocks: Preserve
+# ^^^^^^
+
+# vvvvvv
+### No.[61]  IncludeCategories (List of IncludeCategories) { clang-format 3.8 }
+# 表示用于对 #includes 进行排序的不同 #include 类别的正则表达式。
+# 支持 POSIX 扩展正则表达式。
+# 这些正则表达式按顺序匹配包含的文件名（包括 <>或 ""）。分配属于第一个匹配正则表达式的值，#include 首先根据类别编号递增排序，然后在每个类别内按字母顺序排序。
+# 如果所有正则表达式都不匹配，则 INT_MAX 被分配为类别。源文件的主标题自动获得类别 0 。因此它通常保存在 #include (https://llvm.org/docs/CodingStandards.html#include-style) 的开头。然而，如果你有某些总是需要优先的头，你也可以分配负优先级。
+# 当 IncludeBlocks = Regroup 时，可以使用第三个可选字段 SortPriority 来定义 #include 应该被排序的优先级。Priority 的值定义了 #include 块的顺序，也允许对不同优先级的 #include 块进行分组。如果没有分配 SortPriority ，则将其设置为 Priority 的默认值。
+# 每个正则表达式都可以用大小写敏感字段标记为区分大小写，但默认情况下它不是。
+#
+IncludeCategories:
+  #
+  # +---------------------------+
+  # | DO-NOT-REMOVE-INDENTATION |
+  # +---------------------------+
+  #
+
+  - Regex:           '^"(llvm|llvm-c|clang|clang-c)/'
+    Priority:        2
+    SortPriority:    2
+    CaseSensitive:   true
+  - Regex:           '^((<|")(gtest|gmock|isl|json)/)'
+    Priority:        3
+  - Regex:           '<[[:alnum:].]+>'
+    Priority:        4
+  - Regex:           '.*'
+    Priority:        1
+    SortPriority:    0
+# ^^^^^^
+
+# vvvvvv
+### No.[62]  IncludeIsMainRegex (String) { clang-format 3.9 }
+# 指定在 file-to-main-include 映射中允许的后缀的正则表达式。
+# 当猜测 #include 是否是 main include 时（为类别 0 赋值，见上面），使用这个允许后缀的正则表达式到标题干。完成部分匹配，因此:
+# "" 表示 “任意后缀”
+# "$" 表示 “没有后缀”
+# 例如，如果配置为 (_test)?$，则头文件 a.h 将被视为 a.cc 和 a_test.cc 中的 main 。
+#
+IncludeIsMainRegex: '((_test)|(Test))?$'
+# ^^^^^^
+
+# vvvvvv
+### No.[63]  IncludeIsMainSourceRegex (String) { clang-format 10 }
+# 为在 file-to-main-include 映射中允许被视为 main 的格式化文件指定一个正则表达式。
+# 默认情况下，只有当文件以：.c | .cc | .cpp | .c++ | .cxx | .m | .mm 扩展名结束时，clang-format 才会将文件视为 main 。对于这些文件，会猜测 main include（要分配类别 0 ，参见上面）。这个配置选项允许附加后缀和扩展名的文件被视为 main 。
+# 例如，如果这个选项被配置为 (Impl\.hpp)$，那么一个文件 ClassImpl.hpp 被认为是 main（除了 Class.c、Class.cc、Class.cpp 等）和 main include file 逻辑将被执行（稍后阶段还将使用 No.[62]-IncludeIsMainRegex-(String) 设置）。如果不设置此选项，ClassImpl.hpp 不会把主要的包含文件放在任何其他包含文件之前。
+#
+IncludeIsMainSourceRegex: ''
+# ^^^^^^
+
+# vvvvvv
+### No.[64]  IndentAccessModifiers (Boolean) { clang-format 13 }
+# 指定访问修饰符是否应该有自己的缩进级别。
+# 当为 false 时，访问修饰符相对于记录成员缩进（或退缩），表示 No.[2]-AccessModifierOffset-(int) 。记录成员缩进比记录低一级。当为 true 时，访问修饰符将获得自己的缩进级别。因此，记录成员总是比记录缩进 2 级，而不管是否存在访问修饰符。忽略 No.[2]-AccessModifierOffset-(int) 的值。
+# 例如：
+#     false:                                 true:
+#     class C {                 vs.          class C {
+#       class D {                                class D {
+#         void bar();                                void bar();
+#       protected:                                 protected:
+#         D();                                       D();
+#       };                                       };
+#     public:                                  public:
+#       C();                                     C();
+#     };                                     };
+#     void foo() {                           void foo() {
+#       return 1;                              return 1;
+#     }                                      }
+#
+IndentAccessModifiers: false
+# ^^^^^^
+
+# vvvvvv
+### No.[65]  IndentCaseBlocks (Boolean) { clang-format 11 }
+# 缩进 case 标签，阻塞 case 标签的一级。
+# 当为 false 时，case 标签后面的块使用与 case 标签相同的缩进级别，将 case 标签视为 if 语句。当为 true 时，该块作为范围块缩进。
+# 例如：
+#     false:                                 true:
+#     switch (fool) {            vs.         switch (fool) {
+#     case 1: {                              case 1:
+#       bar();                                 {
+#     } break;                                   bar();
+#     default: {                               }
+#       plop();                                break;
+#     }                                      default:
+#     }                                        {
+#                                                plop();
+#                                              }
+#                                            }
+#
+IndentCaseBlocks: false
+# ^^^^^^
+
+# vvvvvv
+### No.[66]  IndentCaseLabels (Boolean) { clang-format 3.3 }
+# 缩进 case 标记 switch 语句的一个级别。
+# 当为 false 时，使用与 switch 语句相同的缩进级别。switch 语句体总是比 case 标签缩进一级（case 标签后面的第一个块除外，它本身会缩进代码——除非启用了 No.[56]-IndentCaseBlocks-(Boolean)）。
+# 例如：
+#     false:                                 true:
+#     switch (fool) {           vs.          switch (fool) {
+#     case 1:                                  case 1:
+#       bar();                                   bar();
+#       break;                                   break;
+#     default:                                 default:
+#       plop();                                  plop();
+#     }                                      }
+#
+IndentCaseLabels: true
+# ^^^^^^
+
+# vvvvvv
+### No.[67]  IndentExternBlock (IndentExternBlockStyle) { clang-format 11 }
+# 控制 extern "C" { ... } 的缩进（即此配置项是 extern 块的缩进类型）。
+# 可能的值:
+# AfterExternBlock: 向后兼容 No.[31]-BraceWrapping-(BraceWrappingFlags)-bool-AfterExternBlock 的缩进。例如：
+#     IndentExternBlock: AfterExternBlock
+#     BraceWrapping.AfterExternBlock: true
+#     extern "C"
+#     {
+#         void foo();
+#     }
+#
+#     IndentExternBlock: AfterExternBlock
+#     BraceWrapping.AfterExternBlock: false
+#     extern "C" {
+#     void foo();
+#     }
+#
+# NoIndent: 不要缩进外部块。例如：
+#     extern "C" {
+#     void foo();
+#     }
+#
+# Indent: 缩进外部块。例如：
+#     extern "C" {
+#       void foo();
+#     }
+#
+IndentExternBlock: Indent
+# ^^^^^^
+
+# vvvvvv
+### No.[68]  IndentGotoLabels (Boolean) { clang-format 10 }
+# 缩进 goto 标签。
+# 当为 false 时，goto 标签被推到最左侧。例如：
+#     true:                                  false:
+#     int f() {               vs.            int f() {
+#       if (foo()) {                           if (foo()) {
+#       label1:                              label1:
+#         bar();                                 bar();
+#       }                                      }
+#     label2:                                label2:
+#       return 1;                              return 1;
+#     }                                      }
+#
+IndentGotoLabels: false
+# ^^^^^^
+
+# vvvvvv
+### No.[69]  IndentPPDirectives (PPDirectiveIndentStyle) { clang-format 6 }
+# 控制预处理指令的缩进。
+# 可能的值:
+# None: 不要缩进预处理指令。例如：
+#     #if FOO
+#     #if BAR
+#     #include <foo>
+#     #endif
+#     #endif
+#
+# AfterHash: 在 # 之后缩进预处理指令。例如：
+#     #if FOO
+#     #  if BAR
+#     #    include <foo>
+#     #  endif
+#     #endif
+#
+# BeforeHash: 在 # 之前缩进预处理指令。例如：
+#     #if FOO
+#       #if BAR
+#         #include <foo>
+#       #endif
+#     #endif
+#
+IndentPPDirectives: BeforeHash
+# ^^^^^^
+
+# vvvvvv
+### No.[70]  IndentRequiresClause (Boolean) { clang-format 15 }
+# 缩进模板中的 requires 子句。这仅适用于 No.[111]-RequiresClausePosition-(RequiresClausePositionStyle) 为 OwnLine 或 WithFollowing 的情况。
+# 在 clang-format 12, 13 或 14 中，此配置项被称为 IndentRequires 。
+# 例如：
+# true:
+#     template <typename It>
+#       requires Iterator<It>
+#     void sort(It begin, It end) {
+#       //....
+#     }
+#
+# false:
+#     template <typename It>
+#     requires Iterator<It>
+#     void sort(It begin, It end) {
+#       //....
+#     }
+#
+IndentRequires: true
+# ^^^^^^
+
+# vvvvvv
+### No.[71]  IndentWidth (Unsigned) { clang-format 3.7 }
+# 缩进宽度。例如：
+#
+#     +~~~~~~~~~~~~~~~~+
+#     * IndentWidth: 3 *
+#     +~~~~~~~~~~~~~~~~+
+#
+#     void f() {
+#       someFunction();
+#       if (true, false) {
+#           f();
+#       }
+#     }
+#
+IndentWidth: 4
+# ^^^^^^
+
+# vvvvvv
+### No.[72]  IndentWrappedFunctionNames (Boolean) { clang-format 3.7 }
+# 如果为 true ，则缩进包装函数名称。例如：
+# true:
+#     LoooooooooooooooooooooooooooooooooooooooongReturnType
+#         LoooooooooooooooooooooooooooooooongFunctionDeclaration();
+#
+# false:
+#     LoooooooooooooooooooooooooooooooooooooooongReturnType
+#     LoooooooooooooooooooooooooooooooongFunctionDeclaration();
+#
+IndentWrappedFunctionNames: true
+# ^^^^^^
+
+# vvvvvv
+### No.[73]  InsertBraces (Boolean) { clang-format 15 }
+# 在 C++ 中的控制语句（ if、else、for、do 和 while ）之后插入大括号，除非控制语句在宏定义中，或者大括号将包含预处理器指令。
+# 警告
+# 将此选项设置为 true 可能会由于 clang 格式缺乏完整的语义信息而导致代码格式不正确。因此，应该格外小心地检查此选项所做的代码更改。
+# 例如：
+#     false:                                    true:
+#
+#     if (isa<FunctionDecl>(D))        vs.      if (isa<FunctionDecl>(D)) {
+#       handleFunctionDecl(D);                    handleFunctionDecl(D);
+#     else if (isa<VarDecl>(D))                 } else if (isa<VarDecl>(D)) {
+#       handleVarDecl(D);                         handleVarDecl(D);
+#     else                                      } else {
+#       return;                                   return;
+#                                               }
+#
+#     while (i--)                      vs.      while (i--) {
+#       for (auto *A : D.attrs())                 for (auto *A : D.attrs()) {
+#         handleAttr(A);                            handleAttr(A);
+#                                                 }
+#                                               }
+#
+#     do                               vs.      do {
+#       --i;                                      --i;
+#     while (i);                                } while (i);
+#
+InsertBraces: true
+# ^^^^^^
+
+# vvvvvv
+### No.[74]  InsertNewlineAtEOF (Boolean) { clang-format 16 }
+# 如果缺少换行符，请在文件末尾插入一行。
+#
+InsertNewlineAtEOF: true
+# ^^^^^^
+
+# vvvvvv
+### No.[75]  InsertTrailingCommas (TrailingCommaStyle) { clang-format 11 }
+# 如果设置为 Wrapped ，则会在跨多行换行的容器文本（数组和对象）中插入末尾的逗号。它目前仅对 JavaScript 可用，并在默认情况下禁用（ None ）。
+# 注意：此配置项不能与 No.[28]-BinPackArguments-(Boolean) 一起使用，因为插入逗号会禁用包装。
+# 可能的值:
+# Wrapped: 在包装在多行中的括号字面值中插入尾随逗号。请注意，这在概念上与装箱不兼容，因为末尾的逗号被用作指示容器应该每行格式化（即不包含）。因此，插入末尾逗号会抵消括号的作用。例如：
+#     const someArray = [
+#     aaaaaaaaaaaaaaaaaaaaaaaaaa,
+#     aaaaaaaaaaaaaaaaaaaaaaaaaa,
+#     aaaaaaaaaaaaaaaaaaaaaaaaaa,
+#     //                        ^ inserted
+#     ]
+#
+# None: 不要插入末尾的逗号。
+#
+InsertTrailingCommas: None
+# ^^^^^^
+
+# vvvvvv
+### No.[76]  IntegerLiteralSeparator (IntegerLiteralSeparatorStyle) { clang-format 16 }
+# 格式化整数文本分隔符（对于 C++ 为 '，对于 C# 、Java 和 JavaScript 为 _ ）。
+# 嵌套的配置标志:
+# 不同基数的整数文本的分隔符格式。
+# 如果是负数，请拆下分离器。如果为 0 ，则保持文字原样。如果为正数，则在从最右边开始的数字之间插入分隔符。
+# 例如，下面的配置将保留二进制文字中的分隔符，在十进制文字中插入分隔符以将数字分成3组，并在十六进制文字中删除分隔符。
+#     IntegerLiteralSeparator:
+#         Binary: 0
+#         Decimal: 3
+#         Hex: -1
+#
+# 您还可以指定整数文字必须具有的最小位数（ BinaryMinDigits 、DecimalMinDigits 和 HexMinDigits ），以便插入分隔符。
+
+IntegerLiteralSeparator:
+    #
+    # +---------------------------+
+    # | DO-NOT-REMOVE-INDENTATION |
+    # +---------------------------+
+    #
+
+    # int8_t Binary: 二进制整数文本的分隔符格式。例如：
+    #     /* -1: */ b = 0b100111101101;
+    #     /*  0: */ b = 0b10011'11'0110'1;
+    #     /*  3: */ b = 0b100'111'101'101;
+    #     /*  4: */ b = 0b1001'1110'1101;
+    #
+    Binary: 4
+
+    # int8_t BinaryMinDigits: 二进制整数文本的最小位数。例如：
+    #     // Binary: 3
+    #     // BinaryMinDigits: 7
+    #     b1 = 0b101101;
+    #     b2 = 0b1'101'101;
+    #
+    BinaryMinDigits: 4
+
+    # int8_t Decimal: 十进制整数文本的分隔符格式。例如：
+    #     /* -1: */ d = 18446744073709550592ull;
+    #     /*  0: */ d = 184467'440737'0'95505'92ull;
+    #     /*  3: */ d = 18'446'744'073'709'550'592ull;
+    #
+    Decimal: 3
+
+    # int8_t DecimalMinDigits: 十进制整数文本的最小位数。例如：
+    #     // Decimal: 3
+    #     // DecimalMinDigits: 5
+    #     d1 = 2023;
+    #     d2 = 10'000;
+    #
+    DecimalMinDigits: 5
+
+    # int8_t Hex: 十六进制整数文本的分隔符格式。例如：
+    # /* -1: */ h = 0xDEADBEEFDEADBEEFuz;
+    # /*  0: */ h = 0xDEAD'BEEF'DE'AD'BEE'Fuz;
+    # /*  2: */ h = 0xDE'AD'BE'EF'DE'AD'BE'EFuz;
+    #
+    Hex: 2
+
+    # int8_t HexMinDigits: 十六进制整数文本的最小位数。例如：
+    # // Hex: 2
+    # // HexMinDigits: 6
+    # h1 = 0xABCDE;
+    # h2 = 0xAB'CD'EF;
+    #
+    HexMinDigits: 6
+# ^^^^^^
+
+# vvvvvv
+### No.[77]  KeepEmptyLinesAtEOF (Boolean) { clang-format 17 }
+# 如果为 true ，则在文件末尾保留空行。最多保留 No.[86]-MaxEmptyLinesToKeep-(Unsigned) 。
+#
+KeepEmptyLinesAtEOF: true
+# ^^^^^^
+
+# vvvvvv
+### No.[78]  KeepEmptyLinesAtTheStartOfBlocks (Boolean) { clang-format 3.7 }
+# 如果为 true ，则在块的开头保留空行。例如：
+#     true:                                  false:
+#     if (foo) {               vs.           if (foo) {
+#                                             bar();
+#       bar();                               }
+#     }
+#
+KeepEmptyLinesAtTheStartOfBlocks: false
+# ^^^^^^
+
+# vvvvvv
+### No.[79]  LambdaBodyIndentation (LambdaBodyIndentationKind) { clang-format 13 }
+# lambda 主体的缩进样式。（默认）导致 lambda 主体相对于签名的缩进级别缩进一个额外的级别。OuterScope 强制 lambda 主体相对于包含 lambda 签名的父作用域缩进一个额外的级别。 对于回调繁重的代码，将签名缩进两级并使用 OuterScope 可能会提高可读性。KJ 风格（ https://github.com/capnproto/capnproto/blob/master/kjdoc/style-guide.md ）指南需要 OuterScope 。
+# 可能的值:
+# Signature: lambda 主体相对于签名缩进一个额外的级别。例如：
+#     someMethod(
+#         [](SomeReallyLongLambdaSignatureArgument foo) {
+#           return;
+#         });
+#
+# OuterScope: lambda 主体相对于包含 lambda 签名的父作用域缩进一个额外的级别。例如：
+#     someMethod(
+#         [](SomeReallyLongLambdaSignatureArgument foo) {
+#       return;
+#     });
+#
+#     someMethod(someOtherMethod(
+#         [](SomeReallyLongLambdaSignatureArgument foo) {
+#       return;
+#     }));
+#
+LambdaBodyIndentation: Signature
+# ^^^^^^
+
+# vvvvvv
+### No.[80]  Language (LanguageKind) { clang-format 3.5 }
+# 语言，这种格式风格是针对的。
+# 可能的值:
+# Cpp: C、C++
+# CSharp: C#
+# Java: Java
+# JavaScript: JavaScript
+# Json: JSON
+# ObjC: Objective-C
+# Proto: Protocol Buffers
+# TableGen: TableGen
+# TextProto: Text Protocol Buffers
+# Verilog: Verilog
+# None: 无。
+#
+# 特别说明：该配置项虽然在此处列出，但是它定义的位置应该在文件的开头。具体原因请参看条款 文件说明（ 3 ）No.[二] 关于配置样式 。
+# Language: Cpp
+# ^^^^^^
+
+# vvvvvv
+### No.[81]  LineEnding (LineEndingStyle) { clang-format 16 }
+# 控制换行符的样式（ \n 或 \r ）。
+# 可能的值:
+# LF:			使用 \n 。
+# CRLF:			使用 \r\n 。
+# DeriveLF:		除非输入有更多以 \r\n 结尾的行，否则请使用 \n 。
+# DeriveCRLF:	除非输入有更多以 \n 结尾的行，否则请使用 \r\n 。
+#
+LineEnding: CRLF
+# ^^^^^^
+
+# vvvvvv
+### No.[82]  MacroBlockBegin (String) { clang-format 3.7 }
+# 匹配开始块的宏的正则表达式。
+# 例如：
+#     MacroBlockBegin: "^NS_MAP_BEGIN|\
+#         NS_TABLE_HEAD$"
+#     MacroBlockEnd: "^\
+#         NS_MAP_END|\
+#         NS_TABLE_.*_END$"
+#
+# NS_MAP_BEGIN
+#   foo();
+# NS_MAP_END
+#
+# NS_TABLE_HEAD
+#   bar();
+# NS_TABLE_FOO_END
+#
+# # Without:
+# NS_MAP_BEGIN
+# foo();
+# NS_MAP_END
+#
+# NS_TABLE_HEAD
+# bar();
+# NS_TABLE_FOO_END
+#
+MacroBlockBegin: "^MAP_BEGIN|\
+    TABLE_HEAD$"
+# ^^^^^^
+
+# vvvvvv
+### No.[83]  MacroBlockEnd (String) { clang-format 3.7 }
+# 匹配结束块的宏的正则表达式。
+#
+MacroBlockEnd: "^\
+    MAP_END|\
+    TABLE_.*_END$"
+# ^^^^^^
+
+# vvvvvv
+### No.[84]  Macros (List of Strings) { clang-format 17 }
+# 形式为 <definition>=<expansion> 的宏列表。
+# 代码将在展开宏的情况下进行解析，以确定如何解释和格式化宏参数。
+# 例如：代码
+#     A(a*b);
+# 通常将被解释为对函数 a 的调用，并且乘法表达式将被格式化为 a*b 。
+# 如果我们指定宏定义:
+#     Macros:
+#     - A(x)=x
+# 代码现在将被解析为 a* 类型的变量 b 的声明，并被格式化为 a*b（取决于指针绑定规则）。
+#
+# 特点和限制:
+#     支持类函数宏和类对象宏。
+#     宏参数在展开中只能使用一次。
+#     无递归扩展；引用其他宏的宏将被忽略。
+#     支持 arity 重载：例如，给定宏定义 A=x，A()=y，A(A)=A :
+#         A; -> x;
+#         A(); -> y;
+#         A(z); -> z;
+#         A(a, b); // will not be expanded.
+#
+Macros: []
+# ^^^^^^
+
+# vvvvvv
+### No.[85]  MainIncludeChar (MainIncludeCharDiscriminator) { clang-format 19 }
+#
+# +--------------------------------------------+
+# | THE-VERSION-DOES_NOT-MEET-THE-REQUIREMENTS |
+# +--------------------------------------------+
+#
+# 当猜测 #include 是否为 "main" include 时，只考虑使用指定字符的 include 指令。
+# 可能的值:
+# Quote:			main include 使用引号：	#include “foo.hpp” 。
+# AngleBracket:		main include 使用尖括号：	#include ＜foo.hpp＞ 。
+# Any:				main include 使用引号或尖括号。
+#
+# MainIncludeChar: Quote
+# ^^^^^^
+
+# vvvvvv
+### No.[86]  MaxEmptyLinesToKeep (Unsigned) { clang-format 3.7 }
+# 要保留的最大连续空行数。例如：
+#     MaxEmptyLinesToKeep: 1         vs.       MaxEmptyLinesToKeep: 0
+#     int f() {                                int f() {
+#       int = 1;                                   int i = 1;
+#                                                  i = foo();
+#       i = foo();                                 return i;
+#                                              }
+#       return i;
+#     }
+#
+MaxEmptyLinesToKeep: 3
+# ^^^^^^
+
+# vvvvvv
+### No.[87]  NamespaceIndentation (NamespaceIndentationKind) { clang-format 3.7 }
+# 控制名称空间的缩进。
+# 可能的值:
+# None: 不要缩进名称空间。例如：
+#     namespace out {
+#     int i;
+#     namespace in {
+#     int i;
+#     }
+#     }
+#
+# Inner: 缩进名称空间内部。例如：
+#     namespace out {
+#     int i;
+#     namespace in {
+#       int i;
+#     }
+#     }
+#
+# All: 缩进名称空间内部和外部。例如：
+#     namespace out {
+#       int i;
+#       namespace in {
+#         int i;
+#       }
+#     }
+#
+NamespaceIndentation: All
+# ^^^^^^
+
+# vvvvvv
+### No.[88]  NamespaceMacros (List of Strings) { clang-format 9 }
+# 字符串的向量，应该被解释为名称空间宏而不是标识符。这对于语言扩展或静态分析器注释很有用。例如：
+#     NAMESPACE(<namespace-name>, ...) {
+#       <namespace-content>
+#     }
+#
+NamespaceMacros: ['BEGIN_NAMESPACE', 'END_NAMESPACE']
+# ^^^^^^
+
+# vvvvvv
+### No.[89]  PPIndentWidth (Integer) { clang-format 13}
+# 用于缩进预处理器语句的列数。 当设置为 -1（默认）时，IndentWidth 也用于预处理器语句。例如：
+#     +~~~~~~~~~~~~~~~~~~+
+#     * PPIndentWidth: 1 *
+#     +~~~~~~~~~~~~~~~~~~+
+#
+#     #ifdef __linux__
+#     # define FOO
+#     #else
+#     # define BAR
+#     #endif
+#
+PPIndentWidth: -1
+# ^^^^^^
+
+# vvvvvv
+### No.[90]  PackConstructorInitializers (PackConstructorInitializersStyle) { clang-format 14 }
+# 要使用的包构造函数初始值设定项样式。
+# 可能的值:
+# Never: 始终将每个构造函数初始化器放在自己的行上。例如：
+#     Constructor()
+#         : a(),
+#           b()
+#
+# BinPack: Bin-pack 构造函数初始值设定项。例如：
+#     Constructor()
+#         : aaaaaaaaaaaaaaaaaaaa(), bbbbbbbbbbbbbbbbbbbb(),
+#           cccccccccccccccccccc()
+#
+# CurrentLine: 如果合适，将所有构造函数初始值设定项放在当前行。 否则，将每个都放在自己的行上。例如：
+#     Constructor() : a(), b()
+#
+#     Constructor()
+#         : aaaaaaaaaaaaaaaaaaaa(),
+#           bbbbbbbbbbbbbbbbbbbb(),
+#           ddddddddddddd()
+#
+# NextLine: 与 CurrentLine 相同，但如果所有构造函数初始值设定项都不适合当前行，则尝试将它们放在下一行。例如：
+#     Constructor() : a(), b()
+#
+#     Constructor()
+#         : aaaaaaaaaaaaaaaaaaaa(), bbbbbbbbbbbbbbbbbbbb(), ddddddddddddd()
+#
+#     Constructor()
+#         : aaaaaaaaaaaaaaaaaaaa(),
+#           bbbbbbbbbbbbbbbbbbbb(),
+#           cccccccccccccccccccc()
+#
+# NextLineOnly: 如果合适的话，将所有构造函数初始值设定项放在下一行。否则，将每一个放在自己的行上。例如：
+#     Constructor()
+#         : a(), b()
+#
+#     Constructor()
+#         : aaaaaaaaaaaaaaaaaaaa(), bbbbbbbbbbbbbbbbbbbb(), ddddddddddddd()
+#
+#     Constructor()
+#         : aaaaaaaaaaaaaaaaaaaa(),
+#           bbbbbbbbbbbbbbbbbbbb(),
+#           cccccccccccccccccccc()
+#
+PackConstructorInitializers: CurrentLine
+# ^^^^^^
+
+# vvvvvv
+### No.[91]  PenaltyBreakAssignment (Unsigned) { clang-format 5 }
+# 突破赋值运算符的补偿。
+#
+PenaltyBreakAssignment: 2
+# ^^^^^^
+
+# vvvvvv
+### No.[92]  PenaltyBreakBeforeFirstCallParameter (Unsigned) { clang-format 3.7 }
+# call( 后中断函数调用的补偿。
+#
+PenaltyBreakBeforeFirstCallParameter: 19
+# ^^^^^^
+
+# vvvvvv
+### No.[93]  PenaltyBreakComment (Unsigned) { clang-format 3.7 }
+# 注释中引入的每个换行符的补偿。
+#
+PenaltyBreakComment: 300
+# ^^^^^^
+
+# vvvvvv
+### No.[94]  PenaltyBreakFirstLessLess (Unsigned) { clang-format 3.7 }
+# 在第一个 << 之前中断的补偿。
+#
+PenaltyBreakFirstLessLess: 120
+# ^^^^^^
+
+# vvvvvv
+### No.[95]  PenaltyBreakOpenParenthesis (Unsigned) { clang-format 14 }
+# 在打开括号之前中断的补偿。
+#
+PenaltyBreakOpenParenthesis: 60
+# ^^^^^^
+
+# vvvvvv
+### No.[96]  PenaltyBreakScopeResolution (Unsigned) { clang-format 18 }
+# 在 :: 之前中断的补偿。
+#
+PenaltyBreakScopeResolution: 100
+# ^^^^^^
+
+# vvvvvv
+### No.[97]  PenaltyBreakString (Unsigned) { clang-format 3.7 }
+# 在字符串文字中引入的每个换行符的补偿。
+#
+PenaltyBreakString: 1000
+# ^^^^^^
+
+# vvvvvv
+### No.[98]  PenaltyBreakTemplateDeclaration (Unsigned) { clang-format 7 }
+# 模板声明后中断的补偿。
+#
+PenaltyBreakTemplateDeclaration: 10
+# ^^^^^^
+
+# vvvvvv
+### No.[99]  PenaltyExcessCharacter (Unsigned) { clang-format 3.7 }
+# 列限制之外的每个字符的补偿。
+#
+PenaltyExcessCharacter: 1000000
+# ^^^^^^
+
+# vvvvvv
+### No.[100]  PenaltyIndentedWhitespace (Unsigned) { clang-format 12 }
+# 空格缩进的每个字符的补偿（相对于前导非空格列计算）。
+#
+PenaltyIndentedWhitespace: 0
+# ^^^^^^
+
+# vvvvvv
+### No.[101]  PenaltyReturnTypeOnItsOwnLine (Unsigned) { clang-format 3.7 }
+# 将函数的返回类型放在它自己的行上的补偿。
+#
+PenaltyReturnTypeOnItsOwnLine: 60
+# ^^^^^^
+
+# vvvvvv
+### No.[102]  PointerAlignment (PointerAlignmentStyle) { clang-format 3.7 }
+# 控制指针的对齐。
+# 可能的值:
+# Left: 指针左对齐。例如：
+#     int* a;
+#
+# Right: 指针右对齐。例如：
+#     int *a;
+#
+# Middle: 指针居中对齐。例如：
+#     int * a;
+#
+PointerAlignment: Left
+# ^^^^^^
+
+# vvvvvv
+### No.[103]  QualifierAlignment (QualifierAlignmentStyle) { clang-format 14 }
+# 排列说明符和限定符的不同方式（例如：const/volatile ）。
+# Waring: 将 QualifierAlignment 设置为 Leave 以外的其他内容，可能会导致错误的代码格式，这是由于 clang-format 缺乏完整的语义信息而做出的错误决定。因此，应格外小心地审查使用此选项所做的代码更改。
+# 可能的值:
+# Leave: 不要将说明符/限定符更改为左对齐或右对齐（默认）。例如：
+#     int const a;
+#     const int *a;
+#
+# Left: 说明符和限定符左对齐。例如：
+#     const int a;
+#     const int *a;
+#
+# Right: 说明符和限定符右对齐。例如：
+#     int const a;
+#     int const *a;
+#
+# Custom: 在 QualifierAlignment 对象中配置每个单独的说明符和限定符。例如：
+#     QualifierOrder: ['inline', 'static', 'type', 'const']
+#
+#     int const a;
+#     int const *a;
+#
+QualifierAlignment: Custom
+# ^^^^^^
+
+# vvvvvv
+### No.[104]  QualifierOrder (List of Strings) { clang-format 14 }
+# 说明符和限定符的顺序。如果没有指定，则使用默认顺序。顺序是一个数组，可以包含以下任何一项:
+# const
+# inline
+# static
+# constexpr
+# volatile
+# restrict
+# <type>
+# 注意：它必须包含 <type>。<type> 左侧的项目将放置在类型的左侧并按提供的顺序对齐。<type> 右侧的项目将放置在类型的右侧并按照提供的顺序对齐。
+#
+QualifierOrder: ['static', 'constexpr', 'inline', 'const', 'restrict', 'volatile', 'type']
+# ^^^^^^
+
+# vvvvvv
+### No.[105]  RawStringFormats (List of RawStringFormats) { clang-format 6 }
+# 定义在原始字符串中检测支持的语言代码块的提示。
+# 带有匹配的分隔符或包含匹配的函数名的原始字符串将根据 .clang-format 文件中定义的语言的样式进行重新格式化，假设该语言是指定的语言。如果在.clang-format 文件中没有为特定语言定义样式，则使用 BasedOnStyle 给出的预定义样式。如果没有找到 BasedOnStyle ，则格式化基于 Llvm 风格。匹配分隔符优先于匹配的封闭函数名，以确定原始字符串内容的语言。
+# 如果指定了规范分隔符，同一语言中出现的其他分隔符将尽可能更新为规范。
+# 每种语言最多应该有一个规范，每个分隔符和包围函数不应该出现在多个规范中。
+#
+RawStringFormats:
+  #
+  # +---------------------------+
+  # | DO-NOT-REMOVE-INDENTATION |
+  # +---------------------------+
+  #
+
+  - Language: TextProto
+    Delimiters:
+      - pb
+      - proto
+    EnclosingFunctions:
+      - PARSE_TEXT_PROTO
+    BasedOnStyle: google
+  - Language: Cpp
+    Delimiters:
+      - cc
+      - cpp
+    BasedOnStyle: LLVM
+    CanonicalDelimiter: cc
+# ^^^^^^
+
+# vvvvvv
+### No.[106]  ReferenceAlignment (ReferenceAlignmentStyle) { clang-format 13 }
+# 引用对齐样式（覆盖引用的 No.[102]-PointerAlignment-(PointerAlignmentStyle)）。
+# 可能的值:
+# Pointer: 使用 No.[102]-PointerAlignment-(PointerAlignmentStyle) 的值。
+#
+# Left: 引用左对齐。例如：
+#     int& a;
+#
+# Right: 引用右对齐。例如：
+#     int &a;
+#
+# Middle: 引用居中对齐。例如：
+#     int & a;
+#
+ReferenceAlignment: Pointer
+# ^^^^^^
+
+# vvvvvv
+### No.[107]  ReflowComments (Boolean) { clang-format 3.8 }
+# 如果为 true ，clang-format 将尝试重新流式注释。也就是说，它会触摸一条评论，并将长评论回流到新行中，试图遵守 ColumnLimit 。例如：
+# false:
+#     // veryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryLongComment with plenty of information
+#     /* second veryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryLongComment with plenty of information */
+#
+# true:
+#     // veryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryLongComment with plenty of
+#     // information
+#     /* second veryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryLongComment with plenty of
+#     * information */
+#
+ReflowComments: false
+# ^^^^^^
+
+# vvvvvv
+### No.[108]  RemoveBracesLLVM (Boolean) { clang-format 14 }
+# 如果为 true ，则在 LLVM 风格的 if、else、for、while 和 do while 语句中删除大括号。
+# 警告1: 此选项将被重命名并展开以支持其他样式。
+# 警告2: 此选项可能会导致代码格式不正确，这是由于 clang-format 缺乏完整的语义信息而做出的错误决定。因此，应格外小心地审查使用此选项所做的代码更改。
+# 例如：
+#     false:                                     true:
+#
+#     if (isa<FunctionDecl>(D)) {        vs.     if (isa<FunctionDecl>(D))
+#       handleFunctionDecl(D);                     handleFunctionDecl(D);
+#     } else if (isa<VarDecl>(D)) {              else if (isa<VarDecl>(D))
+#       handleVarDecl(D);                          handleVarDecl(D);
+#     }
+#
+#     if (isa<VarDecl>(D)) {             vs.     if (isa<VarDecl>(D)) {
+#       for (auto *A : D.attrs()) {                for (auto *A : D.attrs())
+#         if (shouldProcessAttr(A)) {                if (shouldProcessAttr(A))
+#           handleAttr(A);                             handleAttr(A);
+#         }                                      }
+#       }
+#     }
+#
+#     if (isa<FunctionDecl>(D)) {        vs.     if (isa<FunctionDecl>(D))
+#       for (auto *A : D.attrs()) {                for (auto *A : D.attrs())
+#         handleAttr(A);                             handleAttr(A);
+#       }
+#     }
+#
+#     if (auto *D = (T)(D)) {            vs.     if (auto *D = (T)(D)) {
+#       if (shouldProcess(D)) {                    if (shouldProcess(D))
+#         handleVarDecl(D);                          handleVarDecl(D);
+#       } else {                                   else
+#         markAsIgnored(D);                          markAsIgnored(D);
+#       }                                        }
+#     }
+#
+#     if (a) {                           vs.     if (a)
+#       b();                                       b();
+#     } else {                                   else if (c)
+#       if (c) {                                   d();
+#         d();                                   else
+#       } else {                                   e();
+#         e();
+#       }
+#     }
+#
+RemoveBracesLLVM: false
+# ^^^^^^
+
+# vvvvvv
+### No.[109]  RemoveParentheses (RemoveParenthesesStyle) { clang-format 17 }
+# 控制是否删除不必要的括号。
+# 警告：此选项可能会导致代码格式不正确，这是由于 clang-format 缺乏完整的语义信息而做出的错误决定。因此，应格外小心地审查使用此选项所做的代码更改。
+# 可能的值:
+# Leave: 不要删除括号。例如：
+#     class __declspec((dllimport)) X {};
+#     co_return (((0)));
+#     return ((a + b) - ((c + d)));
+#
+# MultipleParentheses: 将多个圆括号替换为单个圆括号。例如：
+#     class __declspec(dllimport) X {};
+#     co_return (0);
+#     return ((a + b) - (c + d));
+#
+# ReturnStatement: 还可以删除 return/co-rereturn 语句中包含表达式的圆括号。
+#     class __declspec(dllimport) X {};
+#     co_return 0;
+#     return (a + b) - (c + d);
+#
+RemoveParentheses: MultipleParentheses
+# ^^^^^^
+
+# vvvvvv
+### No.[110]  RemoveSemicolon (Boolean) { clang-format 16 }
+# 如果为 true ，则在空语句中删除分号。
+# 警告：此选项可能会导致代码格式不正确，这是由于 clang-format 缺乏完整的语义信息而做出的错误决定。因此，应格外小心地审查使用此选项所做的代码更改。
+# 例如：
+#     false:                                     true:
+#
+#     int max(int a, int b) {                    int max(int a, int b) {
+#       return a > b ? a : b;                      return a > b ? a : b;
+#     };                                         }
+#
+RemoveSemicolon: true
+# ^^^^^^
+
+# vvvvvv
+### No.[111]  RequiresClausePosition (RequiresClausePositionStyle) { clang-format 15 }
+# 控制 requires 子句的位置。
+# 可能的值:
+# OwnLine: 将 requires 子句放在自己的行上。例如：
+#     template <typename T>
+#     requires C<T>
+#     struct Foo {...
+#
+#     template <typename T>
+#     requires C<T>
+#     void bar(T t) {...
+#
+#     template <typename T>
+#     void baz(T t)
+#     requires C<T>
+#     {...
+#
+# WithPreceding: 试着把这个子句和声明的前一部分放在一起。对于类模板：坚持使用模板声明。对于后面跟着 requires 子句的函数声明：坚持使用参数列表。例如：
+#     template <typename T> requires C<T>
+#     struct Foo {...
+#
+#     template <typename T> requires C<T>
+#     void bar(T t) {...
+#
+#     template <typename T>
+#     void baz(T t) requires C<T>
+#     {...
+#
+# WithFollowing: 试着把这个子句和声明的后一部分放在一起。例如：
+#     template <typename T>
+#     requires C<T> struct Foo {...
+#
+#     template <typename T>
+#     requires C<T> void bar(T t) {...
+#
+#     template <typename T>
+#     void baz(T t)
+#     requires C<T> {...
+#
+# SingleLine: 如果可能的话，试着把所有的事情都放在同一条线上。否则，正常的断线规则将取而代之。例如：
+#     // Fitting:
+#     template <typename T> requires C<T> struct Foo {...
+#
+#     template <typename T> requires C<T> void bar(T t) {...
+#
+#     template <typename T> void bar(T t) requires C<T> {...
+#
+#     // Not fitting, one possible example:
+#     template <typename LongName>
+#     requires C<LongName>
+#     struct Foo {...
+#
+#     template <typename LongName>
+#     requires C<LongName>
+#     void bar(LongName ln) {
+#
+#     template <typename LongName>
+#     void bar(LongName ln)
+#         requires C<LongName> {
+#
+RequiresClausePosition: OwnLine
+# ^^^^^^
+
+# vvvvvv
+### No.[112]  RequiresExpressionIndentation (RequiresExpressionIndentationKind) { clang-format 16 }
+# 控制 requires 表达式的缩进。
+# 可能的值:
+# OuterScope: requires 表达式相对于包含 requires 表达式的父作用域缩进一个额外的级别。例如：
+#     template <typename T>
+#     concept C = requires(T t) {
+#       ...
+#     }
+#
+# Keyword: requires 表达式相对于 requires 关键字缩进一个额外的级别。例如：
+#     template <typename T>
+#     concept C = requires(T t) {
+#                   ...
+#                 }
+#
+RequiresExpressionIndentation: Keyword
+# ^^^^^^
+
+# vvvvvv
+### No.[113]  SeparateDefinitionBlocks (SeparateDefinitionStyle) { clang-format 14 }
+# 指定使用空行分隔定义块，包括类、结构、枚举和函数。
+# 可能的值:
+# Leave:	保留定义块的原样。
+# Always:	在定义块之间插入一条空行。
+# Never:	删除定义块之间的任何空行。
+#
+# 例如：
+#     Never                  v.s.     Always
+#     #include <cstring>              #include <cstring>
+#     struct Foo {
+#       int a, b, c;                  struct Foo {
+#     };                                int a, b, c;
+#     namespace Ns {                  };
+#     class Bar {
+#     public:                         namespace Ns {
+#       struct Foobar {               class Bar {
+#         int a;                      public:
+#         int b;                        struct Foobar {
+#       };                                int a;
+#     private:                            int b;
+#       int t;                          };
+#       int method1() {
+#         // ...                      private:
+#       }                               int t;
+#       enum List {
+#         ITEM1,                        int method1() {
+#         ITEM2                           // ...
+#       };                              }
+#       template<typename T>
+#       int method2(T x) {              enum List {
+#         // ...                          ITEM1,
+#       }                                 ITEM2
+#       int i, j, k;                    };
+#       int method3(int par) {
+#         // ...                        template<typename T>
+#       }                               int method2(T x) {
+#     };                                  // ...
+#     class C {};                       }
+#     }
+#                                       int i, j, k;
+#
+#                                       int method3(int par) {
+#                                         // ...
+#                                       }
+#                                     };
+#
+#                                     class C {};
+#                                     }
+#
+SeparateDefinitionBlocks: Always
+# ^^^^^^
+
+# vvvvvv
+### No.[114]  ShortNamespaceLines (Unsigned) { clang-format 13 }
+# 一个短命名空间所跨越的最大展开行数。默认值为 1 。
+# 这通过计算未展开的行（即既不包含开头也不包含结尾的命名空间大括号）来确定短命名空间的最大长度，并使 No.[57]-FixNamespaceComments-(Boolean) 省略了为这些行添加结束注释。
+# 例如：
+#     ShortNamespaceLines: 1     vs.     ShortNamespaceLines: 0
+#     namespace a {                      namespace a {
+#       int foo;                           int foo;
+#     }                                  } // namespace a
+#
+#     ShortNamespaceLines: 1     vs.     ShortNamespaceLines: 0
+#     namespace b {                      namespace b {
+#       int foo;                           int foo;
+#       int bar;                           int bar;
+#     } // namespace b                   } // namespace b
+#
+ShortNamespaceLines: 0
+# ^^^^^^
+
+# vvvvvv
+### No.[115]  SkipMacroDefinitionBody (Boolean) { clang-format 18 }
+# 如果为 true ，则不会格式化宏定义的主体。
+#
+SkipMacroDefinitionBody: false
+# ^^^^^^
+
+# vvvvvv
+### No.[116]  SortIncludes (SortIncludesOptions) { clang-format 3.8 }
+# 控制 clang-format 是否以及如何排序 #include 。如果没有，则包含永远不会排序。如果不区分大小写，则包含以 ascii 或不区分大小写的方式排序。如果区分大小写，则包含按字母或区分大小写的方式排序。
+# 可能的值:
+# Never: 包含永远不会排序。例如：
+#     #include "B/A.h"
+#     #include "A/B.h"
+#     #include "a/b.h"
+#     #include "A/b.h"
+#     #include "B/a.h"
+#
+# CaseSensitive: include 以大小写敏感的方式排序。例如：
+#     #include "A/B.h"
+#     #include "A/b.h"
+#     #include "B/A.h"
+#     #include "B/a.h"
+#     #include "a/b.h"
+#
+# CaseInsensitive: include 以不区分字母或大小写的方式排序。例如：
+#     #include "A/B.h"
+#     #include "A/b.h"
+#     #include "a/b.h"
+#     #include "B/A.h"
+#     #include "B/a.h"
+#
+SortIncludes: CaseInsensitive
+# ^^^^^^
+
+# vvvvvv
+### No.[117]  SortUsingDeclarations (SortUsingDeclarationsOptions) { clang-format 5 }
+# 控制 clang-format 是否以及如何使用声明进行排序。
+# 使用声明的顺序定义如下：使用 :: 分隔字符串并丢弃任何初始化的空字符串。每个列表的最后一个元素是一个非命名空间名称;其他的都是命名空间名称。按字典顺序对名称列表进行排序，其中个人名称的排序顺序是所有非名称空间名称出现在所有名称空间名称之前，并且在这些组中，名称不区分大小写。
+# 可能的值:
+# Never: 使用声明永远不会排序。例如：
+#     using std::chrono::duration_cast;
+#     using std::move;
+#     using boost::regex;
+#     using boost::regex_constants::icase;
+#     using std::string;
+#
+# Lexicographic: Using 声明按如下定义的顺序排序：按 :: 拆分字符串，并丢弃任何初始空字符串。按字典顺序对名称列表进行排序，在这些组中，名称按不区分大小写的字典顺序排列。例如：
+#     using boost::regex;
+#     using boost::regex_constants::icase;
+#     using std::chrono::duration_cast;
+#     using std::move;
+#     using std::string;
+#
+# LexicographicNumeric: Using 声明按如下定义的顺序排序：按 :: 拆分字符串，并丢弃任何初始空字符串。每个列表的最后一个元素是一个非命名空间名称；所有其他都是命名空间名称。按字典顺序对名称列表进行排序，其中单个名称的排序顺序是所有非命名空间名称位于所有命名空间名称之前，在这些组中，名称按不区分大小写的字典顺序排列。例如：
+#     using boost::regex;
+#     using boost::regex_constants::icase;
+#     using std::move;
+#     using std::string;
+#     using std::chrono::duration_cast;
+#
+SortUsingDeclarations: LexicographicNumeric
+# ^^^^^^
+
+# vvvvvv
+### No.[118]  SpaceAfterCStyleCast (Boolean) { clang-format 3.5 }
+# 如果为 true ，则在 C 风格的类型转换后添加空格。例如：
+#     true:                      false:
+#     (int) i;         vs.       (int)i;
+#
+SpaceAfterCStyleCast: false
+# ^^^^^^
+
+# vvvvvv
+### No.[119]  SpaceAfterLogicalNot (Boolean) { clang-format 9 }
+# 如果为 true ，则在逻辑非操作符（!）后添加空格。例如：
+#     true:                               false:
+#     ! someExpression();       vs.       !someExpression();
+#
+SpaceAfterLogicalNot: false
+# ^^^^^^
+
+# vvvvvv
+### No.[120]  SpaceAfterTemplateKeyword (Boolean) { clang-format 4 }
+# 如果为 true ，则在模板关键字后添加空格。例如：
+#     true:                                     false:
+#     template <int> void foo();      vs.       template<int> void foo();
+#
+SpaceAfterTemplateKeyword: true
+# ^^^^^^
+
+# vvvvvv
+### No.[121]  SpaceAroundPointerQualifiers (SpaceAroundPointerQualifiersStyle) { clang-format 12 }
+# 定义在何种情况下在指针限定符之前或之后放置空格
+# 可能的值:
+# Default: 不要确保指针限定符周围有空格，而是使用 No.[102]-PointerAlignment-(PointerAlignmentStyle) 。例如：
+#     PointerAlignment: Left                    PointerAlignment: Right
+#     void* const* x = NULL;          vs.       void *const *x = NULL;
+#
+# Before: 确保在指针限定符之前有空格。例如：
+#     PointerAlignment: Left                    PointerAlignment: Right
+#     void* const* x = NULL;          vs.       void * const *x = NULL;
+#
+# After: 确保在指针限定符后有空格。例如：
+#     PointerAlignment: Left                    PointerAlignment: Right
+#     void* const * x = NULL;         vs.       void *const *x = NULL;
+#
+# Both:  确保在指针限定符的前后都有空格。例如：
+#     PointerAlignment: Left                    PointerAlignment: Right
+#     void* const * x = NULL;         vs.       void * const *x = NULL;
+#
+SpaceAroundPointerQualifiers: Default
+# ^^^^^^
+
+# vvvvvv
+### No.[122]  SpaceBeforeAssignmentOperators (Boolean) { clang-format 3.7 }
+# 如果为 true ，则在赋值操作符之前添加空格。例如：
+#     true:                                    false:
+#     int a = 5;                      vs.      int a= 5;
+#     a += 42;                                 a+= 42;
+#
+SpaceBeforeAssignmentOperators: true
+# ^^^^^^
+
+# vvvvvv
+### No.[123]  SpaceBeforeCaseColon (Boolean) { clang-format 12 }
+# 如果为 true ，则在 case 标签的冒号之前添加空格。例如：
+#     true:                                    false
+#     switch (x) {                    vs.      switch (x) {
+#       case 1 : break;                          case 1: break;
+#     }                                        }
+#
+SpaceBeforeCaseColon: false
+# ^^^^^^
+
+# vvvvvv
+### No.[124]  SpaceBeforeCpp11BracedList (Boolean) { clang-format 7 }
+# 如果为 true ，则在用于初始化对象的 C++11 大括号列表之前插入一个空格（在前面的标识符或类型之后）。例如：
+#     true:                                    false:
+#     Foo foo { bar };                 vs.     Foo foo{ bar };
+#     Foo {};                                  Foo{};
+#     vector<int> { 1, 2, 3 };                 vector<int>{ 1, 2, 3 };
+#     new int[3] { 1, 2, 3 };                  new int[3]{ 1, 2, 3 };
+#
+SpaceBeforeCpp11BracedList: true
+# ^^^^^^
+
+# vvvvvv
+### No.[125]  SpaceBeforeCtorInitializerColon (Boolean) { clang-format 7 }
+# 如果为 true ，则在构造函数初始化列表的冒号之前添加空格。例如：
+#     true:                                     false:
+#     Foo::Foo() : a(a) {}            vs.       Foo::Foo(): a(a) {}
+#
+SpaceBeforeCtorInitializerColon: false
+# ^^^^^^
+
+# vvvvvv
+### No.[126]  SpaceBeforeInheritanceColon (Boolean) { clang-format 7 }
+# 如果为 true ，则在继承列表的冒号之前添加空格。例如：
+# true:                                  false:
+# class Foo : Bar {}          vs.        class Foo: Bar {}
+#
+SpaceBeforeInheritanceColon: false
+# ^^^^^^
+
+# vvvvvv
+### No.[127]  SpaceBeforeParens (SpaceBeforeParensOptions) { clang-format 3.5 }
+# 控制在左圆括号之前放置空格的情况。
+# 可能的值:
+# Never: 从不在左圆括号之前放置空格。
+#
+# ControlStatements: 在控制语句（if、for、while 等）的左圆括号之前放置空格。例如：
+#     void f() {
+#       if (true) {
+#         f();
+#       }
+#     }
+#
+# ControlStatementsExceptControlMacros: 与 ControlStatements 相同，但此选项不适用于 ForEach 和 If 宏。这在 ForEach/If 宏被视为函数调用而不是控制语句的项目中很有用。ControlStatementsExceptForEachMacros 仍然是向后兼容性的别名。例如：
+#     void f() {
+#       Q_FOREACH(...) {
+#         f();
+#       }
+#     }
+#
+# NonEmptyParentheses: 只有当括号不为空，即 "()" 时，才在括号前加空格。例如：
+#     void() {
+#       if (true) {
+#         f();
+#         g (x, y, z);
+#       }
+#     }
+#
+# Always: 除非语法规则禁止（在类似函数的宏定义中）或由其他样式规则决定（在一元运算符、左括号等之后），否则始终在左括号之前加一个空格。例如：
+#     void f () {
+#       if (true) {
+#         f ();
+#       }
+#     }
+# Custom: 使用 SpaceBeforeParensOptions 来指定应如何处理括号大小写前的每个单独的空格。
+#
+SpaceBeforeParens: ControlStatementsExceptControlMacros
+# ^^^^^^
+
+# vvvvvv
+### No.[128]  SpaceBeforeParensOptions (SpaceBeforeParensCustom) { clang-format 14 }
+# 逐项控制括号前的单个空格。
+# 如果 SpaceBeforeParens 设置为 Custom ，则使用它来指定应如何处理括号大小写前的每个单独的空格。否则，这将被忽略。例如：
+# Example of usage:
+#     SpaceBeforeParens: Custom
+#     SpaceBeforeParensOptions:
+#         AfterControlStatements: true
+#         AfterFunctionDefinitionName: true
+#
+# 精确控制括号前的间距。例如：
+#     # Should be declared this way:
+#     SpaceBeforeParens: Custom
+#     SpaceBeforeParensOptions:
+#         AfterControlStatements: true
+#         AfterFunctionDefinitionName: true
+
+SpaceBeforeParensOptions:
+    #
+    # +---------------------------+
+    # | DO-NOT-REMOVE-INDENTATION |
+    # +---------------------------+
+    #
+
+    # bool AfterControlStatements: 如果为 true ，则在控制语句关键字（for/if/while...）和左括号之间放置空格。例如：
+    #     true:                                false:
+    #     if (...) {}                     vs.  if(...) {}
+    #
+    AfterControlStatements: false
+
+    # bool AfterForeachMacros: 如果为 true ，则在 foreach 宏和左括号之间放置空格。例如：
+    #     true:                                  false:
+    #     FOREACH (...)                   vs.    FOREACH(...)
+    #       <loop-body>                            <loop-body>
+    #
+    AfterForeachMacros: false
+
+    # bool AfterFunctionDeclarationName: 如果为 true ，则在函数声明名称和左括号之间放置一个空格。例如：
+    #     true:                                  false:
+    #     void f ();                      vs.    void f();
+    #
+    AfterFunctionDeclarationName: false
+
+    # bool AfterFunctionDefinitionName: 如果为 true ，则在函数定义名称和左括号之间放置一个空格。例如：
+    #     true:                                  false:
+    #     void f () {}                    vs.    void f() {}
+    #
+    AfterFunctionDefinitionName: false
+
+    # bool AfterIfMacros: 如果为 true ，则在 if 宏和左括号之间放置空格。例如：
+    #     true:                                  false:
+    #     IF (...)                        vs.    IF(...)
+    #       <conditional-body>                     <conditional-body>
+    #
+    AfterIfMacros: false
+
+    # bool AfterOverloadedOperator: 如果为 true ，则在重载运算符和左括号之间放置空格。例如：
+    #     true:                                  false:
+    #     void operator++ (int a);        vs.    void operator++(int a);
+    #     object.operator++ (10);                object.operator++(10);
+    #
+    AfterOverloadedOperator: false
+
+    # bool AfterPlacementOperator: 如果为 true ，则在放置 new/delete 运算符和左括号之间放置空格。
+    # 例如：
+    #     true:                                  false:
+    #     new (buf) T;                    vs.    new(buf) T;
+    #     delete (buf) T;                        delete(buf) T;
+    #
+    AfterPlacementOperator: false
+
+    # bool AfterRequiresInClause: 如果为 true ，则在 requires 子句和左括号之间放置空格。例如：
+    #     true:                                  false:
+    #     template<typename T>            vs.    template<typename T>
+    #     requires (A<T> && B<T>)                requires(A<T> && B<T>)
+    #     ...                                    ...
+    #
+    AfterRequiresInClause: false
+
+    # bool AfterRequiresInExpression: 如果为 true ，则在 requires 表达式和左括号之间放置空格。例如：
+    #     true:                                  false:
+    #     template<typename T>            vs.    template<typename T>
+    #     concept C = requires (T t) {           concept C = requires(T t) {
+    #                   ...                                    ...
+    #                 }                                      }
+    #
+    AfterRequiresInExpression: false
+
+    # bool BeforeNonEmptyParentheses: 如果为 true ，则仅当括号不为空时才在括号前放置一个空格。例如：
+    #     true:                                  false:
+    #     void f (int a);                 vs.    void f();
+    #     f (a);                                 f();
+    #
+    BeforeNonEmptyParentheses: false
+# ^^^^^^
+
+# vvvvvv
+### No.[129]  SpaceBeforeRangeBasedForLoopColon (Boolean) { clang-format 7 }
+# 如果为 true ，则在范围 for 循环的冒号之前添加空格。例如：
+#     true:                                  false:
+#     for (auto v : values) {}       vs.     for(auto v: values) {}
+#
+SpaceBeforeRangeBasedForLoopColon: false
+# ^^^^^^
+
+# vvvvvv
+### No.[130]  SpaceBeforeSquareBrackets (Boolean) { clang-format 10 }
+# 如果为 true ，空格将在 [ 之前。不受影响。只有第一个 [ 会被加一个空格。例如：
+#     true:                                  false:
+#     int a [5];               vs.           int a[5];
+#     int a [5][5];            vs.           int a[5][5];
+#
+SpaceBeforeSquareBrackets: false
+# ^^^^^^
+
+# vvvvvv
+### No.[131]  SpaceInEmptyBlock (Boolean) { clang-format 10 }
+# 如果为 true ，则在空块中添加空格。例如：
+# true:                                false:
+# void f() { }            vs.          void f() {}
+# while (true) { }                     while (true) {}
+#
+SpaceInEmptyBlock: false
+# ^^^^^^
+
+# vvvvvv
+### No.[132]  SpacesBeforeTrailingComments (Unsigned) { clang-format 3.7 }
+# 尾行注释（// -注释）之前的空格数。
+# 这不会影响尾部块注释（/*-注释），因为这些注释通常具有不同的使用模式和一些特殊情况。
+# 在 Verilog 的情况下，它不会影响模块头中端口或参数列表中左括号后的注释，因为它可能是针对下一行的端口，而不是后面的括号。例如：
+#
+#     +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+#     * SpacesBeforeTrailingComments: 3 *
+#     +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+#
+#     void f() {
+#       if (true) {   // foo1
+#         f();        // bar
+#       }             // foo
+#     }
+#
+SpacesBeforeTrailingComments: 1
+# ^^^^^^
+
+# vvvvvv
+### No.[133]  SpacesInAngles (SpacesInAnglesStyle) { clang-format 3.4 }
+# 用于模板参数列表的 SpacesInAnglesStyle 。
+# 可能的值:
+# Never: 删除 < 之后和 > 之前的空格。例如：
+#     static_cast<int>(arg);
+#     std::function<void(int)> fct;
+#
+# Always: 在 < 之后和 > 之前添加空格。例如：
+#     static_cast< int >(arg);
+#     std::function< void(int) > fct;
+#
+# Leave: 如果存在空格，则在 < 之后和之前保留一个空格。 选项标准：Cpp03 优先。
+#
+SpacesInAngles: Never
+# ^^^^^^
+
+# vvvvvv
+### No.[134]  SpacesInContainerLiterals (Boolean) { clang-format 3.7 }
+# 如果为 true ，则在容器字面量（例如：ObjC 和 Javascript 数组和 dict 字面量）中插入空格。例如：
+#     true:                                  false:
+#     var arr = [ 1, 2, 3 ];         vs.     var arr = [1, 2, 3];
+#     f({a : 1, b : 2, c : 3});              f({a: 1, b: 2, c: 3});
+#
+SpacesInContainerLiterals: true
+# ^^^^^^
+
+# vvvvvv
+### No.[135]  SpacesInLineCommentPrefix (SpacesInLineComment) { clang-format 13 }
+# 一行注释的开头允许有多少个空格。要禁用最大值，请将其设置为 -1 ，但最大值优先于最小值。
+# 请注意，在行注释部分，后续行的相对缩进被保留。
+# 例如：
+#     before:                                   after:
+#     Minimum: 1
+#     //if (b) {                                // if (b) {
+#     //  return true;                          //   return true;
+#     //}                                       // }
+#
+#     Maximum: 0
+#     /// List:                                 ///List:
+#     ///  - Foo                                /// - Foo
+#     ///    - Bar                              ///   - Bar
+
+SpacesInLineCommentPrefix:
+    #
+    # +---------------------------+
+    # | DO-NOT-REMOVE-INDENTATION |
+    # +---------------------------+
+    #
+
+    # unsigned Minimum 注释开始处的最小空格数。
+    #
+    Minimum: 1
+
+    # unsigned Maximum 注释开始处的最大空格数。
+    #
+    Maximum: -1
+# ^^^^^^
+
+# vvvvvv
+### No.[136]  SpacesInParens (SpacesInParensStyle) { clang-format 17 }
+# 控制括号内的空格。
+# 可能的值:
+# Never: 括号内不插入空格。例如：
+#     void f() {
+#       if(true) {
+#         f();
+#       }
+#     }
+#
+# Custom: 使用 SpacesInParensCustom 来指定应如何处理括号内的每个单独的空格。
+#
+SpacesInParens: Never
+# ^^^^^^
+
+# vvvvvv
+### No.[137]  SpacesInParensCustom (SpacesInParensCustom) { clang-format 17 }
+# 逐项控制括号内的单个空格。
+# 如果 SpacesInPrens 设置为 Custom ，请使用此选项指定括号大小写中的每个空格的处理方式。否则，这将被忽略。例如：
+# Example of usage:
+#     SpacesInParens: Custom
+#     SpacesInParensOptions:
+#         InConditionalStatements: true
+#         InEmptyParentheses: true
+#
+# 精确控制括号中的间距。例如：
+#     # Should be declared this way:
+#     SpacesInParens: Custom
+#     SpacesInParensOptions:
+#         InConditionalStatements: true
+#         Other: true
+#
+
+SpacesInParensOptions:
+    #
+    # +---------------------------+
+    # | DO-NOT-REMOVE-INDENTATION |
+    # +---------------------------+
+    #
+
+    # bool InConditionalStatements: 如果为 true ，则在条件语句中的括号内插入空格。例如：
+    #     true:                                  false:
+    #     if ( a )  { ... }              vs.     if (a) { ... }
+    #     while ( i < 5 )  { ... }               while (i < 5) { ... }
+    #
+    InConditionalStatements: false
+
+    # InCStyleCasts: 如果为 true ，则在 C 风格的类型转换中的括号内插入空格。例如：
+    #     true:                                  false:
+    #     x = ( int32 )y                 vs.     x = (int32)y
+    #
+    InCStyleCasts: false
+
+    # bool InEmptyParentheses: 只有当括号为空时，才在括号中放一个空格，即 "()" 。例如：
+    #     true:                                false:
+    #     void f( ) {                    vs.   void f() {
+    #       int x[] = {foo( ), bar( )};          int x[] = {foo(), bar()};
+    #       if (true) {                          if (true) {
+    #         f( );                                f();
+    #       }                                    }
+    #     }                                    }
+    #
+    InEmptyParentheses: false
+
+    # bool Other: 在前面选项未包含的括号中放一个空格。例如：
+    #     true:                                  false:
+    #     t f( Deleted & ) & = delete;   vs.     t f(Deleted &) & = delete;
+    #
+    Other: false
+# ^^^^^^
+
+# vvvvvv
+### No.[138]  SpacesInSquareBrackets (Boolean) { clang-format 3.7 }
+# 如果为 true ，将在 [ 和之前 ] 后面插入空格。没有参数或未指定大小的数组声明的匿名函数将不受影响。例如：
+#     true:                                  false:
+#     int a[ 5 ];                    vs.     int a[5];
+#     std::unique_ptr<int[]> foo() {} // Won't be affected
+#
+SpacesInSquareBrackets: false
+# ^^^^^^
+
+# vvvvvv
+### No.[139]  Standard (LanguageStandard) { clang-format 3.7 }
+# 解析和格式化与这个标准兼容的 C++ 结构。
+# 可能的值:
+# Cpp03: 解析和格式化为 C++03 。Cpp03 是 c++03 的一个已弃用别名
+# Cpp11: 解析和格式化为 C++11 。
+# Cpp14: 解析和格式化为 C++14 。
+# Cpp17: 解析和格式化为 C++17 。
+# Cpp20: 解析和格式化为 C++20 。
+# Latest: 使用最新支持的语言版本进行解析和格式化。Cpp11 是最新的一个已弃用别名。
+# Auto: 自动检测输入文件的标准。
+#
+Standard: Latest
+# ^^^^^^
+
+# vvvvvv
+### No.[140]  StatementAttributeLikeMacros (List of Strings) { clang-format 12 }
+# 在语句前面被忽略的宏，就像它们是一个属性一样。这样它们就不会被解析为标识符。例如：
+#     AlignConsecutiveDeclarations: true
+#     StatementAttributeLikeMacros: []
+#     unsigned char data = 'x';
+#     emit          signal(data); // This is parsed as variable declaration.
+#
+#     AlignConsecutiveDeclarations: true
+#     StatementAttributeLikeMacros: [emit]
+#     unsigned char data = 'x';
+#     emit signal(data); // Now it's fine again.
+#
+StatementAttributeLikeMacros: []
+# ^^^^^^
+
+# vvvvvv
+### No.[141]  StatementMacros (List of Strings) { clang-format 8 }
+# 宏的一个向量，应该被解释为完整的语句。
+# 典型的宏是表达式，需要添加分号; 有时情况并非如此，这允许 clang-format 能够识别这种情况。
+#
+StatementMacros: ['TEST_CLASS', 'TEST_METHOD']
+# ^^^^^^
+
+# vvvvvv
+### No.[142]  TabWidth (Unsigned) { clang-format 3.7 }
+# 制表符宽度。
+#
+TabWidth: 4
+# ^^^^^^
+
+# vvvvvv
+### No.[143]  TypeNames (List of Strings) { clang-format 17 }
+# 应该被解释为类型名称的非关键字标识符的向量。
+# 类型名和另一个非关键字标识符之间的 * 、 & 或 && 被注释为指针或引用标记，而不是二进制运算符。
+# 这些应为以下形式的宏:
+#     STACK_OF(...)
+#
+TypeNames: []
+# ^^^^^^
+
+# vvvvvv
+### No.[144]  TypenameMacros (List of Strings) { clang-format 9 }
+# 宏的一个向量，它应该被解释为类型声明而不是函数调用。
+#
+TypenameMacros: []
+# ^^^^^^
+
+# vvvvvv
+### No.[145]  UseTab (UseTabStyle) { clang-format 3.7 }
+# 控制是否使用制表符。
+# 可能的值:
+# Never:							从不使用制表符。
+# ForIndentation:					仅在缩进级别中使用制表符。
+# ForContinuationAndIndentation:	用制表符填充所有的前导空格，并在一行中使用空格进行对齐（例如连续的赋值和声明）。
+# AlignWithSpaces:					使用制表符进行行延续和缩进，使用空格进行对齐。
+# Always:							当需要填补至少从一个制表位到下一个制表位的空白时，使用制表位。
+#
+UseTab: Always
+# ^^^^^^
+
+# vvvvvv
+### No.[146]  WhitespaceSensitiveMacros (List of Strings) { clang-format 11 }
+# 宏的一个向量，应该被解释为敏感于空格的宏。
+# 这些应为以下形式的宏:
+#     STRINGIZE(...)
+#
+WhitespaceSensitiveMacros: ['STRINGIZE', 'PP_STRINGIZE', 'STRINGIZE', 'PP_STRINGIZE', 'BOOST_PP_STRINGIZE', 'NS_SWIFT_NAME', 'CF_SWIFT_NAME']
+# ^^^^^^
+
+#
+# ^^^^^^^^^^^^^^^^^^^^^^^^ The Formal Configuration Items End Here ^^^^^^^^^^^^^^^^^^^^^^^^^
+#
+
+# 文件说明（ 4 ）:
+#
+### No.[一] 
+# 添加其他样式选项？
+#
+# 每个额外的样式选项都会增加 clang-format 项目的成本。其中一些成本影响了 clang-format 开发本身，因为我们需要确保任何给定的选项组合都有效，并且新功能不会以任何方式破坏现有的任何选项。
+# 随着选项变得不那么容易发现，最终用户也会付出代价，人们不得不考虑并决定他们并不真正关心的选项。
+# clang-format 项目的目标更倾向于真正很好地支持有限的一组样式，而不是支持某个地方的代码库使用的每一种样式。
+# 当然，我们确实希望支持所有主要项目，因此建立了以下添加样式选项的栏。每个新样式选项必须:
+#   be used in a project of significant size (have dozens of contributors)
+#       （编者按：用于规模巨大的项目（有几十个贡献者））
+#   have a publicly accessible style guide
+#       （编者按：有一个可公开访问的风格指南）
+#   have a person willing to contribute and maintain patches
+#       （编者按：让愿意贡献和维护补丁的人）
+#
+#
+#
+### No.[二] 
+# 示例
+#
+# 类似于 Linux Kernel style 的样式:
+# BasedOnStyle: LLVM
+# IndentWidth: 8
+# UseTab: Always
+# BreakBeforeBraces: Linux
+# AllowShortIfStatementsOnASingleLine: false
+# IndentCaseLabels: false
+#
+# 结果是（假设这里使用制表符进行缩进）:
+#       void test()
+#       {
+#               switch (x) {
+#               case 0:
+#               case 1:
+#                       do_something();
+#                       break;
+#               case 2:
+#                       do_something_else();
+#                       break;
+#               default:
+#                       break;
+#               }
+#               if (condition)
+#                       do_something_completely_different();
+#
+#               if (x == y) {
+#                       q();
+#               } else if (x > y) {
+#                       w();
+#               } else {
+#                       r();
+#               }
+#       }
+#
+# 与默认的 Visual Studio 格式设置样式类似的样式:
+# UseTab: Never
+# IndentWidth: 4
+# BreakBeforeBraces: Allman
+# AllowShortIfStatementsOnASingleLine: false
+# IndentCaseLabels: false
+# ColumnLimit: 0
+#
+# 结果是:
+#       void test()
+#       {
+#           switch (suffix)
+#           {
+#           case 0:
+#           case 1:
+#               do_something();
+#               break;
+#           case 2:
+#               do_something_else();
+#               break;
+#           default:
+#               break;
+#           }
+#           if (condition)
+#               do_something_completely_different();
+#
+#           if (x == y)
+#           {
+#               q();
+#           }
+#           else if (x > y)
+#           {
+#               w();
+#           }
+#           else
+#           {
+#               r();
+#           }
+#       }
+#
