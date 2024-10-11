@@ -101,14 +101,13 @@
     </Link>
     <PreBuildEvent />
     <PostBuildEvent>
-      <Command>copy "..\BaiduAPI\$(outdir)*.dll" "..\BaiduAPITest\$(outdir)"</Command>
+      <Command>xcopy "..\BaiduAPI\$(outdir)*.dll" "..\BaiduAPITest\$(outdir)" /y /i /d</Command>
     </PostBuildEvent>
     <PostBuildEvent>
       <Message>复制 BaiduAPI 项目中的 dll 文件到指定目录。如已存在，则跳过</Message>
     </PostBuildEvent>
     <PreBuildEvent>
-      <Command>if not exist "..\BaiduAPITest\$(outdir)" md "..\BaiduAPITest\$(outdir)"
-copy "..\BaiduAPI\$(outdir)baidu.dll" "..\BaiduAPITest\$(outdir)" /y</Command>
+      <Command>xcopy "..\BaiduAPI\$(outdir)baidu.dll" "..\BaiduAPITest\$(outdir)" /y /i</Command>
       <Message>覆盖目标目录中的旧的自生成文件</Message>
     </PreBuildEvent>
   </ItemDefinitionGroup>
@@ -131,14 +130,13 @@ copy "..\BaiduAPI\$(outdir)baidu.dll" "..\BaiduAPITest\$(outdir)" /y</Command>
     </Link>
     <PreBuildEvent />
     <PostBuildEvent>
-      <Command>copy "..\BaiduAPI\$(outdir)*.dll" "..\BaiduAPITest\$(outdir)"</Command>
+      <Command>xcopy "..\BaiduAPI\$(outdir)*.dll" "..\BaiduAPITest\$(outdir)" /y /i /d</Command>
     </PostBuildEvent>
     <PostBuildEvent>
       <Message>复制 BaiduAPI 项目中的 dll 文件到指定目录。如已存在，则跳过</Message>
     </PostBuildEvent>
     <PreBuildEvent>
-      <Command>if not exist "..\BaiduAPITest\$(outdir)" md "..\BaiduAPITest\$(outdir)"
-copy "..\BaiduAPI\$(outdir)baidu.dll" "..\BaiduAPITest\$(outdir)" /y</Command>
+      <Command>xcopy "..\BaiduAPI\$(outdir)baidu.dll" "..\BaiduAPITest\$(outdir)" /y /i</Command>
       <Message>覆盖目标目录中的旧的自生成文件</Message>
     </PreBuildEvent>
   </ItemDefinitionGroup>
@@ -157,14 +155,13 @@ copy "..\BaiduAPI\$(outdir)baidu.dll" "..\BaiduAPITest\$(outdir)" /y</Command>
     </Link>
     <PreBuildEvent />
     <PostBuildEvent>
-      <Command>copy "..\BaiduAPI\$(outdir)*.dll" "..\BaiduAPITest\$(outdir)"</Command>
+      <Command>xcopy "..\BaiduAPI\$(outdir)*.dll" "..\BaiduAPITest\$(outdir)" /y /i /d</Command>
     </PostBuildEvent>
     <PostBuildEvent>
       <Message>复制 BaiduAPI 项目中的 dll 文件到指定目录。如已存在，则跳过</Message>
     </PostBuildEvent>
     <PreBuildEvent>
-      <Command>if not exist "..\BaiduAPITest\$(outdir)" md "..\BaiduAPITest\$(outdir)"
-copy "..\BaiduAPI\$(outdir)baidu.dll" "..\BaiduAPITest\$(outdir)" /y</Command>
+      <Command>xcopy "..\BaiduAPI\$(outdir)baidu.dll" "..\BaiduAPITest\$(outdir)" /y /i</Command>
       <Message>覆盖目标目录中的旧的自生成文件</Message>
     </PreBuildEvent>
   </ItemDefinitionGroup>
@@ -187,14 +184,13 @@ copy "..\BaiduAPI\$(outdir)baidu.dll" "..\BaiduAPITest\$(outdir)" /y</Command>
     </Link>
     <PreBuildEvent />
     <PostBuildEvent>
-      <Command>copy "..\BaiduAPI\$(outdir)*.dll" "..\BaiduAPITest\$(outdir)"</Command>
+      <Command>xcopy "..\BaiduAPI\$(outdir)*.dll" "..\BaiduAPITest\$(outdir)" /y /i /d</Command>
     </PostBuildEvent>
     <PostBuildEvent>
       <Message>复制 BaiduAPI 项目中的 dll 文件到指定目录。如已存在，则跳过</Message>
     </PostBuildEvent>
     <PreBuildEvent>
-      <Command>if not exist "..\BaiduAPITest\$(outdir)" md "..\BaiduAPITest\$(outdir)"
-copy "..\BaiduAPI\$(outdir)baidu.dll" "..\BaiduAPITest\$(outdir)" /y</Command>
+      <Command>xcopy "..\BaiduAPI\$(outdir)baidu.dll" "..\BaiduAPITest\$(outdir)" /y /i</Command>
       <Message>覆盖目标目录中的旧的自生成文件</Message>
     </PreBuildEvent>
   </ItemDefinitionGroup>
