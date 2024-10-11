@@ -3,9 +3,11 @@
 #include "pch.h"
 
 #include "../include/baidu.h"
+
 #include <array>
 #include <format>
 #include <iterator>
+#include <memory>
 #include <random>
 #include <string>
 #include <version>
@@ -22,6 +24,7 @@ BaiDuTranslateDLL::BaiDuTranslate::BaiDuTranslate(const _STD string& appid, cons
 	p_appkey(appkey)
 {
 	p_ctx = EVP_MD_CTX_new();
+
 	EVP_DigestInit_ex(p_ctx, EVP_md5(), nullptr);
 
 	p_curl = curl_easy_init();
@@ -102,7 +105,7 @@ _STD string BaiDuTranslateDLL::BaiDuTranslate::Translate(const _STD string& quer
 		_STD format_to(_STD back_inserter(result),
 					   R"({{ "错误代码": "{0}", "错误信息": "{1}" }})",
 					   root["error_code"].asString(),
-					   root["error_msg"].asString());
+					   GetAPIErrorInfo(root["error_code"].asInt()));
 		return result;
 	}
 
@@ -152,4 +155,18 @@ size_t BaiDuTranslateDLL::BaiDuTranslate::
 {
 	userp->append(contents, size * nmemb);
 	return size * nmemb;
+}
+
+_STD string BaiDuTranslateDLL::BaiDuTranslate::GetAPIErrorInfo(__int32 error_code) const noexcept
+{
+	const auto& iter = p_APIErrorInfo.find(error_code);
+
+	if (iter != p_APIErrorInfo.end())
+	{
+		return iter->second;
+	}
+	else
+	{
+		return "未知错误";
+	}
 }
