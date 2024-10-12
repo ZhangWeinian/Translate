@@ -2,6 +2,7 @@
 
 #include <unordered_map>
 #include <atomic>
+#include <random>
 #include <stdexcept>
 #include <string>
 #include <version>
@@ -19,7 +20,7 @@
 
 
 
-namespace BaiDuTranslateDLL
+namespace BaiduTranslateDLL
 {
 	namespace ErrorDefine
 	{
@@ -66,31 +67,37 @@ namespace BaiDuTranslateDLL
 		};
 	} // namespace ErrorDefine
 
-	class BaiDuTranslate final: public ErrorDefine::LimitInstance<BaiDuTranslate, 1>
+	class BaiduTranslate final: public ErrorDefine::LimitInstance<BaiduTranslate, 1>
 	{
 	public:
-		BAIDUAPI_API explicit BaiDuTranslate(const _STD string& appid = "", const _STD string& appkey = "") noexcept;
-		BAIDUAPI_API ~BaiDuTranslate(void) noexcept override;
+		BAIDUAPI_API explicit BaiduTranslate(const _STD string& appid, const _STD string& appkey) noexcept;
+
+		BAIDUAPI_API ~BaiduTranslate(void) noexcept override;
 
 		BAIDUAPI_API _STD string Translate(const _STD string& query,
 										   const _STD string& from,
 										   const _STD string& to,
 										   const _STD string& appid	 = "",
-										   const _STD string& appkey = "") const noexcept;
+										   const _STD string& appkey = "") noexcept;
 
 		BAIDUAPI_API void		 SetAppIDAndKey(const _STD string& appid, const _STD string& appkey) noexcept;
+
 		BAIDUAPI_API _STD string GetAppIDAndKey(void) const noexcept;
 
 	private:
-		_STD string				 p_appid {};
-		_STD string				 p_appkey {};
-		_STD string				 p_query {};
-		_STD string				 p_from {};
-		_STD string				 p_to {};
+		_STD string p_app_id { "" };
+		_STD string p_app_key { "" };
 
-		const _STD string		 p_url { "http://api.fanyi.baidu.com/api/trans/vip/translate?" };
-		EVP_MD_CTX*				 p_ctx {};
-		CURL*					 p_curl {};
+		//_STD string		  p_query { "" };
+		//_STD string		  p_from { "" };
+		//_STD string		  p_to { "" };
+
+		const _STD string p_url { "http://api.fanyi.baidu.com/api/trans/vip/translate?" };
+		EVP_MD_CTX*		  p_ctx { nullptr };
+		CURL*			  p_curl { nullptr };
+
+		_STD mt19937_64	  p_gen { _STD random_device {}() };
+		_STD uniform_int_distribution<__int32> p_dis { 32'768, 65'536 };
 
 		static inline const _STD unordered_map<__int32, _STD string> p_APIErrorInfo {
 			// clang-format off
@@ -114,12 +121,10 @@ namespace BaiDuTranslateDLL
 			// clang-format on
 		};
 
-		__int32		  GetIntRandom(void) const noexcept;
-
 		_STD string	  GetMD5(const _STD string& str) const noexcept;
 
 		static size_t CurlWriteCallback(const char* contents, size_t size, size_t nmemb, _STD string* userp);
 
 		_STD string	  GetAPIErrorInfo(__int32 error_code) const noexcept;
 	};
-} // namespace BaiDuTranslateDLL
+} // namespace BaiduTranslateDLL

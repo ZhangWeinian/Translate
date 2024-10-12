@@ -107,6 +107,10 @@
       <EnableUAC>false</EnableUAC>
     </Link>
     <PostBuildEvent />
+    <PostBuildEvent>
+      <Command>xcopy "$(outdir)baidu.dll" "..\TranslateQtGUI\$(outdir)" /y /i</Command>
+      <Message>复制 BaiduAPI 项目中的 dll 文件到指定目录。如已存在，则跳过</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -129,6 +133,10 @@
       <EnableUAC>false</EnableUAC>
     </Link>
     <PostBuildEvent />
+    <PostBuildEvent>
+      <Command>xcopy "$(outdir)baidu.dll" "..\TranslateQtGUI\$(outdir)" /y /i</Command>
+      <Message>复制 BaiduAPI 项目中的 dll 文件到指定目录。如已存在，则跳过</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -147,6 +155,10 @@
       <EnableUAC>false</EnableUAC>
     </Link>
     <PostBuildEvent />
+    <PostBuildEvent>
+      <Command>xcopy "$(outdir)baidu.dll" "..\TranslateQtGUI\$(outdir)" /y /i</Command>
+      <Message>复制 BaiduAPI 项目中的 dll 文件到指定目录。如已存在，则跳过</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -169,6 +181,10 @@
       <EnableUAC>false</EnableUAC>
     </Link>
     <PostBuildEvent />
+    <PostBuildEvent>
+      <Command>xcopy "$(outdir)baidu.dll" "..\TranslateQtGUI\$(outdir)" /y /i</Command>
+      <Message>复制 BaiduAPI 项目中的 dll 文件到指定目录。如已存在，则跳过</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="include\baidu.h" />

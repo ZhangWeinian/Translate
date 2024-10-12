@@ -7,7 +7,6 @@
 #include <array>
 #include <format>
 #include <iterator>
-#include <memory>
 #include <random>
 #include <string>
 #include <version>
@@ -19,9 +18,9 @@
 #include <json/reader.h>
 #include <json/value.h>
 
-BaiDuTranslateDLL::BaiDuTranslate::BaiDuTranslate(const _STD string& appid, const _STD string& appkey) noexcept:
-	p_appid(appid),
-	p_appkey(appkey)
+BaiduTranslateDLL::BaiduTranslate::BaiduTranslate(const _STD string& appid, const _STD string& appkey) noexcept:
+	p_app_id(appid),
+	p_app_key(appkey)
 {
 	p_ctx = EVP_MD_CTX_new();
 
@@ -30,7 +29,7 @@ BaiDuTranslateDLL::BaiDuTranslate::BaiDuTranslate(const _STD string& appid, cons
 	p_curl = curl_easy_init();
 }
 
-BaiDuTranslateDLL::BaiDuTranslate::~BaiDuTranslate(void) noexcept
+BaiduTranslateDLL::BaiduTranslate::~BaiduTranslate(void) noexcept
 {
 	if (p_ctx != nullptr)
 	{
@@ -45,11 +44,11 @@ BaiDuTranslateDLL::BaiDuTranslate::~BaiDuTranslate(void) noexcept
 	p_curl = nullptr;
 }
 
-_STD string BaiDuTranslateDLL::BaiDuTranslate::Translate(const _STD string& query,
+_STD string BaiduTranslateDLL::BaiduTranslate::Translate(const _STD string& query,
 														 const _STD string& from,
 														 const _STD string& to,
 														 const _STD string& appid,
-														 const _STD string& appkey) const noexcept
+														 const _STD string& appkey) noexcept
 {
 	_STD string result {};
 
@@ -62,10 +61,19 @@ _STD string BaiDuTranslateDLL::BaiDuTranslate::Translate(const _STD string& quer
 		return result;
 	}
 
-	const _STD string id   = appid.empty() ? p_appid : appid;
-	const _STD string key  = appkey.empty() ? p_appkey : appkey;
+	if (p_ctx == nullptr)
+	{
+		_STD format_to(_STD back_inserter(result),
+					   R"({{ "错误代码": "{0}", "错误信息": "{1}" }})",
+					   -1,
+					   "MD5 初始化失败");
+		return result;
+	}
 
-	const __int32	  salt = GetIntRandom();
+	const _STD string id   = appid.empty() ? p_app_id : appid;
+	const _STD string key  = appkey.empty() ? p_app_key : appkey;
+
+	const __int32	  salt = p_dis(p_gen);
 	const _STD string sign = GetMD5(_STD format("{0}{1}{2}{3}", id, query, salt, key));
 
 	const _STD string fullUrl =
@@ -74,7 +82,7 @@ _STD string BaiDuTranslateDLL::BaiDuTranslate::Translate(const _STD string& quer
 	_STD string readBuffer {};
 
 	curl_easy_setopt(p_curl, CURLOPT_URL, fullUrl.c_str());
-	curl_easy_setopt(p_curl, CURLOPT_WRITEFUNCTION, BaiDuTranslateDLL::BaiDuTranslate::CurlWriteCallback);
+	curl_easy_setopt(p_curl, CURLOPT_WRITEFUNCTION, BaiduTranslateDLL::BaiduTranslate::CurlWriteCallback);
 	curl_easy_setopt(p_curl, CURLOPT_WRITEDATA, &readBuffer);
 
 	auto res = curl_easy_perform(p_curl);
@@ -112,35 +120,27 @@ _STD string BaiDuTranslateDLL::BaiDuTranslate::Translate(const _STD string& quer
 	return root["trans_result"][0]["dst"].asString();
 }
 
-void BaiDuTranslateDLL::BaiDuTranslate::SetAppIDAndKey(const _STD string& appid, const _STD string& appkey) noexcept
+void BaiduTranslateDLL::BaiduTranslate::SetAppIDAndKey(const _STD string& appid, const _STD string& appkey) noexcept
 {
-	p_appid	 = appid;
-	p_appkey = appkey;
+	p_app_id  = appid;
+	p_app_key = appkey;
 }
 
-_STD string BaiDuTranslateDLL::BaiDuTranslate::GetAppIDAndKey(void) const noexcept
+_STD string BaiduTranslateDLL::BaiduTranslate::GetAppIDAndKey(void) const noexcept
 {
 	_STD string result {};
-	_STD		format_to(_STD back_inserter(result), R"({{ "appid": "{0}", "appkey": "{1}" }})", p_appid, p_appkey);
+	_STD		format_to(_STD back_inserter(result), R"({{ "appid": "{0}", "appkey": "{1}" }})", p_app_id, p_app_key);
 	return result;
 }
 
-inline __int32 BaiDuTranslateDLL::BaiDuTranslate::GetIntRandom(void) const noexcept
-{
-	_STD mt19937_64 gen(_STD random_device {}());
-	_STD uniform_int_distribution<__int32> dis(32'768, 65'536);
-
-	return dis(gen);
-}
-
-inline _STD string BaiDuTranslateDLL::BaiDuTranslate::GetMD5(const _STD string& str) const noexcept
+inline _STD string BaiduTranslateDLL::BaiduTranslate::GetMD5(const _STD string& str) const noexcept
 {
 	_STD array<unsigned char, MD5_DIGEST_LENGTH> md5 {};
 
 	EVP_DigestUpdate(p_ctx, str.c_str(), str.size());
 	EVP_DigestFinal_ex(p_ctx, md5.data(), nullptr);
 
-	_STD string result;
+	_STD string result {};
 
 	for (const auto& c: md5)
 	{
@@ -150,14 +150,14 @@ inline _STD string BaiDuTranslateDLL::BaiDuTranslate::GetMD5(const _STD string& 
 	return result;
 }
 
-size_t BaiDuTranslateDLL::BaiDuTranslate::
+size_t BaiduTranslateDLL::BaiduTranslate::
 	CurlWriteCallback(const char* contents, size_t size, size_t nmemb, _STD string* userp)
 {
 	userp->append(contents, size * nmemb);
 	return size * nmemb;
 }
 
-_STD string BaiDuTranslateDLL::BaiDuTranslate::GetAPIErrorInfo(__int32 error_code) const noexcept
+_STD string BaiduTranslateDLL::BaiduTranslate::GetAPIErrorInfo(__int32 error_code) const noexcept
 {
 	const auto& iter = p_APIErrorInfo.find(error_code);
 
