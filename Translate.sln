@@ -7,6 +7,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BaiduAPITest", "BaiduAPITest\BaiduAPITest.vcxproj", "{AA5CE51E-1F50-4F1D-AEE5-B7A7297FFC69}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CommandTranslate", "CommandTranslate\CommandTranslate.vcxproj", "{7DF03D23-1345-4BA4-9C17-D5C13E8769EE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4EC8E437-C310-436A-87E1-88EF7708537C} = {4EC8E437-C310-436A-87E1-88EF7708537C}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

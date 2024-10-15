@@ -74,9 +74,9 @@ namespace BaiduTranslateDLL
 	} // namespace ErrorDefine
 
 	/// <summary>
-	/// 不能实例化此对象，只能通过全局实例 BaiduTranslate 访问
+	/// 不能实例化此对象，只能通过全局 BaiduTranslate 命名空间访问其静态成员函数
 	/// </summary>
-	class BaiduTranslateFunction final: public ErrorDefine::MaxInitCount<BaiduTranslateFunction, 1>
+	class BaiduTranslateFunction final: public ErrorDefine::MaxInitCount<BaiduTranslateFunction, 0>
 	{
 	public:
 		BAIDUAPI_API static void Constructor(const _STD string& appid = "", const _STD string& appkey = "") noexcept;
@@ -104,7 +104,7 @@ namespace BaiduTranslateDLL
 		static inline EVP_MD_CTX*		p_ctx { EVP_MD_CTX_new() };
 
 		static inline _STD mt19937_64	p_gen { _STD random_device {}() };
-		static inline _STD uniform_int_distribution<__int32> p_dis { 32'768, 65'536 };
+		static inline _STD uniform_int_distribution<_STD size_t> p_dis { 32'768, 65'536 };
 
 		static inline const _STD unordered_map<_STD string, _STD string> p_APIErrorInfo {
 			// clang-format off
@@ -131,7 +131,10 @@ namespace BaiduTranslateDLL
 
 		static _STD string GetMD5(const _STD string& str) noexcept;
 
-		static size_t	   CurlWriteCallback(const char* contents, size_t size, size_t nmemb, _STD string* userp);
+		static _STD size_t CurlWriteCallback(const char*  contents,
+											 _STD size_t  size,
+											 _STD size_t  nmemb,
+											 _STD string* userp);
 
 		static _STD string GetAPIErrorInfo(const _STD string& error_code) noexcept;
 	};

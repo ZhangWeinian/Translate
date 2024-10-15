@@ -161,6 +161,11 @@
   <ItemGroup>
     <ClCompile Include="src\run.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BaiduAPI\BaiduAPI.vcxproj">
+      <Project>{4ec8e437-c310-436a-87e1-88ef7708537c}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -23,6 +23,7 @@ void BaiduTranslateDLL::BaiduTranslateFunction::Constructor(const _STD string& a
 {
 	if (p_curl = curl_easy_init(); p_curl != nullptr)
 	{
+		curl_easy_setopt(p_curl, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_3);
 		curl_easy_setopt(p_curl, CURLOPT_SSL_VERIFYPEER, 0L);
 		curl_easy_setopt(p_curl, CURLOPT_SSL_VERIFYHOST, 0L);
 	}
@@ -97,7 +98,7 @@ _STD string BaiduTranslateDLL::BaiduTranslateFunction::Translate(const _STD stri
 		return result;
 	}
 
-	const __int32	  salt	  = p_dis(p_gen);
+	const _STD size_t salt	  = p_dis(p_gen);
 	const _STD string sign	  = GetMD5(_STD format("{0}{1}{2}{3}", p_appid, query, salt, p_appkey));
 
 	const _STD string fullUrl = _STD
@@ -176,8 +177,8 @@ inline _STD string BaiduTranslateDLL::BaiduTranslateFunction::GetMD5(const _STD 
 	return result;
 }
 
-size_t BaiduTranslateDLL::BaiduTranslateFunction::
-	CurlWriteCallback(const char* contents, size_t size, size_t nmemb, _STD string* userp)
+_STD size_t BaiduTranslateDLL::BaiduTranslateFunction::
+	CurlWriteCallback(const char* contents, _STD size_t size, _STD size_t nmemb, _STD string* userp)
 {
 	userp->append(contents, size * nmemb);
 	return size * nmemb;
