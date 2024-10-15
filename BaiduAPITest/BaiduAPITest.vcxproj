@@ -162,6 +162,9 @@
     <ClCompile Include="src\run.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BaiduAPIDistribute\BaiduAPIDistribute.vcxproj">
+      <Project>{4678e104-cfa9-486c-a7c0-7920abf7289a}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\BaiduAPI\BaiduAPI.vcxproj">
       <Project>{4ec8e437-c310-436a-87e1-88ef7708537c}</Project>
     </ProjectReference>

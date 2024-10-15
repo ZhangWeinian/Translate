@@ -108,22 +108,10 @@
     </Link>
     <PostBuildEvent />
     <PostBuildEvent>
-      <Command>echo ------ 开始执行生成事件(生成后事件) ------
-@set target=BaiduAPITest
-echo 复制到 '%target%'
-echo 复制项目生成的 dll 文件到%target%
-xcopy "$(outdir)baidu.dll" "..\%target%\$(outdir)" /y /i
-echo 复制项目引入的 dll 文件到%target%
-xcopy "$(outdir)*.dll" "..\%target%\$(outdir)" /y /i /d
-@set target=CommandTranslate
-echo 复制到 '%target%'
-echo 复制项目生成的 dll 文件到%target%
-xcopy "$(outdir)baidu.dll" "..\%target%\$(outdir)" /y /i
-echo 复制项目引入的 dll 文件到%target%
-xcopy "$(outdir)*.dll" "..\%target%\$(outdir)" /y /i /d
-@set target=
-echo  ------ 生成事件(生成后事件)完成 ------</Command>
-      <Message>按不同策略，复制 BaiduAPI 项目所有必要的 dll 文件到指定目录</Message>
+      <Command>
+      </Command>
+      <Message>
+      </Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -148,22 +136,10 @@ echo  ------ 生成事件(生成后事件)完成 ------</Command>
     </Link>
     <PostBuildEvent />
     <PostBuildEvent>
-      <Command>echo ------ 开始执行生成事件(生成后事件) ------
-@set target=BaiduAPITest
-echo 复制到 '%target%'
-echo 复制项目生成的 dll 文件到%target%
-xcopy "$(outdir)baidu.dll" "..\%target%\$(outdir)" /y /i
-echo 复制项目引入的 dll 文件到%target%
-xcopy "$(outdir)*.dll" "..\%target%\$(outdir)" /y /i /d
-@set target=CommandTranslate
-echo 复制到 '%target%'
-echo 复制项目生成的 dll 文件到%target%
-xcopy "$(outdir)baidu.dll" "..\%target%\$(outdir)" /y /i
-echo 复制项目引入的 dll 文件到%target%
-xcopy "$(outdir)*.dll" "..\%target%\$(outdir)" /y /i /d
-@set target=
-echo  ------ 生成事件(生成后事件)完成 ------</Command>
-      <Message>按不同策略，复制 BaiduAPI 项目所有必要的 dll 文件到指定目录</Message>
+      <Command>
+      </Command>
+      <Message>
+      </Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -184,22 +160,10 @@ echo  ------ 生成事件(生成后事件)完成 ------</Command>
     </Link>
     <PostBuildEvent />
     <PostBuildEvent>
-      <Command>echo ------ 开始执行生成事件(生成后事件) ------
-@set target=BaiduAPITest
-echo 复制到 '%target%'
-echo 复制项目生成的 dll 文件到%target%
-xcopy "$(outdir)baidu.dll" "..\%target%\$(outdir)" /y /i
-echo 复制项目引入的 dll 文件到%target%
-xcopy "$(outdir)*.dll" "..\%target%\$(outdir)" /y /i /d
-@set target=CommandTranslate
-echo 复制到 '%target%'
-echo 复制项目生成的 dll 文件到%target%
-xcopy "$(outdir)baidu.dll" "..\%target%\$(outdir)" /y /i
-echo 复制项目引入的 dll 文件到%target%
-xcopy "$(outdir)*.dll" "..\%target%\$(outdir)" /y /i /d
-@set target=
-echo  ------ 生成事件(生成后事件)完成 ------</Command>
-      <Message>按不同策略，复制 BaiduAPI 项目所有必要的 dll 文件到指定目录</Message>
+      <Command>
+      </Command>
+      <Message>
+      </Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -224,22 +188,10 @@ echo  ------ 生成事件(生成后事件)完成 ------</Command>
     </Link>
     <PostBuildEvent />
     <PostBuildEvent>
-      <Command>echo ------ 开始执行生成事件(生成后事件) ------
-@set target=BaiduAPITest
-echo 复制到 '%target%'
-echo 复制项目生成的 dll 文件到%target%
-xcopy "$(outdir)baidu.dll" "..\%target%\$(outdir)" /y /i
-echo 复制项目引入的 dll 文件到%target%
-xcopy "$(outdir)*.dll" "..\%target%\$(outdir)" /y /i /d
-@set target=CommandTranslate
-echo 复制到 '%target%'
-echo 复制项目生成的 dll 文件到%target%
-xcopy "$(outdir)baidu.dll" "..\%target%\$(outdir)" /y /i
-echo 复制项目引入的 dll 文件到%target%
-xcopy "$(outdir)*.dll" "..\%target%\$(outdir)" /y /i /d
-@set target=
-echo  ------ 生成事件(生成后事件)完成 ------</Command>
-      <Message>按不同策略，复制 BaiduAPI 项目所有必要的 dll 文件到指定目录</Message>
+      <Command>
+      </Command>
+      <Message>
+      </Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

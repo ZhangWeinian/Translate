@@ -20,6 +20,14 @@ int main(int argc, char* argv[])
 			str += argv[i];
 			str += '\n';
 		}
+
+		BaiduTranslate::Constructor();
+
+		BaiduTranslate::SetAppIDAndKey("20210720000876307", "X3Q1Q1Q1Q1Q1Q1Q1");
+
+		_STD string result = BaiduTranslate::Translate(str, "auto", "zh");
+
+		BaiduTranslate::Destructor();
 	}
 
 	return 0;

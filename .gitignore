@@ -365,3 +365,4 @@ FodyWeavers.xsd
 /BaiduAPI/src/.clang-format
 /BaiduAPICLR/src/.clang-format
 /BaiduAPITest/src/.clang-format
+/CommandTranslate/src/.clang-format

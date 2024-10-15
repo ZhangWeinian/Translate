@@ -12,9 +12,9 @@
 	#include <version>
 
 	#include <curl/curl.h>
-	#include <openssl/types.h>
 	#include <curl/easy.h>
 	#include <openssl/evp.h>
+	#include <openssl/types.h>
 
 
 

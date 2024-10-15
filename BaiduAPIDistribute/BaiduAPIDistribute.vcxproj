@@ -21,32 +21,32 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{7df03d23-1345-4ba4-9c17-d5c13e8769ee}</ProjectGuid>
-    <RootNamespace>CommandTranslate</RootNamespace>
+    <ProjectGuid>{4678e104-cfa9-486c-a7c0-7920abf7289a}</ProjectGuid>
+    <RootNamespace>BaiduAPIDistribute</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>Utility</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>Utility</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>Utility</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>Utility</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -73,22 +73,22 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>build\$(PlatformShortName)\$(Configuration)\</OutDir>
     <IntDir>work\$(PlatformShortName)\$(Configuration)\</IntDir>
-    <TargetName>cmd_tr</TargetName>
+    <TargetName>distribute</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>build\$(PlatformShortName)\$(Configuration)\</OutDir>
     <IntDir>work\$(PlatformShortName)\$(Configuration)\</IntDir>
-    <TargetName>cmd_tr</TargetName>
+    <TargetName>distribute</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>build\$(PlatformShortName)\$(Configuration)\</OutDir>
     <IntDir>work\$(PlatformShortName)\$(Configuration)\</IntDir>
-    <TargetName>cmd_tr</TargetName>
+    <TargetName>distribute</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>build\$(PlatformShortName)\$(Configuration)\</OutDir>
     <IntDir>work\$(PlatformShortName)\$(Configuration)\</IntDir>
-    <TargetName>cmd_tr</TargetName>
+    <TargetName>distribute</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -98,12 +98,30 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>..\BaiduAPI\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PostBuildEvent>
+      <Command>echo ------ 开始执行生成事件(生成后事件) ------
+@set source=BaiduAPI
+@set target=BaiduAPITest
+echo 复制到 '%target%'
+echo 复制 %source% 生成的 dll 文件到 %target%
+xcopy "..\%source%\$(outdir)baidu.dll" "..\%target%\$(outdir)" /y /i
+echo 复制 %source% 引入的 dll 文件到 %target%
+xcopy "..\%source%\$(outdir)*.dll" "..\%target%\$(outdir)" /y /i /d
+@set target=CommandTranslate
+echo 复制到 '%target%'
+echo 复制 %source% 生成的 dll 文件到 %target%
+xcopy "..\%source%\$(outdir)baidu.dll" "..\%target%\$(outdir)" /y /i
+echo 复制 %source% 引入的 dll 文件到 %target%
+xcopy "..\%source%\$(outdir)*.dll" "..\%target%\$(outdir)" /y /i /d
+@set target=
+echo  ------ 生成事件(生成后事件)完成 ------</Command>
+      <Message>按不同策略，复制 BaiduAPI 项目所有必要的 dll 文件到指定目录</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -115,7 +133,6 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>..\BaiduAPI\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -123,6 +140,25 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PostBuildEvent>
+      <Command>echo ------ 开始执行生成事件(生成后事件) ------
+@set source=BaiduAPI
+@set target=BaiduAPITest
+echo 复制到 '%target%'
+echo 复制 %source% 生成的 dll 文件到 %target%
+xcopy "..\%source%\$(outdir)baidu.dll" "..\%target%\$(outdir)" /y /i
+echo 复制 %source% 引入的 dll 文件到 %target%
+xcopy "..\%source%\$(outdir)*.dll" "..\%target%\$(outdir)" /y /i /d
+@set target=CommandTranslate
+echo 复制到 '%target%'
+echo 复制 %source% 生成的 dll 文件到 %target%
+xcopy "..\%source%\$(outdir)baidu.dll" "..\%target%\$(outdir)" /y /i
+echo 复制 %source% 引入的 dll 文件到 %target%
+xcopy "..\%source%\$(outdir)*.dll" "..\%target%\$(outdir)" /y /i /d
+@set target=
+echo  ------ 生成事件(生成后事件)完成 ------</Command>
+      <Message>按不同策略，复制 BaiduAPI 项目所有必要的 dll 文件到指定目录</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -132,12 +168,30 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>..\BaiduAPI\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PostBuildEvent>
+      <Command>echo ------ 开始执行生成事件(生成后事件) ------
+@set source=BaiduAPI
+@set target=BaiduAPITest
+echo 复制到 '%target%'
+echo 复制 %source% 生成的 dll 文件到 %target%
+xcopy "..\%source%\$(outdir)baidu.dll" "..\%target%\$(outdir)" /y /i
+echo 复制 %source% 引入的 dll 文件到 %target%
+xcopy "..\%source%\$(outdir)*.dll" "..\%target%\$(outdir)" /y /i /d
+@set target=CommandTranslate
+echo 复制到 '%target%'
+echo 复制 %source% 生成的 dll 文件到 %target%
+xcopy "..\%source%\$(outdir)baidu.dll" "..\%target%\$(outdir)" /y /i
+echo 复制 %source% 引入的 dll 文件到 %target%
+xcopy "..\%source%\$(outdir)*.dll" "..\%target%\$(outdir)" /y /i /d
+@set target=
+echo  ------ 生成事件(生成后事件)完成 ------</Command>
+      <Message>按不同策略，复制 BaiduAPI 项目所有必要的 dll 文件到指定目录</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -149,7 +203,6 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>..\BaiduAPI\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -157,14 +210,27 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PostBuildEvent>
+      <Command>echo ------ 开始执行生成事件(生成后事件) ------
+@set source=BaiduAPI
+@set target=BaiduAPITest
+echo 复制到 '%target%'
+echo 复制 %source% 生成的 dll 文件到 %target%
+xcopy "..\%source%\$(outdir)baidu.dll" "..\%target%\$(outdir)" /y /i
+echo 复制 %source% 引入的 dll 文件到 %target%
+xcopy "..\%source%\$(outdir)*.dll" "..\%target%\$(outdir)" /y /i /d
+@set target=CommandTranslate
+echo 复制到 '%target%'
+echo 复制 %source% 生成的 dll 文件到 %target%
+xcopy "..\%source%\$(outdir)baidu.dll" "..\%target%\$(outdir)" /y /i
+echo 复制 %source% 引入的 dll 文件到 %target%
+xcopy "..\%source%\$(outdir)*.dll" "..\%target%\$(outdir)" /y /i /d
+@set target=
+echo  ------ 生成事件(生成后事件)完成 ------</Command>
+      <Message>按不同策略，复制 BaiduAPI 项目所有必要的 dll 文件到指定目录</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\run.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\BaiduAPIDistribute\BaiduAPIDistribute.vcxproj">
-      <Project>{4678e104-cfa9-486c-a7c0-7920abf7289a}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\BaiduAPI\BaiduAPI.vcxproj">
       <Project>{4ec8e437-c310-436a-87e1-88ef7708537c}</Project>
     </ProjectReference>
