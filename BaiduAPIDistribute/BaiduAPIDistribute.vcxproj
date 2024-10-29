@@ -21,9 +21,10 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{4678e104-cfa9-486c-a7c0-7920abf7289a}</ProjectGuid>
+    <ProjectGuid>{6b4ecc2d-d090-4693-81bf-91b0ac5da640}</ProjectGuid>
     <RootNamespace>BaiduAPIDistribute</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>BaiduAPIDistribute</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -107,19 +108,18 @@
       <Command>echo ------ 开始执行生成事件(生成后事件) ------
 @set source=BaiduAPI
 @set target=BaiduAPITest
+
 echo 复制到 '%target%'
 echo 复制 %source% 生成的 dll 文件到 %target%
 xcopy "..\%source%\$(outdir)baidu.dll" "..\%target%\$(outdir)" /y /i
+
 echo 复制 %source% 引入的 dll 文件到 %target%
 xcopy "..\%source%\$(outdir)*.dll" "..\%target%\$(outdir)" /y /i /d
-@set target=CommandTranslate
-echo 复制到 '%target%'
-echo 复制 %source% 生成的 dll 文件到 %target%
-xcopy "..\%source%\$(outdir)baidu.dll" "..\%target%\$(outdir)" /y /i
-echo 复制 %source% 引入的 dll 文件到 %target%
-xcopy "..\%source%\$(outdir)*.dll" "..\%target%\$(outdir)" /y /i /d
+
 @set target=
 echo  ------ 生成事件(生成后事件)完成 ------</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
       <Message>按不同策略，复制 BaiduAPI 项目所有必要的 dll 文件到指定目录</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -144,19 +144,18 @@ echo  ------ 生成事件(生成后事件)完成 ------</Command>
       <Command>echo ------ 开始执行生成事件(生成后事件) ------
 @set source=BaiduAPI
 @set target=BaiduAPITest
+
 echo 复制到 '%target%'
 echo 复制 %source% 生成的 dll 文件到 %target%
 xcopy "..\%source%\$(outdir)baidu.dll" "..\%target%\$(outdir)" /y /i
+
 echo 复制 %source% 引入的 dll 文件到 %target%
 xcopy "..\%source%\$(outdir)*.dll" "..\%target%\$(outdir)" /y /i /d
-@set target=CommandTranslate
-echo 复制到 '%target%'
-echo 复制 %source% 生成的 dll 文件到 %target%
-xcopy "..\%source%\$(outdir)baidu.dll" "..\%target%\$(outdir)" /y /i
-echo 复制 %source% 引入的 dll 文件到 %target%
-xcopy "..\%source%\$(outdir)*.dll" "..\%target%\$(outdir)" /y /i /d
+
 @set target=
 echo  ------ 生成事件(生成后事件)完成 ------</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
       <Message>按不同策略，复制 BaiduAPI 项目所有必要的 dll 文件到指定目录</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -177,19 +176,18 @@ echo  ------ 生成事件(生成后事件)完成 ------</Command>
       <Command>echo ------ 开始执行生成事件(生成后事件) ------
 @set source=BaiduAPI
 @set target=BaiduAPITest
+
 echo 复制到 '%target%'
 echo 复制 %source% 生成的 dll 文件到 %target%
 xcopy "..\%source%\$(outdir)baidu.dll" "..\%target%\$(outdir)" /y /i
+
 echo 复制 %source% 引入的 dll 文件到 %target%
 xcopy "..\%source%\$(outdir)*.dll" "..\%target%\$(outdir)" /y /i /d
-@set target=CommandTranslate
-echo 复制到 '%target%'
-echo 复制 %source% 生成的 dll 文件到 %target%
-xcopy "..\%source%\$(outdir)baidu.dll" "..\%target%\$(outdir)" /y /i
-echo 复制 %source% 引入的 dll 文件到 %target%
-xcopy "..\%source%\$(outdir)*.dll" "..\%target%\$(outdir)" /y /i /d
+
 @set target=
 echo  ------ 生成事件(生成后事件)完成 ------</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
       <Message>按不同策略，复制 BaiduAPI 项目所有必要的 dll 文件到指定目录</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -214,19 +212,18 @@ echo  ------ 生成事件(生成后事件)完成 ------</Command>
       <Command>echo ------ 开始执行生成事件(生成后事件) ------
 @set source=BaiduAPI
 @set target=BaiduAPITest
+
 echo 复制到 '%target%'
 echo 复制 %source% 生成的 dll 文件到 %target%
 xcopy "..\%source%\$(outdir)baidu.dll" "..\%target%\$(outdir)" /y /i
+
 echo 复制 %source% 引入的 dll 文件到 %target%
 xcopy "..\%source%\$(outdir)*.dll" "..\%target%\$(outdir)" /y /i /d
-@set target=CommandTranslate
-echo 复制到 '%target%'
-echo 复制 %source% 生成的 dll 文件到 %target%
-xcopy "..\%source%\$(outdir)baidu.dll" "..\%target%\$(outdir)" /y /i
-echo 复制 %source% 引入的 dll 文件到 %target%
-xcopy "..\%source%\$(outdir)*.dll" "..\%target%\$(outdir)" /y /i /d
+
 @set target=
 echo  ------ 生成事件(生成后事件)完成 ------</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
       <Message>按不同策略，复制 BaiduAPI 项目所有必要的 dll 文件到指定目录</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
