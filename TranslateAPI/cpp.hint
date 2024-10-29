@@ -2,5 +2,7 @@
 // 如函数和宏的名称。
 // 有关详细信息，请参见 https://go.microsoft.com/fwlink/?linkid=865984
 #define _STD
-#define BAIDUAPI_API __declspec(dllexport)
-#define BAIDUAPI_API __declspec(dllimport)
+#define TRANSLATE_API __declspec(dllexport)
+#define TRANSLATE_API __declspec(dllimport)
+#define EXTREN_C extern "C"
+#define EXTREN_C

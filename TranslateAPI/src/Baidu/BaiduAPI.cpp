@@ -1,8 +1,6 @@
 #pragma once
 
-#include "pch.h"
-
-#include "../include/BaiduAPI.h"
+#include "BaiduAPI.h"
 
 #include <array>
 #include <format>
@@ -18,28 +16,40 @@
 #include <json/reader.h>
 #include <json/value.h>
 
-void BaiduTranslateDLL::BaiduTranslateFunction::Constructor(const _STD string& appid,
-															const _STD string& appkey) noexcept
+CPPBaiduTranslateDLL::CPPBaiduTranslateFunction::CPPBaiduTranslateFunction(const _STD string& appid,
+																		   const _STD string& appkey) noexcept
 {
 	if (p_curl = curl_easy_init(); p_curl != nullptr)
 	{
 		curl_easy_setopt(p_curl, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_3);
 		curl_easy_setopt(p_curl, CURLOPT_SSL_VERIFYPEER, 0L);
 		curl_easy_setopt(p_curl, CURLOPT_SSL_VERIFYHOST, 0L);
+
+		p_is_init = true;
+	}
+	else
+	{
+		p_is_init = false;
+		return;
 	}
 
 	if (p_ctx = EVP_MD_CTX_new(); p_ctx != nullptr)
 	{
 		EVP_DigestInit_ex(p_ctx, EVP_md5(), nullptr);
+
+		p_is_init = true;
+	}
+	else
+	{
+		p_is_init = false;
+		return;
 	}
 
-	p_appid			= appid;
-	p_appkey		= appkey;
-
-	p_isConstructor = true;
+	p_appid	 = appid;
+	p_appkey = appkey;
 }
 
-void BaiduTranslateDLL::BaiduTranslateFunction::Destructor(void) noexcept
+CPPBaiduTranslateDLL::CPPBaiduTranslateFunction::~CPPBaiduTranslateFunction(void) noexcept
 {
 	if (p_curl != nullptr)
 	{
@@ -52,24 +62,18 @@ void BaiduTranslateDLL::BaiduTranslateFunction::Destructor(void) noexcept
 	}
 }
 
-_STD string BaiduTranslateDLL::BaiduTranslateFunction::Translate(const _STD string& query,
-																 const _STD string& from,
-																 const _STD string& to,
-																 const _STD string& appid,
-																 const _STD string& appkey) noexcept
+_STD string CPPBaiduTranslateDLL::CPPBaiduTranslateFunction::Translate(const _STD string& query,
+																	   const _STD string& from,
+																	   const _STD string& to,
+																	   const _STD string& appid,
+																	   const _STD string& appkey) noexcept
 {
 	_STD string result {};
-
-	if (!p_isConstructor)
-	{
-		_STD format_to(_STD back_inserter(result), R"({{ "错误代码": "{0}", "错误信息": "{1}" }})", -1, "未初始化");
-		return result;
-	}
 
 	if (p_curl == nullptr)
 	{
 		_STD format_to(_STD back_inserter(result),
-					   R"({{ "错误代码": "{0}", "错误信息": "{1}" }})",
+					   R"({{ "错误代码": "{0}", "提示信息": "{1}" }})",
 					   -1,
 					   "CURL 初始化失败");
 		return result;
@@ -78,7 +82,7 @@ _STD string BaiduTranslateDLL::BaiduTranslateFunction::Translate(const _STD stri
 	if (p_ctx == nullptr)
 	{
 		_STD format_to(_STD back_inserter(result),
-					   R"({{ "错误代码": "{0}", "错误信息": "{1}" }})",
+					   R"({{ "错误代码": "{0}", "提示信息": "{1}" }})",
 					   -1,
 					   "MD5 初始化失败");
 		return result;
@@ -92,7 +96,7 @@ _STD string BaiduTranslateDLL::BaiduTranslateFunction::Translate(const _STD stri
 	else if (p_appid.empty() || p_appkey.empty())
 	{
 		_STD format_to(_STD back_inserter(result),
-					   R"({{ "错误代码": "{0}", "错误信息": "{1}" }})",
+					   R"({{ "错误代码": "{0}", "提示信息": "{1}" }})",
 					   -1,
 					   "APPID 或 APPKEY 为空");
 		return result;
@@ -113,7 +117,7 @@ _STD string BaiduTranslateDLL::BaiduTranslateFunction::Translate(const _STD stri
 	if (auto res = curl_easy_perform(p_curl); res != CURLE_OK)
 	{
 		_STD format_to(_STD back_inserter(result),
-					   R"({{ "错误代码": "{0}", "错误信息": "{1}" }})",
+					   R"({{ "错误代码": "{0}", "提示信息": "{1}" }})",
 					   -1,
 					   curl_easy_strerror(res));
 		return result;
@@ -125,7 +129,7 @@ _STD string BaiduTranslateDLL::BaiduTranslateFunction::Translate(const _STD stri
 	if (!reader.parse(readBuffer, root))
 	{
 		_STD format_to(_STD back_inserter(result),
-					   R"({{ "错误代码": "{0}", "错误信息": "{1}" }})",
+					   R"({{ "错误代码": "{0}", "提示信息": "{1}" }})",
 					   -1,
 					   reader.getFormattedErrorMessages());
 		return result;
@@ -134,7 +138,7 @@ _STD string BaiduTranslateDLL::BaiduTranslateFunction::Translate(const _STD stri
 	if (root.isMember("error_code"))
 	{
 		_STD format_to(_STD back_inserter(result),
-					   R"({{ "错误代码": "{0}", "错误信息": "{1}" }})",
+					   R"({{ "错误代码": "{0}", "提示信息": "{1}" }})",
 					   root["error_code"].asString(),
 					   GetAPIErrorInfo(root["error_code"].asString()));
 		return result;
@@ -143,24 +147,26 @@ _STD string BaiduTranslateDLL::BaiduTranslateFunction::Translate(const _STD stri
 	return root["trans_result"][0]["dst"].asString();
 }
 
-void BaiduTranslateDLL::BaiduTranslateFunction::SetAppIDAndKey(const _STD string& appid,
-															   const _STD string& appkey) noexcept
+void CPPBaiduTranslateDLL::CPPBaiduTranslateFunction::SetAppIDAndKey(const _STD string& appid,
+																	 const _STD string& appkey) noexcept
 {
-	if (p_isConstructor)
-	{
-		p_appid	 = appid;
-		p_appkey = appkey;
-	}
+	p_appid	 = appid;
+	p_appkey = appkey;
 }
 
-_STD string BaiduTranslateDLL::BaiduTranslateFunction::GetAppIDAndKey(void) noexcept
+_STD string CPPBaiduTranslateDLL::CPPBaiduTranslateFunction::GetAppIDAndKey(void) noexcept
 {
 	_STD string result {};
 	_STD		format_to(_STD back_inserter(result), R"({{ "appid": "{0}", "appkey": "{1}" }})", p_appid, p_appkey);
 	return result;
 }
 
-inline _STD string BaiduTranslateDLL::BaiduTranslateFunction::GetMD5(const _STD string& str) noexcept
+bool CPPBaiduTranslateDLL::CPPBaiduTranslateFunction::IsInitSuccess(void) noexcept
+{
+	return p_is_init;
+}
+
+inline _STD string CPPBaiduTranslateDLL::CPPBaiduTranslateFunction::GetMD5(const _STD string& str) noexcept
 {
 	_STD array<unsigned char, MD5_DIGEST_LENGTH> md5 {};
 
@@ -177,18 +183,18 @@ inline _STD string BaiduTranslateDLL::BaiduTranslateFunction::GetMD5(const _STD 
 	return result;
 }
 
-_STD size_t BaiduTranslateDLL::BaiduTranslateFunction::
+_STD size_t CPPBaiduTranslateDLL::CPPBaiduTranslateFunction::
 	CurlWriteCallback(const char* contents, _STD size_t size, _STD size_t nmemb, _STD string* userp)
 {
 	userp->append(contents, size * nmemb);
 	return size * nmemb;
 }
 
-_STD string BaiduTranslateDLL::BaiduTranslateFunction::GetAPIErrorInfo(const _STD string& error_code) noexcept
+_STD string CPPBaiduTranslateDLL::CPPBaiduTranslateFunction::GetAPIErrorInfo(const _STD string& error_code) noexcept
 {
-	auto iter = p_APIErrorInfo.find(error_code);
+	auto iter = p_API_error_info.find(error_code);
 
-	if (iter != p_APIErrorInfo.end())
+	if (iter != p_API_error_info.end())
 	{
 		return iter->second;
 	}

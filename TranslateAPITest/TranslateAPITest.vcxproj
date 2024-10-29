@@ -21,32 +21,33 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{4678e104-cfa9-486c-a7c0-7920abf7289a}</ProjectGuid>
-    <RootNamespace>BaiduAPIDistribute</RootNamespace>
+    <ProjectGuid>{aa5ce51e-1f50-4f1d-aee5-b7a7297ffc69}</ProjectGuid>
+    <RootNamespace>TranslateAPITest</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>TranslateAPITest</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Utility</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Utility</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Utility</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Utility</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -70,25 +71,25 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>build\$(PlatformShortName)\$(Configuration)\</OutDir>
-    <IntDir>work\$(PlatformShortName)\$(Configuration)\</IntDir>
-    <TargetName>distribute</TargetName>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>build\$(PlatformShortName)\$(Configuration)\</OutDir>
-    <IntDir>work\$(PlatformShortName)\$(Configuration)\</IntDir>
-    <TargetName>distribute</TargetName>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>build\$(PlatformShortName)\$(Configuration)\</OutDir>
     <IntDir>work\$(PlatformShortName)\$(Configuration)\</IntDir>
-    <TargetName>distribute</TargetName>
+    <TargetName>test</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>build\$(PlatformShortName)\$(Configuration)\</OutDir>
     <IntDir>work\$(PlatformShortName)\$(Configuration)\</IntDir>
-    <TargetName>distribute</TargetName>
+    <TargetName>test</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>build\$(PlatformShortName)\$(Configuration)\</OutDir>
+    <IntDir>work\$(PlatformShortName)\$(Configuration)\</IntDir>
+    <TargetName>test</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>build\$(PlatformShortName)\$(Configuration)\</OutDir>
+    <IntDir>work\$(PlatformShortName)\$(Configuration)\</IntDir>
+    <TargetName>test</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -98,30 +99,12 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <AdditionalIncludeDirectories>..\TranslateAPI\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
-    <PostBuildEvent>
-      <Command>echo ------ 开始执行生成事件(生成后事件) ------
-@set source=BaiduAPI
-@set target=BaiduAPITest
-echo 复制到 '%target%'
-echo 复制 %source% 生成的 dll 文件到 %target%
-xcopy "..\%source%\$(outdir)baidu.dll" "..\%target%\$(outdir)" /y /i
-echo 复制 %source% 引入的 dll 文件到 %target%
-xcopy "..\%source%\$(outdir)*.dll" "..\%target%\$(outdir)" /y /i /d
-@set target=CommandTranslate
-echo 复制到 '%target%'
-echo 复制 %source% 生成的 dll 文件到 %target%
-xcopy "..\%source%\$(outdir)baidu.dll" "..\%target%\$(outdir)" /y /i
-echo 复制 %source% 引入的 dll 文件到 %target%
-xcopy "..\%source%\$(outdir)*.dll" "..\%target%\$(outdir)" /y /i /d
-@set target=
-echo  ------ 生成事件(生成后事件)完成 ------</Command>
-      <Message>按不同策略，复制 BaiduAPI 项目所有必要的 dll 文件到指定目录</Message>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -133,6 +116,7 @@ echo  ------ 生成事件(生成后事件)完成 ------</Command>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <AdditionalIncludeDirectories>..\TranslateAPI\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -140,25 +124,6 @@ echo  ------ 生成事件(生成后事件)完成 ------</Command>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
-    <PostBuildEvent>
-      <Command>echo ------ 开始执行生成事件(生成后事件) ------
-@set source=BaiduAPI
-@set target=BaiduAPITest
-echo 复制到 '%target%'
-echo 复制 %source% 生成的 dll 文件到 %target%
-xcopy "..\%source%\$(outdir)baidu.dll" "..\%target%\$(outdir)" /y /i
-echo 复制 %source% 引入的 dll 文件到 %target%
-xcopy "..\%source%\$(outdir)*.dll" "..\%target%\$(outdir)" /y /i /d
-@set target=CommandTranslate
-echo 复制到 '%target%'
-echo 复制 %source% 生成的 dll 文件到 %target%
-xcopy "..\%source%\$(outdir)baidu.dll" "..\%target%\$(outdir)" /y /i
-echo 复制 %source% 引入的 dll 文件到 %target%
-xcopy "..\%source%\$(outdir)*.dll" "..\%target%\$(outdir)" /y /i /d
-@set target=
-echo  ------ 生成事件(生成后事件)完成 ------</Command>
-      <Message>按不同策略，复制 BaiduAPI 项目所有必要的 dll 文件到指定目录</Message>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -168,30 +133,12 @@ echo  ------ 生成事件(生成后事件)完成 ------</Command>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <AdditionalIncludeDirectories>..\TranslateAPI\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
-    <PostBuildEvent>
-      <Command>echo ------ 开始执行生成事件(生成后事件) ------
-@set source=BaiduAPI
-@set target=BaiduAPITest
-echo 复制到 '%target%'
-echo 复制 %source% 生成的 dll 文件到 %target%
-xcopy "..\%source%\$(outdir)baidu.dll" "..\%target%\$(outdir)" /y /i
-echo 复制 %source% 引入的 dll 文件到 %target%
-xcopy "..\%source%\$(outdir)*.dll" "..\%target%\$(outdir)" /y /i /d
-@set target=CommandTranslate
-echo 复制到 '%target%'
-echo 复制 %source% 生成的 dll 文件到 %target%
-xcopy "..\%source%\$(outdir)baidu.dll" "..\%target%\$(outdir)" /y /i
-echo 复制 %source% 引入的 dll 文件到 %target%
-xcopy "..\%source%\$(outdir)*.dll" "..\%target%\$(outdir)" /y /i /d
-@set target=
-echo  ------ 生成事件(生成后事件)完成 ------</Command>
-      <Message>按不同策略，复制 BaiduAPI 项目所有必要的 dll 文件到指定目录</Message>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -203,6 +150,7 @@ echo  ------ 生成事件(生成后事件)完成 ------</Command>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <AdditionalIncludeDirectories>..\TranslateAPI\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -210,28 +158,15 @@ echo  ------ 生成事件(生成后事件)完成 ------</Command>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
-    <PostBuildEvent>
-      <Command>echo ------ 开始执行生成事件(生成后事件) ------
-@set source=BaiduAPI
-@set target=BaiduAPITest
-echo 复制到 '%target%'
-echo 复制 %source% 生成的 dll 文件到 %target%
-xcopy "..\%source%\$(outdir)baidu.dll" "..\%target%\$(outdir)" /y /i
-echo 复制 %source% 引入的 dll 文件到 %target%
-xcopy "..\%source%\$(outdir)*.dll" "..\%target%\$(outdir)" /y /i /d
-@set target=CommandTranslate
-echo 复制到 '%target%'
-echo 复制 %source% 生成的 dll 文件到 %target%
-xcopy "..\%source%\$(outdir)baidu.dll" "..\%target%\$(outdir)" /y /i
-echo 复制 %source% 引入的 dll 文件到 %target%
-xcopy "..\%source%\$(outdir)*.dll" "..\%target%\$(outdir)" /y /i /d
-@set target=
-echo  ------ 生成事件(生成后事件)完成 ------</Command>
-      <Message>按不同策略，复制 BaiduAPI 项目所有必要的 dll 文件到指定目录</Message>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BaiduAPI\BaiduAPI.vcxproj">
+    <ClCompile Include="src\run.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TranslateAPIDistribute\TranslateAPIDistribute.vcxproj">
+      <Project>{6b4ecc2d-d090-4693-81bf-91b0ac5da640}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\TranslateAPI\TranslateAPI.vcxproj">
       <Project>{4ec8e437-c310-436a-87e1-88ef7708537c}</Project>
     </ProjectReference>
   </ItemGroup>
