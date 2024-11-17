@@ -7,15 +7,108 @@
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		mc:Ignorable="d">
 
-	<StackPanel HorizontalAlignment="Center"
-				VerticalAlignment="Center"
-				Orientation="Horizontal">
-		<Grid Background="Blue" RowDefinitions="*, 5*, 5*">
-			<TextBlock Grid.Row="0" Text="Enter Text" />
-			<TextBox x:Name="txtInput"
-					 Grid.Row="1"
-					 Width="200" />
-			<Button Grid.Row="2" Content="Translate" />
+	<Window.SystemBackdrop>
+		<MicaBackdrop />
+	</Window.SystemBackdrop>
+
+	<Grid RowDefinitions="Auto,*">
+		<!--  标题栏  -->
+		<Grid x:Name="AppTitleBar"
+			  Grid.Row="0"
+			  HorizontalAlignment="Stretch"
+			  VerticalAlignment="Top"
+			  Background="Transparent"
+			  ColumnDefinitions="Auto,*">
+
+			<TextBlock x:Name="TitleText"
+					   Grid.Column="0"
+					   Margin="12,12,12,6"
+					   HorizontalAlignment="Left"
+					   VerticalAlignment="Top"
+					   FontSize="14"
+					   Text="✌️ 我要学外语 ✌️" />
 		</Grid>
-	</StackPanel>
+
+		<!--  主内容  -->
+		<Grid Grid.Row="1" RowDefinitions="Auto,*,*">
+
+			<!--  功能按钮条列  -->
+			<Grid Grid.Row="0"
+				  Margin="12,6,12,4"
+				  ColumnDefinitions="Auto,*">
+				<StackPanel Grid.Column="0" Orientation="Horizontal">
+					<!--  from  -->
+					<ComboBox x:Name="From"
+							  Width="80"
+							  Margin="0,0,6,0"
+							  SelectionChanged="{x:Bind From_SelectionChanged}"
+							  ToolTipService.ToolTip="选择源语言类型">
+						<ComboBoxItem Content="自动" />
+						<ComboBoxItem Content="英文" />
+						<ComboBoxItem Content="中文" />
+					</ComboBox>
+
+					<!--  switch  -->
+					<FontIcon Margin="14,0"
+							  FontFamily="{ThemeResource SymbolThemeFontFamily}"
+							  FontSize="12"
+							  Glyph="&#xF1CB;"
+							  Tapped="Switch_Tapped"
+							  ToolTipService.ToolTip="点击切换源目标语言" />
+
+					<!--  to  -->
+					<ComboBox x:Name="To"
+							  Width="80"
+							  Margin="6,0,0,0"
+							  SelectionChanged="{x:Bind To_SelectionChanged}"
+							  ToolTipService.ToolTip="选择目标语言类型">
+						<ComboBoxItem Content="中文" />
+						<ComboBoxItem Content="英文" />
+					</ComboBox>
+				</StackPanel>
+
+				<!--  translate  -->
+				<Grid Grid.Column="1" HorizontalAlignment="Stretch">
+					<FontIcon x:Name="Run"
+							  Margin="0,0,20,0"
+							  HorizontalAlignment="Right"
+							  FontFamily="{ThemeResource SymbolThemeFontFamily}"
+							  FontSize="16"
+							  Glyph="&#xF78C;"
+							  Tapped="Run_Tapped"
+							  ToolTipService.ToolTip="点击执行翻译" />
+				</Grid>
+			</Grid>
+
+			<!--  输入文本框  -->
+			<Grid Grid.Row="1"
+				  Margin="12,4,12,6"
+				  HorizontalAlignment="Stretch"
+				  VerticalAlignment="Stretch">
+				<TextBox x:Name="InputTextBox"
+						 HorizontalAlignment="Stretch"
+						 VerticalAlignment="Stretch"
+						 AcceptsReturn="True"
+						 FontSize="{x:Bind ViewModel.InputFontSize}"
+						 PlaceholderText="输入或粘贴文字"
+						 ScrollViewer.VerticalScrollBarVisibility="Auto"
+						 TextWrapping="Wrap" />
+			</Grid>
+
+			<!--  输出文本框  -->
+			<Grid Grid.Row="2"
+				  Margin="12,6,12,12"
+				  HorizontalAlignment="Stretch"
+				  VerticalAlignment="Stretch"
+				  Background="Transparent">
+				<TextBlock x:Name="OutputTextBlock"
+						   Margin="12"
+						   HorizontalAlignment="Stretch"
+						   VerticalAlignment="Stretch"
+						   FontSize="14"
+						   ScrollViewer.VerticalScrollBarVisibility="Auto"
+						   TextWrapping="Wrap" />
+			</Grid>
+		</Grid>
+	</Grid>
 </Window>

@@ -114,12 +114,18 @@
 
 echo ------ 生成事件（生成后事件）开始执行 ------
 set source=..\BaiduAPI
-set target=..\BaiduAPITest
 
+set target=..\BaiduAPITest\$(outdir)
 echo Running Command1
-xcopy "%source%\$(outdir)baidu.dll" "%target%\$(outdir)" /y /i
+xcopy "%source%\$(outdir)baidu.dll" "%target%" /y /i
 echo RunningCommand2
-xcopy "%source%\$(outdir)*.dll" "%target%\$(outdir)" /y /i /d
+xcopy "%source%\$(outdir)*.dll" "%target%" /y /i /d
+
+set target=..\TranslateWinUI3\Import
+echo Running Command3
+xcopy "%source%\$(outdir)baidu.dll" "%target%" /y /i
+echo RunningCommand4
+xcopy "%source%\$(outdir)*.dll" "%target%" /y /i /d
 
 set source=
 set target=
@@ -154,12 +160,18 @@ echo  ------ 生成事件（生成后事件）执行结束 ------</Command>
 
 echo ------ 生成事件（生成后事件）开始执行 ------
 set source=..\BaiduAPI
-set target=..\BaiduAPITest
 
+set target=..\BaiduAPITest\$(outdir)
 echo Running Command1
-xcopy "%source%\$(outdir)baidu.dll" "%target%\$(outdir)" /y /i
+xcopy "%source%\$(outdir)baidu.dll" "%target%" /y /i
 echo RunningCommand2
-xcopy "%source%\$(outdir)*.dll" "%target%\$(outdir)" /y /i /d
+xcopy "%source%\$(outdir)*.dll" "%target%" /y /i /d
+
+set target=..\TranslateWinUI3\Import
+echo Running Command3
+xcopy "%source%\$(outdir)baidu.dll" "%target%" /y /i
+echo RunningCommand4
+xcopy "%source%\$(outdir)*.dll" "%target%" /y /i /d
 
 set source=
 set target=
@@ -190,12 +202,18 @@ echo  ------ 生成事件（生成后事件）执行结束 ------</Command>
 
 echo ------ 生成事件（生成后事件）开始执行 ------
 set source=..\BaiduAPI
-set target=..\BaiduAPITest
 
+set target=..\BaiduAPITest\$(outdir)
 echo Running Command1
-xcopy "%source%\$(outdir)baidu.dll" "%target%\$(outdir)" /y /i
+xcopy "%source%\$(outdir)baidu.dll" "%target%" /y /i
 echo RunningCommand2
-xcopy "%source%\$(outdir)*.dll" "%target%\$(outdir)" /y /i /d
+xcopy "%source%\$(outdir)*.dll" "%target%" /y /i /d
+
+set target=..\TranslateWinUI3\Import
+echo Running Command3
+xcopy "%source%\$(outdir)baidu.dll" "%target%" /y /i
+echo RunningCommand4
+xcopy "%source%\$(outdir)*.dll" "%target%" /y /i /d
 
 set source=
 set target=
@@ -230,12 +248,18 @@ echo  ------ 生成事件（生成后事件）执行结束 ------</Command>
 
 echo ------ 生成事件（生成后事件）开始执行 ------
 set source=..\BaiduAPI
-set target=..\BaiduAPITest
 
+set target=..\BaiduAPITest\$(outdir)
 echo Running Command1
-xcopy "%source%\$(outdir)baidu.dll" "%target%\$(outdir)" /y /i
+xcopy "%source%\$(outdir)baidu.dll" "%target%" /y /i
 echo RunningCommand2
-xcopy "%source%\$(outdir)*.dll" "%target%\$(outdir)" /y /i /d
+xcopy "%source%\$(outdir)*.dll" "%target%" /y /i /d
+
+set target=..\TranslateWinUI3\Import
+echo Running Command3
+xcopy "%source%\$(outdir)baidu.dll" "%target%" /y /i
+echo RunningCommand4
+xcopy "%source%\$(outdir)*.dll" "%target%" /y /i /d
 
 set source=
 set target=
