@@ -25,7 +25,7 @@ namespace TranslateWinUI3
 		/// <param name="args">Details about the launch request and process.</param>
 		protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
 		{
-			m_window = new View.MainWindow();
+			m_window = new View.MainView();
 			m_window.Activate();
 		}
 
