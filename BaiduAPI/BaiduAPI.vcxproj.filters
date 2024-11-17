@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\CppStyle_BaiduAPI.h">
+    <ClInclude Include="src\BaiduAPI.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="include\Baidu.h">
@@ -26,7 +26,7 @@
     <ClCompile Include="src\dllmain.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\CppStyle_BaiduAPI.cpp">
+    <ClCompile Include="src\BaiduAPI.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\Baidu.cpp">

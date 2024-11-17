@@ -110,10 +110,21 @@
     </Link>
     <PostBuildEvent />
     <PostBuildEvent>
-      <Command>
-      </Command>
-      <Message>
-      </Message>
+      <Command>@echo off
+
+echo ------ 生成事件（生成后事件）开始执行 ------
+set source=..\BaiduAPI
+set target=..\BaiduAPITest
+
+echo Running Command1
+xcopy "%source%\$(outdir)baidu.dll" "%target%\$(outdir)" /y /i
+echo RunningCommand2
+xcopy "%source%\$(outdir)*.dll" "%target%\$(outdir)" /y /i /d
+
+set source=
+set target=
+echo  ------ 生成事件（生成后事件）执行结束 ------</Command>
+      <Message>把生成的 dll 分发给其他项目</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -139,10 +150,21 @@
     </Link>
     <PostBuildEvent />
     <PostBuildEvent>
-      <Command>
-      </Command>
-      <Message>
-      </Message>
+      <Command>@echo off
+
+echo ------ 生成事件（生成后事件）开始执行 ------
+set source=..\BaiduAPI
+set target=..\BaiduAPITest
+
+echo Running Command1
+xcopy "%source%\$(outdir)baidu.dll" "%target%\$(outdir)" /y /i
+echo RunningCommand2
+xcopy "%source%\$(outdir)*.dll" "%target%\$(outdir)" /y /i /d
+
+set source=
+set target=
+echo  ------ 生成事件（生成后事件）执行结束 ------</Command>
+      <Message>把生成的 dll 分发给其他项目</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -164,10 +186,21 @@
     </Link>
     <PostBuildEvent />
     <PostBuildEvent>
-      <Command>
-      </Command>
-      <Message>
-      </Message>
+      <Command>@echo off
+
+echo ------ 生成事件（生成后事件）开始执行 ------
+set source=..\BaiduAPI
+set target=..\BaiduAPITest
+
+echo Running Command1
+xcopy "%source%\$(outdir)baidu.dll" "%target%\$(outdir)" /y /i
+echo RunningCommand2
+xcopy "%source%\$(outdir)*.dll" "%target%\$(outdir)" /y /i /d
+
+set source=
+set target=
+echo  ------ 生成事件（生成后事件）执行结束 ------</Command>
+      <Message>把生成的 dll 分发给其他项目</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -193,18 +226,29 @@
     </Link>
     <PostBuildEvent />
     <PostBuildEvent>
-      <Command>
-      </Command>
-      <Message>
-      </Message>
+      <Command>@echo off
+
+echo ------ 生成事件（生成后事件）开始执行 ------
+set source=..\BaiduAPI
+set target=..\BaiduAPITest
+
+echo Running Command1
+xcopy "%source%\$(outdir)baidu.dll" "%target%\$(outdir)" /y /i
+echo RunningCommand2
+xcopy "%source%\$(outdir)*.dll" "%target%\$(outdir)" /y /i /d
+
+set source=
+set target=
+echo  ------ 生成事件（生成后事件）执行结束 ------</Command>
+      <Message>把生成的 dll 分发给其他项目</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="include\Baidu.h" />
-    <ClInclude Include="src\CppStyle_BaiduAPI.h" />
+    <ClInclude Include="src\BaiduAPI.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\CppStyle_BaiduAPI.cpp" />
+    <ClCompile Include="src\BaiduAPI.cpp" />
     <ClCompile Include="src\dllmain.cpp" />
     <ClCompile Include="src\Baidu.cpp" />
   </ItemGroup>

@@ -16,57 +16,13 @@
 
 namespace BaiduTranslateDLL
 {
-	namespace ErrorDefine
-	{
-		class NoCommonObject
-		{
-		public:
-			explicit NoCommonObject(void) noexcept				 = default;
-			virtual ~NoCommonObject(void) noexcept				 = default;
-
-			NoCommonObject(const NoCommonObject&)				 = delete;
-			NoCommonObject(NoCommonObject&&) noexcept			 = delete;
-			NoCommonObject& operator=(const NoCommonObject&)	 = delete;
-			NoCommonObject& operator=(NoCommonObject&&) noexcept = delete;
-		};
-
-		struct LimitInstanceError: public _STD runtime_error
-		{
-			using _STD runtime_error::runtime_error;
-		};
-
-		template <typename ClassType, size_t N>
-		class MaxInitCount: public NoCommonObject
-		{
-		public:
-			MaxInitCount(void)
-			{
-				if (p_instance_count >= N)
-				{
-					throw LimitInstanceError("实例对象的个数超过最大值");
-				}
-				else
-				{
-					++p_instance_count;
-				}
-			}
-
-			~MaxInitCount(void) noexcept override
-			{
-				--p_instance_count;
-			}
-
-		private:
-			static inline _STD atomic<size_t> p_instance_count = 0;
-		};
-	} // namespace ErrorDefine
-
-	class BaiduTranslateFunction final: public ErrorDefine::MaxInitCount<BaiduTranslateFunction, 1>
+	class BaiduTranslateFunction final
 	{
 	public:
-		BaiduTranslateFunction(const _STD string& appid = "", const _STD string& appkey = "") noexcept;
+		BaiduTranslateFunction(const _STD string& appid	 = "",
+							   const _STD string& appkey = "") noexcept;
 
-		~BaiduTranslateFunction(void) noexcept override;
+		~BaiduTranslateFunction(void) noexcept;
 
 		_STD string Translate(const _STD string& query,
 							  const _STD string& from,
@@ -78,7 +34,7 @@ namespace BaiduTranslateDLL
 
 		_STD string GetAppIDAndKey(void) noexcept;
 
-		static bool IsInitSuccess(void) noexcept;
+		static bool InitIsNoError(void) noexcept;
 
 	private:
 		_STD string		  p_appid { "" };
@@ -91,7 +47,7 @@ namespace BaiduTranslateDLL
 		_STD mt19937_64	  p_gen { _STD random_device {}() };
 		_STD uniform_int_distribution<_STD size_t> p_dis { 32'768, 65'536 };
 
-		static inline bool						   p_is_init { false };
+		static inline bool						   p_init_is_no_error { false };
 
 		static inline const _STD unordered_map<_STD string, _STD string> p_API_error_info {
 			// clang-format off

@@ -1,65 +1,92 @@
 #pragma once
 
 #include "Baidu.h"
-#include "CppStyle_BaiduAPI.h"
+#include "BaiduAPI.h"
 
 #include <type_traits>
+#include <mutex>
 #include <string>
 #include <version>
 
-using BaiduTranslate_Ptr = ::BaiduTranslateDLL::BaiduTranslateFunction*;
-
-TranslateObj* BaiduTranslate_Init(CString appid, CString appkey)
+class TranslatePtr
 {
-	static auto p_translate_object = ::BaiduTranslateDLL::BaiduTranslateFunction(appid, appkey);
-
-	if (!::BaiduTranslateDLL::BaiduTranslateFunction::IsInitSuccess())
+public:
+	static inline ::BaiduTranslateDLL::BaiduTranslateFunction* Ptr(void)
 	{
-		return nullptr;
+		static _STD once_flag once {};
+
+		_STD				  call_once(once,
+						[]()
+						{
+							static auto m_baidu_translate {
+								::BaiduTranslateDLL::BaiduTranslateFunction::BaiduTranslateFunction()
+							};
+
+							if (::BaiduTranslateDLL::BaiduTranslateFunction::InitIsNoError())
+							{
+								m_baidu_translate_ptr = &m_baidu_translate;
+							}
+							else
+							{
+								m_baidu_translate_ptr = nullptr;
+							}
+						});
+
+		return m_baidu_translate_ptr;
 	}
 
-	return (TranslateObj*)(&p_translate_object);
+
+private:
+	static inline ::BaiduTranslateDLL::BaiduTranslateFunction* m_baidu_translate_ptr { nullptr };
+};
+
+CBool BaiduTranslate_Init(CString appid, CString appkey)
+{
+	if (TranslatePtr::Ptr() != nullptr)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
-CString BaiduTranslate_Translate(TranslateObj* p_translate_object,
-								 CString	   query,
-								 CString	   from,
-								 CString	   to,
-								 CString	   appid,
-								 CString	   appkey)
+CString
+	BaiduTranslate_Translate(CString query, CString from, CString to, CString appid, CString appkey)
 {
-	if (p_translate_object == nullptr)
-	{
-		return nullptr;
-	}
-
 	static _STD string result {};
 
-	result = _STD	   move(((BaiduTranslate_Ptr)p_translate_object)->Translate(query, from, to, appid, appkey));
+	if (TranslatePtr::Ptr() != nullptr)
+	{
+		result = _STD move(TranslatePtr::Ptr()->Translate(query, from, to, appid, appkey).c_str());
+	}
 
 	return result.c_str();
 }
 
-void BaiduTranslate_SetAppIDAndKey(TranslateObj* p_translate_object, CString appid, CString appkey)
+CBool BaiduTranslate_SetAppIDAndKey(CString appid, CString appkey)
 {
-	if (p_translate_object == nullptr)
+	if (TranslatePtr::Ptr() != nullptr)
 	{
-		return;
-	}
+		TranslatePtr::Ptr()->SetAppIDAndKey(appid, appkey);
 
-	((BaiduTranslate_Ptr)p_translate_object)->SetAppIDAndKey(appid, appkey);
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
-CString BaiduTranslate_GetAppIDAndKey(TranslateObj* p_translate_object)
+CString BaiduTranslate_GetAppIDAndKey(void)
 {
-	if (p_translate_object == nullptr)
-	{
-		return nullptr;
-	}
-
 	static _STD string result {};
 
-	result = _STD	   move(((BaiduTranslate_Ptr)p_translate_object)->GetAppIDAndKey());
+	if (TranslatePtr::Ptr() != nullptr)
+	{
+		result = _STD move(TranslatePtr::Ptr()->GetAppIDAndKey().c_str());
+	}
 
 	return result.c_str();
 }

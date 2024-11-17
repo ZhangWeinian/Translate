@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CppStyle_BaiduAPI.h"
+#include "BaiduAPI.h"
 
 #include <array>
 #include <format>
@@ -16,8 +16,8 @@
 #include <json/reader.h>
 #include <json/value.h>
 
-BaiduTranslateDLL::BaiduTranslateFunction::BaiduTranslateFunction(const _STD string& appid,
-																  const _STD string& appkey) noexcept
+BaiduTranslateDLL::BaiduTranslateFunction::
+	BaiduTranslateFunction(const _STD string& appid, const _STD string& appkey) noexcept
 {
 	if (p_curl = curl_easy_init(); p_curl != nullptr)
 	{
@@ -25,11 +25,11 @@ BaiduTranslateDLL::BaiduTranslateFunction::BaiduTranslateFunction(const _STD str
 		curl_easy_setopt(p_curl, CURLOPT_SSL_VERIFYPEER, 0L);
 		curl_easy_setopt(p_curl, CURLOPT_SSL_VERIFYHOST, 0L);
 
-		p_is_init = true;
+		p_init_is_no_error = true;
 	}
 	else
 	{
-		p_is_init = false;
+		p_init_is_no_error = false;
 		return;
 	}
 
@@ -37,11 +37,11 @@ BaiduTranslateDLL::BaiduTranslateFunction::BaiduTranslateFunction(const _STD str
 	{
 		EVP_DigestInit_ex(p_ctx, EVP_md5(), nullptr);
 
-		p_is_init = true;
+		p_init_is_no_error = true;
 	}
 	else
 	{
-		p_is_init = false;
+		p_init_is_no_error = false;
 		return;
 	}
 
@@ -105,10 +105,16 @@ _STD string BaiduTranslateDLL::BaiduTranslateFunction::Translate(const _STD stri
 	const _STD size_t salt	  = p_dis(p_gen);
 	const _STD string sign	  = GetMD5(_STD format("{0}{1}{2}{3}", p_appid, query, salt, p_appkey));
 
-	const _STD string fullUrl = _STD
-		format("{0}appid={1}&q={2}&from={3}&to={4}&salt={5}&sign={6}", p_url, p_appid, query, from, to, salt, sign);
+	const _STD string fullUrl = _STD format("{0}appid={1}&q={2}&from={3}&to={4}&salt={5}&sign={6}",
+											p_url,
+											p_appid,
+											query,
+											from,
+											to,
+											salt,
+											sign);
 
-	_STD string readBuffer {};
+	_STD string						 readBuffer {};
 
 	curl_easy_setopt(p_curl, CURLOPT_URL, fullUrl.c_str());
 	curl_easy_setopt(p_curl, CURLOPT_WRITEFUNCTION, CurlWriteCallback);
@@ -157,16 +163,20 @@ void BaiduTranslateDLL::BaiduTranslateFunction::SetAppIDAndKey(const _STD string
 _STD string BaiduTranslateDLL::BaiduTranslateFunction::GetAppIDAndKey(void) noexcept
 {
 	_STD string result {};
-	_STD		format_to(_STD back_inserter(result), R"({{ "appid": "{0}", "appkey": "{1}" }})", p_appid, p_appkey);
+	_STD		format_to(_STD back_inserter(result),
+						  R"({{ "appid": "{0}", "appkey": "{1}" }})",
+						  p_appid,
+						  p_appkey);
 	return result;
 }
 
-bool BaiduTranslateDLL::BaiduTranslateFunction::IsInitSuccess(void) noexcept
+bool BaiduTranslateDLL::BaiduTranslateFunction::InitIsNoError(void) noexcept
 {
-	return p_is_init;
+	return p_init_is_no_error;
 }
 
-inline _STD string BaiduTranslateDLL::BaiduTranslateFunction::GetMD5(const _STD string& str) noexcept
+inline _STD string BaiduTranslateDLL::BaiduTranslateFunction::GetMD5(
+	const _STD string& str) noexcept
 {
 	_STD array<unsigned char, MD5_DIGEST_LENGTH> md5 {};
 
@@ -190,7 +200,8 @@ _STD size_t BaiduTranslateDLL::BaiduTranslateFunction::
 	return size * nmemb;
 }
 
-_STD string BaiduTranslateDLL::BaiduTranslateFunction::GetAPIErrorInfo(const _STD string& error_code) noexcept
+_STD string BaiduTranslateDLL::BaiduTranslateFunction::GetAPIErrorInfo(
+	const _STD string& error_code) noexcept
 {
 	auto iter = p_API_error_info.find(error_code);
 

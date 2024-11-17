@@ -163,9 +163,6 @@
     <ClCompile Include="src\run.c" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BaiduAPIDistribute\BaiduAPIDistribute.vcxproj">
-      <Project>{6b4ecc2d-d090-4693-81bf-91b0ac5da640}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\BaiduAPI\BaiduAPI.vcxproj">
       <Project>{4ec8e437-c310-436a-87e1-88ef7708537c}</Project>
     </ProjectReference>
