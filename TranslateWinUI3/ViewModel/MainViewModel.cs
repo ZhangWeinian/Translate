@@ -11,7 +11,7 @@ namespace TranslateWinUI3.ViewModel
 		}
 
 		[ObservableProperty]
-		private double inputFontSize = 22; // 初始字体大小
+		private double inputFontSize = 18; // 初始字体大小
 
 		[ObservableProperty]
 		private string translatedText = string.Empty; // 翻译结果
@@ -20,7 +20,7 @@ namespace TranslateWinUI3.ViewModel
 		{
 			await Task.Run(() =>
 			{
-				TranslatedText = "Translating...";
+				TranslatedText = "Translating..." + query + "|||" + form + "|||" + to;
 			});
 
 			return true;

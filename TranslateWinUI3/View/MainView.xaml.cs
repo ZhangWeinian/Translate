@@ -1,6 +1,5 @@
-using System.Threading.Tasks;
-
 using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Input;
 
 using TranslateWinUI3.ViewModel;
 
@@ -21,7 +20,7 @@ namespace TranslateWinUI3.View
 			this.InitializeComponent();
 
 			// 设置默认窗口大小
-			this.AppWindow.Resize(new Windows.Graphics.SizeInt32 { Width = 900, Height = 1200 });
+			this.AppWindow.Resize(new Windows.Graphics.SizeInt32 { Width = 860, Height = 1100 });
 
 			// 隐藏原生标题栏
 			this.ExtendsContentIntoTitleBar = true;
@@ -29,12 +28,27 @@ namespace TranslateWinUI3.View
 			// 设置自定义标题栏
 			this.SetTitleBar(this.AppTitleBar);
 
-			// 设置 from 和 to 的默认语言
+			// 源语言类型默认为 "自动检测"
 			this.From.SelectedItem = this.From.Items[0];
+
+			// 目标语言类型默认为 "中文"
 			this.To.SelectedItem = this.To.Items[0];
+
+			// 添加键盘事件处理程序
+			this.Content.KeyDown += MainView_KeyDown; // Change this line
 		}
 
-		private void Switch_Tapped(object sender, RoutedEventArgs e)
+		private void MainView_KeyDown(object sender, KeyRoutedEventArgs e)
+		{
+			// 监听键盘，当检测到 Ctrl + Enter 时触发翻译
+			if(e.Key == Windows.System.VirtualKey.Enter &&
+			Microsoft.UI.Input.InputKeyboardSource.GetKeyStateForCurrentThread(Windows.System.VirtualKey.Control).HasFlag(Windows.UI.Core.CoreVirtualKeyStates.Down))
+			{
+				this.Translate_Click();
+			}
+		}
+
+		private void Switch_Click()
 		{
 			if(this.To.SelectedItem == this.To.Items[0])
 			{
@@ -48,17 +62,17 @@ namespace TranslateWinUI3.View
 			}
 		}
 
-		private async void Run_Tapped(object sender, Microsoft.UI.Xaml.Input.TappedRoutedEventArgs e)
+		private void Translate_Click()
 		{
-			string query = InputTextBox.Text;
+			string query = this.InputTextBox.Text;
 
 			if(string.IsNullOrEmpty(query))
 			{
 				return;
 			}
 
-			string form="";
-			string to="";
+			string form = "";
+			string to = "";
 
 			if(this.From.SelectedItem == this.From.Items[0])
 			{
@@ -82,11 +96,9 @@ namespace TranslateWinUI3.View
 				to = "en";
 			}
 
-			await Task.Run(() =>
-			{
-				string result= "Translating..." + form + "|||" + to;
-				this.OutputTextBlock.Text = result;
-			});
+			_ = ViewModel.Translate(query, form, to);
+
+			this.InputTextBox.Text = "";
 		}
 
 		private void From_SelectionChanged()

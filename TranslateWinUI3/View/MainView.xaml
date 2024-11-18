@@ -2,6 +2,7 @@
 <Window x:Class="TranslateWinUI3.View.MainView"
 		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:animatedvisuals="using:Microsoft.UI.Xaml.Controls.AnimatedVisuals"
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 		xmlns:local="using:TranslateWinUI3.View"
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -15,68 +16,95 @@
 		<!--  标题栏  -->
 		<Grid x:Name="AppTitleBar"
 			  Grid.Row="0"
-			  HorizontalAlignment="Stretch"
-			  VerticalAlignment="Top"
 			  Background="Transparent"
 			  ColumnDefinitions="Auto,*">
 
-			<TextBlock x:Name="TitleText"
-					   Grid.Column="0"
-					   Margin="12,12,12,6"
-					   HorizontalAlignment="Left"
+			<Grid Grid.Column="0"
+				  Margin="16,12,6,6"
+				  HorizontalAlignment="Center"
+				  VerticalAlignment="Center">
+				<BitmapIcon Width="16"
+							Height="16"
+							ShowAsMonochrome="False"
+							UriSource="ms-appx:///Assets/logo.png" />
+			</Grid>
+
+			<TextBlock Grid.Column="1"
+					   Margin="6,12,12,6"
+					   HorizontalAlignment="Stretch"
 					   VerticalAlignment="Top"
-					   FontSize="14"
-					   Text="✌️ 我要学外语 ✌️" />
+					   FontSize="13"
+					   Text="学外语" />
 		</Grid>
 
 		<!--  主内容  -->
-		<Grid Grid.Row="1" RowDefinitions="Auto,*,*">
+		<Grid Grid.Row="1"
+			  VerticalAlignment="Stretch"
+			  RowDefinitions="Auto,*,*">
 
 			<!--  功能按钮条列  -->
 			<Grid Grid.Row="0"
 				  Margin="12,6,12,4"
 				  ColumnDefinitions="Auto,*">
-				<StackPanel Grid.Column="0" Orientation="Horizontal">
+
+				<!--  语言选择  -->
+				<StackPanel Grid.Column="0"
+							VerticalAlignment="Center"
+							Orientation="Horizontal">
+
 					<!--  from  -->
 					<ComboBox x:Name="From"
 							  Width="80"
 							  Margin="0,0,6,0"
+							  VerticalAlignment="Center"
 							  SelectionChanged="{x:Bind From_SelectionChanged}"
-							  ToolTipService.ToolTip="选择源语言类型">
+							  ToolTipService.ToolTip="源语言类型">
 						<ComboBoxItem Content="自动" />
 						<ComboBoxItem Content="英文" />
 						<ComboBoxItem Content="中文" />
 					</ComboBox>
 
 					<!--  switch  -->
-					<FontIcon Margin="14,0"
-							  FontFamily="{ThemeResource SymbolThemeFontFamily}"
-							  FontSize="12"
-							  Glyph="&#xF1CB;"
-							  Tapped="Switch_Tapped"
-							  ToolTipService.ToolTip="点击切换源目标语言" />
+					<HyperlinkButton x:Name="Switch"
+									 Margin="3,0"
+									 VerticalAlignment="Center"
+									 Background="Transparent"
+									 Click="{x:Bind Switch_Click}"
+									 Foreground="Black"
+									 ToolTipService.ToolTip="切换源目标语言">
+						<FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}"
+								  FontSize="12"
+								  Glyph="&#xF1CB;" />
+					</HyperlinkButton>
 
 					<!--  to  -->
 					<ComboBox x:Name="To"
 							  Width="80"
 							  Margin="6,0,0,0"
+							  VerticalAlignment="Center"
 							  SelectionChanged="{x:Bind To_SelectionChanged}"
-							  ToolTipService.ToolTip="选择目标语言类型">
+							  ToolTipService.ToolTip="目标语言类型">
 						<ComboBoxItem Content="中文" />
 						<ComboBoxItem Content="英文" />
 					</ComboBox>
 				</StackPanel>
 
-				<!--  translate  -->
-				<Grid Grid.Column="1" HorizontalAlignment="Stretch">
-					<FontIcon x:Name="Run"
-							  Margin="0,0,20,0"
-							  HorizontalAlignment="Right"
-							  FontFamily="{ThemeResource SymbolThemeFontFamily}"
-							  FontSize="16"
-							  Glyph="&#xF78C;"
-							  Tapped="Run_Tapped"
-							  ToolTipService.ToolTip="点击执行翻译" />
+				<!--  翻译按钮  -->
+				<Grid Grid.Column="1"
+					  HorizontalAlignment="Stretch"
+					  VerticalAlignment="Center">
+					<HyperlinkButton x:Name="Translate"
+									 HorizontalAlignment="Right"
+									 VerticalAlignment="Center"
+									 Background="Transparent"
+									 Click="{x:Bind Translate_Click}"
+									 Foreground="Black"
+									 ToolTipService.ToolTip="执行翻译">
+						<FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}"
+								  FontSize="14"
+								  FontWeight="Bold"
+								  Glyph="&#xF78C;" />
+					</HyperlinkButton>
 				</Grid>
 			</Grid>
 
@@ -89,7 +117,8 @@
 						 HorizontalAlignment="Stretch"
 						 VerticalAlignment="Stretch"
 						 AcceptsReturn="True"
-						 FontSize="{x:Bind ViewModel.InputFontSize}"
+						 Background="White"
+						 FontSize="15"
 						 PlaceholderText="输入或粘贴文字"
 						 ScrollViewer.VerticalScrollBarVisibility="Auto"
 						 TextWrapping="Wrap" />
@@ -99,14 +128,13 @@
 			<Grid Grid.Row="2"
 				  Margin="12,6,12,12"
 				  HorizontalAlignment="Stretch"
-				  VerticalAlignment="Stretch"
-				  Background="Transparent">
+				  VerticalAlignment="Stretch">
 				<TextBlock x:Name="OutputTextBlock"
-						   Margin="12"
 						   HorizontalAlignment="Stretch"
 						   VerticalAlignment="Stretch"
-						   FontSize="14"
+						   FontSize="15"
 						   ScrollViewer.VerticalScrollBarVisibility="Auto"
+						   Text="{x:Bind ViewModel.TranslatedText, Mode=OneWay}"
 						   TextWrapping="Wrap" />
 			</Grid>
 		</Grid>

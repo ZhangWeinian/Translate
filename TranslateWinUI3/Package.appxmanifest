@@ -34,7 +34,7 @@
       Executable="$targetnametoken$.exe"
       EntryPoint="$targetentrypoint$">
       <uap:VisualElements
-        DisplayName="我要学外语 ！！！"
+        DisplayName="学外语"
         Description="✌️我要学外语✌️"
         BackgroundColor="transparent"
         Square150x150Logo="Assets\Square150x150Logo.png"
