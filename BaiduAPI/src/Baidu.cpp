@@ -40,7 +40,7 @@ private:
 	static inline ::BaiduTranslateDLL::BaiduTranslateFunction* m_baidu_translate_ptr { nullptr };
 };
 
-CBool BaiduTranslate_Init(CString appid, CString appkey)
+C_Bool BaiduTranslate_Init(C_String appid, C_String appkey)
 {
 	if (TranslatePtr::Ptr() != nullptr)
 	{
@@ -48,45 +48,83 @@ CBool BaiduTranslate_Init(CString appid, CString appkey)
 	}
 	else
 	{
+		::BaiduTranslateDLL::BaiduTranslateDLLError::SetLastError(
+			::BaiduTranslateDLL::ErrorCodeEnum::TRANSLATEPTR_PTR_IS_NULL);
+
+		::BaiduTranslateDLL::BaiduTranslateDLLError::SetErrorTip(
+			"公开头文件中的基指针为空。这发生在包装的初始化过程中，可能是 TranslatePtr "
+			"实例化基指针时错误，也可能是 BaiduTranslateFunction 实例化过程中错误。");
+
 		return false;
 	}
 }
 
-CString
-	BaiduTranslate_Translate(CString query, CString from, CString to, CString appid, CString appkey)
+C_String BaiduTranslate_Translate(C_String query,
+								  C_String from,
+								  C_String to,
+								  C_String appid,
+								  C_String appkey)
 {
 	static _STD string result {};
 
 	if (TranslatePtr::Ptr() != nullptr)
 	{
-		result = _STD move(TranslatePtr::Ptr()->Translate(query, from, to, appid, appkey).c_str());
+		result = _STD move(TranslatePtr::Ptr()->Translate(query, from, to, appid, appkey));
+	}
+	else
+	{
+		::BaiduTranslateDLL::BaiduTranslateDLLError::SetLastError(
+			::BaiduTranslateDLL::ErrorCodeEnum::TRANSLATEPTR_PTR_IS_NULL);
+	}
+
+
+	return result.c_str();
+}
+
+C_Bool BaiduTranslate_SetAppIDAndKey(C_String appid, C_String appkey)
+{
+	if (TranslatePtr::Ptr() != nullptr)
+	{
+		TranslatePtr::Ptr()->SetAppIDAndKey(appid, appkey);
+		return true;
+	}
+	else
+	{
+		::BaiduTranslateDLL::BaiduTranslateDLLError::SetLastError(
+			::BaiduTranslateDLL::ErrorCodeEnum::TRANSLATEPTR_PTR_IS_NULL);
+
+		return false;
+	}
+}
+
+C_String BaiduTranslate_GetAppIDAndKey(void)
+{
+	static _STD string result {};
+
+	if (TranslatePtr::Ptr() != nullptr)
+	{
+		result = _STD move(TranslatePtr::Ptr()->GetAppIDAndKey());
+	}
+	else
+	{
+		::BaiduTranslateDLL::BaiduTranslateDLLError::SetLastError(
+			::BaiduTranslateDLL::ErrorCodeEnum::TRANSLATEPTR_PTR_IS_NULL);
 	}
 
 	return result.c_str();
 }
 
-CBool BaiduTranslate_SetAppIDAndKey(CString appid, CString appkey)
-{
-	if (TranslatePtr::Ptr() != nullptr)
-	{
-		TranslatePtr::Ptr()->SetAppIDAndKey(appid, appkey);
-
-		return true;
-	}
-	else
-	{
-		return false;
-	}
-}
-
-CString BaiduTranslate_GetAppIDAndKey(void)
+C_String BaiduTranslate_GetLastError(void)
 {
 	static _STD string result {};
 
-	if (TranslatePtr::Ptr() != nullptr)
+	if (TranslatePtr::Ptr() == nullptr)
 	{
-		result = _STD move(TranslatePtr::Ptr()->GetAppIDAndKey().c_str());
+		::BaiduTranslateDLL::BaiduTranslateDLLError::SetLastError(
+			::BaiduTranslateDLL::ErrorCodeEnum::TRANSLATEPTR_PTR_IS_NULL);
 	}
+
+	result = _STD move(::BaiduTranslateDLL::BaiduTranslateDLLError::GetErrorInfo());
 
 	return result.c_str();
 }
