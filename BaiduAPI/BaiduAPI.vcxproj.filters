@@ -21,6 +21,15 @@
     <ClInclude Include="include\Baidu.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="src\PasswordAPI.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GlobalError.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TypeDefined.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\dllmain.cpp">
@@ -32,8 +41,15 @@
     <ClCompile Include="src\Baidu.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\PasswordAPI.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GlobalError.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>
