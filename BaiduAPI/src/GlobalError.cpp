@@ -1,6 +1,6 @@
 #pragma once
 
-#include "aaa_TypeDefined.h"
+#include "TypeDefined.h"
 
 #include "GlobalError.h"
 

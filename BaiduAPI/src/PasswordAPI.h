@@ -43,6 +43,11 @@ namespace BaiduTranslateDLL
 
 		_string				  Decryption(const _string& str) const noexcept;
 
+		static int			  InihReadHandler(void*		  user,
+											  const char* section,
+											  const char* name,
+											  const char* value) noexcept;
+
 	private:
 		using enum ::BaiduTranslateDLL::ErrorCodeEnum;
 		using ErrorHandling = ::BaiduTranslateDLL::GlobalErrorHandling;
@@ -55,6 +60,14 @@ namespace BaiduTranslateDLL
 		_string				  m_appkey { "" };
 
 		EVP_MD_CTX*			  m_ctx { EVP_MD_CTX_new() };
+
+		using app_config = struct
+		{
+			_string appid;
+			_string appkey;
+		};
+
+		app_config m_app_config {};
 	};
 } // namespace BaiduTranslateDLL
 

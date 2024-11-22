@@ -57,6 +57,7 @@
 							  Width="80"
 							  Margin="0,0,6,0"
 							  VerticalAlignment="Center"
+							  Background="Transparent"
 							  SelectionChanged="{x:Bind From_SelectionChanged}"
 							  ToolTipService.ToolTip="源语言类型">
 						<ComboBoxItem Content="自动" />
@@ -71,7 +72,7 @@
 									 Background="Transparent"
 									 Click="{x:Bind Switch_Click}"
 									 Foreground="Black"
-									 ToolTipService.ToolTip="切换源目标语言">
+									 ToolTipService.ToolTip="快速切换">
 						<FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}"
 								  FontSize="12"
 								  Glyph="&#xF1CB;" />
@@ -82,6 +83,7 @@
 							  Width="80"
 							  Margin="6,0,0,0"
 							  VerticalAlignment="Center"
+							  Background="Transparent"
 							  SelectionChanged="{x:Bind To_SelectionChanged}"
 							  ToolTipService.ToolTip="目标语言类型">
 						<ComboBoxItem Content="中文" />
@@ -93,18 +95,17 @@
 				<Grid Grid.Column="1"
 					  HorizontalAlignment="Stretch"
 					  VerticalAlignment="Center">
-					<HyperlinkButton x:Name="Translate"
-									 HorizontalAlignment="Right"
-									 VerticalAlignment="Center"
-									 Background="Transparent"
-									 Click="{x:Bind Translate_Click}"
-									 Foreground="Black"
-									 ToolTipService.ToolTip="执行翻译">
-						<FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}"
+					<Button x:Name="Translate"
+							HorizontalAlignment="Right"
+							VerticalAlignment="Center"
+							Click="{x:Bind Translate_Click}"
+							Content="👍"
+							ToolTipService.ToolTip="执行翻译">
+						<!--<FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}"
 								  FontSize="14"
 								  FontWeight="Bold"
-								  Glyph="&#xF78C;" />
-					</HyperlinkButton>
+								  Glyph="&#xF78C;" />-->
+					</Button>
 				</Grid>
 			</Grid>
 
