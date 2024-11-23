@@ -16,19 +16,12 @@ int main(int argc, char* argv[])
 	const char* query  = "Hello, World!";
 	const char* from   = "en";
 	const char* to	   = "zh";
-	const char* appid  = "";
-	const char* appkey = "";
+	const char* appid  = "1234567890";
+	const char* appkey = "abcdefg";
 
 	const char* result = BaiduTranslate_Translate(query, from, to, appid, appkey);
 
-	if (result)
-	{
-		printf("BaiduTranslate_Translate: %s\n", result);
-	}
-	else
-	{
-		fputs("BaiduTranslate_Translate failed.\n", stderr);
-	}
+	BaiduTranslate_SetAppIDAndKey(appid, appkey);
 
 	return 0;
 }

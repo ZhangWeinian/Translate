@@ -8,22 +8,21 @@
 #include <ShlObj_core.h>
 #include <type_traits>
 #include <array>
-#include <cctype>
-#include <combaseapi.h>
-#include <cstring>
 #include <filesystem>
 #include <format>
 #include <fstream>
 #include <iosfwd>
 #include <iterator>
-#include <ostream>
+#include <memory>
 #include <string>
 #include <version>
 #include <Windows.h>
 
 #include <openssl/evp.h>
 #include <openssl/md5.h>
-#include <ini.h>
+#include <json/reader.h>
+#include <json/value.h>
+#include <json/writer.h>
 
 BaiduTranslateDLL::PasswordFunction::PasswordFunction(void) noexcept
 {
@@ -35,8 +34,8 @@ BaiduTranslateDLL::PasswordFunction::PasswordFunction(void) noexcept
 	}
 	else
 	{
-		ErrorHandling::SetLastError(PASSWORD_FUNC_CTX_IS_NULL);
-		ErrorHandling::SetErrorTip("MD5 初始化失败在构造函数中。");
+		GlobalErrorHandling::SetLastError(ErrorCodeEnum::PASSWORD_FUNC_CTX_IS_NULL);
+		GlobalErrorHandling::SetErrorTip("MD5 初始化失败在构造函数中。");
 
 		m_init_is_no_error = false;
 
@@ -47,8 +46,8 @@ BaiduTranslateDLL::PasswordFunction::PasswordFunction(void) noexcept
 
 	if (m_path.empty())
 	{
-		ErrorHandling::SetLastError(PASSWORD_FUNC_OPEN_LOCALAPPDATA_FAILED);
-		ErrorHandling::SetErrorTip("打开本地目录 AppData 失败在构造函数中。");
+		GlobalErrorHandling::SetLastError(ErrorCodeEnum::PASSWORD_FUNC_OPEN_LOCALAPPDATA_FAILED);
+		GlobalErrorHandling::SetErrorTip("打开本地目录 AppData 失败在构造函数中。");
 
 		m_init_is_no_error = false;
 
@@ -102,19 +101,26 @@ void BaiduTranslateDLL::PasswordFunction::SetAppIDAndKey(const _string& appid,
 		ofs.close();
 	}
 
-	_STD ofstream ofs(m_path.string(), _STD ios::out);
+	_STD ofstream ofs(m_path.string());
 
 	if (!ofs.is_open())
 	{
 		ofs.close();
-		ErrorHandling::SetLastError(PASSWORD_FUNC_MAKING_LOCAL_FILE_FAILED);
-		ErrorHandling::SetErrorTip("创建本地文件失败在 SetAppIDAndKey 函数中。");
+		GlobalErrorHandling::SetLastError(ErrorCodeEnum::PASSWORD_FUNC_MAKING_LOCAL_FILE_FAILED);
+		GlobalErrorHandling::SetErrorTip("创建本地文件失败在 SetAppIDAndKey 函数中。");
 		return;
 	}
 
-	ofs << "[app]" << _STD							endl;
-	ofs << "[appid]" << Encryption(appid) << _STD	endl;
-	ofs << "[appkey]" << Encryption(appkey) << _STD endl;
+	Json::Value root {};
+	root["app"]["appid"]  = Encryption(appid);
+	root["app"]["appkey"] = Encryption(appkey);
+
+	Json::StreamWriterBuilder builder {};
+	builder["commentStyle"] = "None";
+	builder["indentation"]	= "    ";
+
+	std::unique_ptr<Json::StreamWriter> writer(builder.newStreamWriter());
+	writer->write(root, &ofs);
 
 	ofs.close();
 }
@@ -151,7 +157,14 @@ _STD filesystem::path BaiduTranslateDLL::PasswordFunction::GetLocalFilePath(void
 		appdata_path += c;
 	}
 
-	data_path = _STD move(appdata_path + L"\\MyBaiduTranslate\\local.data");
+	data_path = _STD move(appdata_path + L"\\MyBaiduTranslate\\");
+
+	if (!_STD filesystem::exists(data_path))
+	{
+		_STD filesystem::create_directory(data_path);
+	}
+
+	data_path += L"\\app.ini";
 
 	return data_path;
 }
@@ -170,21 +183,32 @@ void BaiduTranslateDLL::PasswordFunction::GetLocalAppIDAndKey(_string& appid,
 		return;
 	}
 
-	if (ini_parse(m_path.string().c_str(),
-				  BaiduTranslateDLL::PasswordFunction::InihReadHandler,
-				  &m_app_config) < 0)
-	{
-		appid  = "";
-		appkey = "";
+	_STD ifstream ifs(m_path.string());
 
+	if (!ifs.is_open())
+	{
+		ifs.close();
+		GlobalErrorHandling::SetLastError(ErrorCodeEnum::PASSWORD_FUNC_OPEN_APPINI_FILE_FAILED);
+		GlobalErrorHandling::SetErrorTip("打开 app.ini 文件失败在 GetLocalAppIDAndKey 函数中。");
 		return;
 	}
 
-	appid = _STD move(m_app_config.appid);
-	m_app_config.appid.clear();
+	_string str((_STD istreambuf_iterator<char>(ifs)), _STD istreambuf_iterator<char>());
+	ifs.close();
 
-	appkey = _STD move(m_app_config.appkey);
-	m_app_config.appkey.clear();
+	Json::Value	 root {};
+	Json::Reader reader {};
+
+	if (!reader.parse(str, root))
+	{
+		GlobalErrorHandling::SetLastError(ErrorCodeEnum::PASSWORD_FUNC_OPEN_WITH_JSON_FAILED);
+		GlobalErrorHandling::SetErrorTip(
+			"无法以 JSON 格式读取 app.ini 在 GetLocalAppIDAndKey 函数中。");
+		return;
+	}
+
+	appid  = _STD  move(Decryption(root["app"]["appid"].asString()));
+	appkey = _STD move(Decryption(root["app"]["appkey"].asString()));
 }
 
 _string BaiduTranslateDLL::PasswordFunction::Encryption(const _string& str) const noexcept
@@ -195,40 +219,4 @@ _string BaiduTranslateDLL::PasswordFunction::Encryption(const _string& str) cons
 _string BaiduTranslateDLL::PasswordFunction::Decryption(const _string& str) const noexcept
 {
 	return str;
-}
-
-int BaiduTranslateDLL::PasswordFunction::
-	InihReadHandler(void* user, const char* section, const char* name, const char* value) noexcept
-{
-	auto* config = static_cast<app_config*>(user);
-
-	if (section == nullptr)
-	{
-		config->appkey = "";
-		config->appid  = "";
-
-		return -1;
-	}
-
-	if (_STD strcmp(section, "app") != 0)
-	{
-		config->appkey = "";
-		config->appid  = "";
-
-		return -1;
-	}
-
-	if (name != nullptr && value != nullptr)
-	{
-		if (_STD strcmp(name, "appid") == 0)
-		{
-			config->appid = value;
-		}
-		else if (_STD strcmp(name, "appkey") == 0)
-		{
-			config->appkey = value;
-		}
-	}
-
-	return 1;
 }

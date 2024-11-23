@@ -41,9 +41,6 @@ namespace BaiduTranslateDLL
 			CurlWriteCallback(const char* contents, _size_t size, _size_t nmemb, _string* userp);
 
 	private:
-		using enum ::BaiduTranslateDLL::ErrorCodeEnum;
-		using ErrorHandling = ::BaiduTranslateDLL::GlobalErrorHandling;
-
 		PasswordFunction   m_password {};
 
 		static inline bool m_init_is_no_error { false };

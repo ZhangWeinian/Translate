@@ -43,8 +43,8 @@ BaiduTranslateDLL::BaiduTranslateFunction::BaiduTranslateFunction(const _string&
 	{
 		m_init_is_no_error = false;
 
-		ErrorHandling::SetLastError(BAIDUTRANSLATE_FUNC_CURL_IS_NULL);
-		ErrorHandling::SetErrorTip("CURL 上下文为空在 BaiduTranslateFunction 初始化中。");
+		GlobalErrorHandling::SetLastError(ErrorCodeEnum::BAIDUTRANSLATE_FUNC_CURL_IS_NULL);
+		GlobalErrorHandling::SetErrorTip("CURL 上下文为空在 BaiduTranslateFunction 初始化中。");
 
 		return;
 	}
@@ -53,8 +53,8 @@ BaiduTranslateDLL::BaiduTranslateFunction::BaiduTranslateFunction(const _string&
 	{
 		m_init_is_no_error = false;
 
-		ErrorHandling::SetLastError(BAIDUTRANSLATE_FUNC_CURL_IS_NULL);
-		ErrorHandling::SetErrorTip("CURL 初始化失败在 BaiduTranslateFunction 初始化中。");
+		GlobalErrorHandling::SetLastError(ErrorCodeEnum::BAIDUTRANSLATE_FUNC_CURL_IS_NULL);
+		GlobalErrorHandling::SetErrorTip("CURL 初始化失败在 BaiduTranslateFunction 初始化中。");
 
 		return;
 	}
@@ -81,9 +81,8 @@ _string BaiduTranslateDLL::BaiduTranslateFunction::Translate(const _string& quer
 
 	if (!m_init_is_no_error)
 	{
-		ErrorHandling::SetLastError(BAIDUTRANSLATE_FUNC_CURL_IS_NULL);
-		ErrorHandling::SetErrorTip("BaiduTranslateFunction 初始化失败，无法执行操作。");
-
+		GlobalErrorHandling::SetLastError(ErrorCodeEnum::BAIDUTRANSLATE_FUNC_CURL_IS_NULL);
+		GlobalErrorHandling::SetErrorTip("BaiduTranslateFunction 初始化失败，无法执行操作。");
 		return _STD move(result);
 	}
 
@@ -94,10 +93,10 @@ _string BaiduTranslateDLL::BaiduTranslateFunction::Translate(const _string& quer
 	}
 	else if (m_appid.empty() || m_appkey.empty())
 	{
-		ErrorHandling::SetLastError(BAIDUTRANSLATE_FUNC_APPID_OR_APPKEY_IS_EMPTY);
-		ErrorHandling::SetErrorTip(
+		GlobalErrorHandling::SetLastError(
+			ErrorCodeEnum::BAIDUTRANSLATE_FUNC_APPID_OR_APPKEY_IS_EMPTY);
+		GlobalErrorHandling::SetErrorTip(
 			"初始化 appid、appkey 和 Translate 函数传入的 appid、appkey 都是空值。");
-
 		return _STD move(result);
 	}
 
@@ -122,9 +121,8 @@ _string BaiduTranslateDLL::BaiduTranslateFunction::Translate(const _string& quer
 
 	if (auto res { curl_easy_perform(m_curl) }; res != CURLE_OK)
 	{
-		ErrorHandling::SetLastError(BAIDUTRANSLATE_FUNC_CURL_RETURN_ERROR);
-		ErrorHandling::SetErrorTip("curl 发起的请求返回了错误。");
-
+		GlobalErrorHandling::SetLastError(ErrorCodeEnum::BAIDUTRANSLATE_FUNC_CURL_RETURN_ERROR);
+		GlobalErrorHandling::SetErrorTip("curl 发起的请求返回了错误。");
 		return _STD move(result);
 	}
 
@@ -133,17 +131,15 @@ _string BaiduTranslateDLL::BaiduTranslateFunction::Translate(const _string& quer
 
 	if (!reader.parse(readBuffer, root))
 	{
-		ErrorHandling::SetLastError(BAIDUTRANSLATE_FUNC_JSON_PARSE_ERROR);
-		ErrorHandling::SetErrorTip("Translate 函数中 JSON 文本解析错误。");
-
+		GlobalErrorHandling::SetLastError(ErrorCodeEnum::BAIDUTRANSLATE_FUNC_JSON_PARSE_ERROR);
+		GlobalErrorHandling::SetErrorTip("Translate 函数中 JSON 文本解析错误。");
 		return _STD move(result);
 	}
 
 	if (root.isMember("error_code"))
 	{
-		ErrorHandling::SetLastError(BAIDUTRANSLATE_FUNC_API_RETURN_ERROR);
-		ErrorHandling::SetErrorTip("Translate 函数中 API 请求成功但返回错误。");
-
+		GlobalErrorHandling::SetLastError(ErrorCodeEnum::BAIDUTRANSLATE_FUNC_API_RETURN_ERROR);
+		GlobalErrorHandling::SetErrorTip("Translate 函数中 API 请求成功但返回错误。");
 		return _STD move(result);
 	}
 
@@ -155,23 +151,23 @@ void BaiduTranslateDLL::BaiduTranslateFunction::SetAppIDAndKey(const _string& ap
 {
 	if (!m_init_is_no_error)
 	{
-		ErrorHandling::SetLastError(BAIDUTRANSLATE_FUNC_CURL_IS_NULL);
-		ErrorHandling::SetErrorTip("BaiduTranslateFunction 初始化失败，无法执行操作。");
-
+		GlobalErrorHandling::SetLastError(ErrorCodeEnum::BAIDUTRANSLATE_FUNC_CURL_IS_NULL);
+		GlobalErrorHandling::SetErrorTip("BaiduTranslateFunction 初始化失败，无法执行操作。");
 		return;
 	}
 
 	m_appid	 = appid;
 	m_appkey = appkey;
+
+	m_password.SetAppIDAndKey(appid, appkey);
 }
 
 _string BaiduTranslateDLL::BaiduTranslateFunction::GetAppIDAndKey(void) noexcept
 {
 	if (!m_init_is_no_error)
 	{
-		ErrorHandling::SetLastError(BAIDUTRANSLATE_FUNC_CURL_IS_NULL);
-		ErrorHandling::SetErrorTip("BaiduTranslateFunction 初始化失败，无法执行操作。");
-
+		GlobalErrorHandling::SetLastError(ErrorCodeEnum::BAIDUTRANSLATE_FUNC_CURL_IS_NULL);
+		GlobalErrorHandling::SetErrorTip("BaiduTranslateFunction 初始化失败，无法执行操作。");
 		return "";
 	}
 

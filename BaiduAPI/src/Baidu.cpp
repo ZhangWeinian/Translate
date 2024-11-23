@@ -11,8 +11,8 @@
 #include <string>
 #include <version>
 
-using enum ::BaiduTranslateDLL::ErrorCodeEnum;
-using ErrorHandling = ::BaiduTranslateDLL::GlobalErrorHandling;
+using ErrorCodeEnum		  = ::BaiduTranslateDLL::ErrorCodeEnum;
+using GlobalErrorHandling = ::BaiduTranslateDLL::GlobalErrorHandling;
 
 class TranslatePtr
 {
@@ -41,7 +41,6 @@ public:
 		return m_baidu_translate_ptr;
 	}
 
-
 private:
 	static inline ::BaiduTranslateDLL::BaiduTranslateFunction* m_baidu_translate_ptr { nullptr };
 };
@@ -54,9 +53,8 @@ _cbool BaiduTranslate_Init(_cstring appid, _cstring appkey)
 	}
 	else
 	{
-		ErrorHandling::SetLastError(EXPORT_TRANSLATE_PTR_IS_NULL);
-
-		ErrorHandling::SetErrorTip(
+		GlobalErrorHandling::SetLastError(ErrorCodeEnum::EXPORT_TRANSLATE_PTR_IS_NULL);
+		GlobalErrorHandling::SetErrorTip(
 			"公开头文件中的基指针为空。这发生在包装的初始化过程中，可能是 TranslatePtr "
 			"实例化基指针时错误，也可能是 BaiduTranslateFunction 实例化过程中错误。");
 
@@ -78,9 +76,8 @@ _cstring BaiduTranslate_Translate(_cstring query,
 	}
 	else
 	{
-		ErrorHandling::SetLastError(EXPORT_TRANSLATE_PTR_IS_NULL);
+		GlobalErrorHandling::SetLastError(ErrorCodeEnum::EXPORT_TRANSLATE_PTR_IS_NULL);
 	}
-
 
 	return result.c_str();
 }
@@ -94,8 +91,7 @@ _cbool BaiduTranslate_SetAppIDAndKey(_cstring appid, _cstring appkey)
 	}
 	else
 	{
-		ErrorHandling::SetLastError(EXPORT_TRANSLATE_PTR_IS_NULL);
-
+		GlobalErrorHandling::SetLastError(ErrorCodeEnum::EXPORT_TRANSLATE_PTR_IS_NULL);
 		return false;
 	}
 }
@@ -110,7 +106,7 @@ _cstring BaiduTranslate_GetAppIDAndKey(void)
 	}
 	else
 	{
-		ErrorHandling::SetLastError(EXPORT_TRANSLATE_PTR_IS_NULL);
+		GlobalErrorHandling::SetLastError(ErrorCodeEnum::EXPORT_TRANSLATE_PTR_IS_NULL);
 	}
 
 	return result.c_str();
@@ -122,10 +118,10 @@ _cstring BaiduTranslate_GetLastError(void)
 
 	if (TranslatePtr::Ptr() == nullptr)
 	{
-		ErrorHandling::SetLastError(EXPORT_TRANSLATE_PTR_IS_NULL);
+		GlobalErrorHandling::SetLastError(ErrorCodeEnum::EXPORT_TRANSLATE_PTR_IS_NULL);
 	}
 
-	result = _STD move(ErrorHandling::GetErrorInfo());
+	result = _STD move(GlobalErrorHandling::GetErrorInfo());
 
 	return result.c_str();
 }

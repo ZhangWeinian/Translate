@@ -18,7 +18,9 @@ namespace BaiduTranslateDLL
 		PASSWORD_FUNC_SUCCESS										= 10'000,
 		PASSWORD_FUNC_CTX_IS_NULL									= 10'001,
 		PASSWORD_FUNC_OPEN_LOCALAPPDATA_FAILED						= 10'002,
-		PASSWORD_FUNC_MAKING_LOCAL_FILE_FAILED						= 10'003,
+		PASSWORD_FUNC_OPEN_APPINI_FILE_FAILED						= 10'003,
+		PASSWORD_FUNC_MAKING_LOCAL_FILE_FAILED						= 10'004,
+		PASSWORD_FUNC_OPEN_WITH_JSON_FAILED							= 10'005,
 		PAASWORD_FUNC_INIT_ERROR									= 19'999,
 
 		BAIDUTRANSLATE_FUNC_SUCCESS									= 30'000,
@@ -73,7 +75,9 @@ namespace BaiduTranslateDLL
 			{ PASSWORD_FUNC_SUCCESS, { "密码设置函数：初始化成功。", "" } },
 			{ PASSWORD_FUNC_CTX_IS_NULL, { "密码设置函数：MD5 上下文为空。", "" } },
 			{ PASSWORD_FUNC_OPEN_LOCALAPPDATA_FAILED, { "密码设置函数：打开本地目录 AppData 失败。", "" } },
+			{ PASSWORD_FUNC_OPEN_APPINI_FILE_FAILED, { "密码设置函数：打开 app.ini 文件失败。", "" } },
 			{ PASSWORD_FUNC_MAKING_LOCAL_FILE_FAILED, { "密码设置函数：创建本地文件失败。", "" } },
+			{ PASSWORD_FUNC_OPEN_WITH_JSON_FAILED, { "密码设置函数：无法以 JSON 格式读取。", "" } },
 			{ PAASWORD_FUNC_INIT_ERROR, { "密码设置函数：密码设置函数初始化失败。", "" } },
 
 			{ BAIDUTRANSLATE_FUNC_SUCCESS, { "百度翻译函数：初始化成功。", "" } },
