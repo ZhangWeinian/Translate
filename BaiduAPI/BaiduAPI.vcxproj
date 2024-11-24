@@ -276,11 +276,8 @@ echo  ------ 生成事件（生成后事件）执行结束 ------</Command>
     <ClInclude Include="src\TypeDefined.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\BaiduAPI.cpp" />
     <ClCompile Include="src\dllmain.cpp" />
     <ClCompile Include="src\Baidu.cpp" />
-    <ClCompile Include="src\GlobalError.cpp" />
-    <ClCompile Include="src\PasswordAPI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />

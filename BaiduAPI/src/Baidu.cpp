@@ -17,15 +17,17 @@ using GlobalErrorHandling = ::BaiduTranslateDLL::GlobalErrorHandling;
 class TranslatePtr
 {
 public:
-	static inline ::BaiduTranslateDLL::BaiduTranslateFunction* Ptr(void)
+	static inline ::BaiduTranslateDLL::BaiduTranslateFunction* Ptr(const char* appid  = "",
+																   const char* appkey = "")
 	{
 		static _STD once_flag once {};
 
 		_STD				  call_once(once,
-						[]()
+						[appid, appkey]()
 						{
 							static auto m_baidu_translate {
-								::BaiduTranslateDLL::BaiduTranslateFunction::BaiduTranslateFunction()
+								::BaiduTranslateDLL::BaiduTranslateFunction::
+									BaiduTranslateFunction(appid, appkey)
 							};
 
 							if (::BaiduTranslateDLL::BaiduTranslateFunction::InitIsNoError())
@@ -45,9 +47,9 @@ private:
 	static inline ::BaiduTranslateDLL::BaiduTranslateFunction* m_baidu_translate_ptr { nullptr };
 };
 
-_cbool BaiduTranslate_Init(_cstring appid, _cstring appkey)
+bool BaiduTranslate_Init(const char* appid, const char* appkey)
 {
-	if (TranslatePtr::Ptr() != nullptr)
+	if (TranslatePtr::Ptr(appid, appkey) != nullptr)
 	{
 		return true;
 	}
@@ -62,11 +64,11 @@ _cbool BaiduTranslate_Init(_cstring appid, _cstring appkey)
 	}
 }
 
-_cstring BaiduTranslate_Translate(_cstring query,
-								  _cstring from,
-								  _cstring to,
-								  _cstring appid,
-								  _cstring appkey)
+const char* BaiduTranslate_Translate(const char* query,
+									 const char* from,
+									 const char* to,
+									 const char* appid,
+									 const char* appkey)
 {
 	static _string result {};
 
@@ -82,7 +84,7 @@ _cstring BaiduTranslate_Translate(_cstring query,
 	return result.c_str();
 }
 
-_cbool BaiduTranslate_SetAppIDAndKey(_cstring appid, _cstring appkey)
+bool BaiduTranslate_SetAppIDAndKey(const char* appid, const char* appkey)
 {
 	if (TranslatePtr::Ptr() != nullptr)
 	{
@@ -96,7 +98,7 @@ _cbool BaiduTranslate_SetAppIDAndKey(_cstring appid, _cstring appkey)
 	}
 }
 
-_cstring BaiduTranslate_GetAppIDAndKey(void)
+const char* BaiduTranslate_GetAppIDAndKey(void)
 {
 	static _string result {};
 
@@ -112,7 +114,7 @@ _cstring BaiduTranslate_GetAppIDAndKey(void)
 	return result.c_str();
 }
 
-_cstring BaiduTranslate_GetLastError(void)
+const char* BaiduTranslate_GetLastError(void)
 {
 	static _string result {};
 

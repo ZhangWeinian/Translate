@@ -19,24 +19,19 @@
 
 
 
-EXTREN_C typedef const char* _cstring;
-EXTREN_C typedef bool		 _cbool;
+EXTREN_C BAIDU_API bool		   BaiduTranslate_Init(const char* appid, const char* appkey);
 
+EXTREN_C BAIDU_API const char* BaiduTranslate_Translate(const char* query,
+														const char* from,
+														const char* to,
+														const char* appid,
+														const char* appkey);
 
+EXTREN_C BAIDU_API bool		   BaiduTranslate_SetAppIDAndKey(const char* appid, const char* appkey);
 
-EXTREN_C BAIDU_API _cbool	 BaiduTranslate_Init(_cstring appid, _cstring appkey);
+EXTREN_C BAIDU_API const char* BaiduTranslate_GetAppIDAndKey(void);
 
-EXTREN_C BAIDU_API _cstring	 BaiduTranslate_Translate(_cstring query,
-													  _cstring from,
-													  _cstring to,
-													  _cstring appid,
-													  _cstring appkey);
-
-EXTREN_C BAIDU_API _cbool	 BaiduTranslate_SetAppIDAndKey(_cstring appid, _cstring appkey);
-
-EXTREN_C BAIDU_API _cstring	 BaiduTranslate_GetAppIDAndKey(void);
-
-EXTREN_C BAIDU_API _cstring	 BaiduTranslate_GetLastError(void);
+EXTREN_C BAIDU_API const char* BaiduTranslate_GetLastError(void);
 
 
 #endif // !BAIDU
