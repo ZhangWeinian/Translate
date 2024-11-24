@@ -13,26 +13,31 @@ namespace BaiduTranslateDLL
 {
 	enum class ErrorCodeEnum : _uint
 	{
-		GLOBAL_SUCCESS												= 0,
+		// 全局标识符，以 0 开头
+		GLOBAL_SUCCESS = 0,
 
-		PASSWORD_FUNC_SUCCESS										= 10'000,
-		PASSWORD_FUNC_CTX_IS_NULL									= 10'001,
-		PASSWORD_FUNC_OPEN_LOCALAPPDATA_FAILED						= 10'002,
-		PASSWORD_FUNC_OPEN_APPINI_FILE_FAILED						= 10'003,
-		PASSWORD_FUNC_MAKING_LOCAL_FILE_FAILED						= 10'004,
-		PASSWORD_FUNC_OPEN_WITH_JSON_FAILED							= 10'005,
-		PAASWORD_FUNC_INIT_ERROR									= 19'999,
+		// 密码设置函数标识符，以 1 开头
+		PASSWORD_FUNC_SUCCESS				   = 10'000,
+		PASSWORD_FUNC_CTX_IS_NULL			   = 10'001,
+		PASSWORD_FUNC_OPEN_LOCALAPPDATA_FAILED = 10'002,
+		PASSWORD_FUNC_OPEN_CONFIG_FILE_FAILED  = 10'003,
+		PASSWORD_FUNC_MAKING_LOCAL_FILE_FAILED = 10'004,
+		PASSWORD_FUNC_OPEN_WITH_JSON_FAILED	   = 10'005,
+		PAASWORD_FUNC_INIT_ERROR			   = 19'999,
 
-		BAIDUTRANSLATE_FUNC_SUCCESS									= 30'000,
-		BAIDUTRANSLATE_FUNC_CURL_IS_NULL							= 30'001,
-		BAIDUTRANSLATE_FUNC_APPID_OR_APPKEY_IS_EMPTY				= 30'002,
-		BAIDUTRANSLATE_FUNC_CURL_RETURN_ERROR						= 30'003,
-		BAIDUTRANSLATE_FUNC_JSON_PARSE_ERROR						= 30'004,
-		BAIDUTRANSLATE_FUNC_API_RETURN_ERROR						= 30'005,
-		BAIDUTRANSLATE_FUNC_INIT_ERROR								= 39'999,
+		// 百度翻译函数标识符，以 3 开头
+		BAIDUTRANSLATE_FUNC_SUCCESS					 = 30'000,
+		BAIDUTRANSLATE_FUNC_CURL_IS_NULL			 = 30'001,
+		BAIDUTRANSLATE_FUNC_APPID_OR_APPKEY_IS_EMPTY = 30'002,
+		BAIDUTRANSLATE_FUNC_CURL_RETURN_ERROR		 = 30'003,
+		BAIDUTRANSLATE_FUNC_JSON_PARSE_ERROR		 = 30'004,
+		BAIDUTRANSLATE_FUNC_API_RETURN_ERROR		 = 30'005,
+		BAIDUTRANSLATE_FUNC_INIT_ERROR				 = 39'999,
 
-		EXPORT_TRANSLATE_PTR_IS_NULL								= 40'000,
+		// 公开头文件标识符，以 4 开头
+		EXPORT_TRANSLATE_PTR_IS_NULL = 40'000,
 
+		// 百度翻译 API 标识符，以官方错误码为准
 		TRANSLATEURL_API_SUCCESS									= 52'000,
 		TRANSLATEURL_API_REQUEST_TIMEOUT							= 52'001,
 		TRANSLATEURL_API_SYSTEM_ERROR								= 52'002,
@@ -47,7 +52,8 @@ namespace BaiduTranslateDLL
 		TRANSLATEURL_API_SERVICE_CURRENTLY_CLOSED					= 58'002,
 		TRANSLATEURL_API_AUTHENTICATION_NOT_PASSED_OR_NOT_EFFECTIVE = 90'107,
 
-		OTHER_UNDEFIND_ERROR										= 99'999
+		// 其他标识符，以 9 开头
+		OTHER_UNDEFIND_ERROR = 99'999
 	};
 
 	class GlobalErrorHandling final
@@ -70,16 +76,19 @@ namespace BaiduTranslateDLL
 
 		// clang-format off
 		static inline const _STD unordered_map<ErrorCodeEnum, ErrorStruct> p_error_infos_def = {
+			// 全局标识符，以 0 开头
 			{ GLOBAL_SUCCESS, { "全局：成功。", "" } },
 
+			// 密码设置函数标识符，以 1 开头
 			{ PASSWORD_FUNC_SUCCESS, { "密码设置函数：初始化成功。", "" } },
 			{ PASSWORD_FUNC_CTX_IS_NULL, { "密码设置函数：MD5 上下文为空。", "" } },
 			{ PASSWORD_FUNC_OPEN_LOCALAPPDATA_FAILED, { "密码设置函数：打开本地目录 AppData 失败。", "" } },
-			{ PASSWORD_FUNC_OPEN_APPINI_FILE_FAILED, { "密码设置函数：打开 app.ini 文件失败。", "" } },
+			{ PASSWORD_FUNC_OPEN_CONFIG_FILE_FAILED, { "密码设置函数：打开配置文件失败。", "" } },
 			{ PASSWORD_FUNC_MAKING_LOCAL_FILE_FAILED, { "密码设置函数：创建本地文件失败。", "" } },
 			{ PASSWORD_FUNC_OPEN_WITH_JSON_FAILED, { "密码设置函数：无法以 JSON 格式读取。", "" } },
 			{ PAASWORD_FUNC_INIT_ERROR, { "密码设置函数：密码设置函数初始化失败。", "" } },
 
+			// 百度翻译函数标识符，以 3 开头
 			{ BAIDUTRANSLATE_FUNC_SUCCESS, { "百度翻译函数：初始化成功。", "" } },
 			{ BAIDUTRANSLATE_FUNC_CURL_IS_NULL, { "百度翻译函数：CURL 句柄为空。", "" } },
 			{ BAIDUTRANSLATE_FUNC_APPID_OR_APPKEY_IS_EMPTY, { "百度翻译函数：APPID 或 APPKEY 为空。", "" } },
@@ -88,8 +97,10 @@ namespace BaiduTranslateDLL
 			{ BAIDUTRANSLATE_FUNC_API_RETURN_ERROR, { "百度翻译函数：API 返回错误。", "" } },
 			{ BAIDUTRANSLATE_FUNC_INIT_ERROR, { "百度翻译函数：初始化失败。", "" } },
 
+			// 公开头文件标识符，以 4 开头
 			{ EXPORT_TRANSLATE_PTR_IS_NULL, { "TranslatePtr：基指针为空。", "公开头文件中的基指针为空。" } },
 
+			// 百度翻译 API 标识符，以官方错误码为准
 			{ TRANSLATEURL_API_SUCCESS, { "百度翻译 API ：翻译成功。", "" } },
 			{ TRANSLATEURL_API_REQUEST_TIMEOUT, { "百度翻译 API ：请求超时，请重试。", "" } },
 			{ TRANSLATEURL_API_SYSTEM_ERROR, { "百度翻译 API ：系统错误，请重试。", "" } },
@@ -136,6 +147,8 @@ namespace BaiduTranslateDLL
 				{ R"(百度翻译 API ：认证未通过或未生效！请前往我的认证)"
 				  R"(（https://fanyi-api.baidu.com/myIdentify）查看认证进度)", "" }
 			},
+
+			// 其他标识符，以 9 开头
 			{ OTHER_UNDEFIND_ERROR, { "其他：未定义错误。", "" } }
 		};
 		// clang-format on

@@ -54,7 +54,7 @@ BaiduTranslateDLL::PasswordFunction::PasswordFunction(void) noexcept
 		return;
 	}
 
-	GetLocalAppIDAndKey(m_appid, m_appkey);
+	ReadLocalAppidAndAppkey(m_appid, m_appkey);
 }
 
 BaiduTranslateDLL::PasswordFunction::~PasswordFunction(void) noexcept
@@ -111,15 +111,15 @@ void BaiduTranslateDLL::PasswordFunction::SetAppIDAndKey(const _string& appid,
 		return;
 	}
 
-	Json::Value root {};
+	::Json::Value root {};
 	root["app"]["appid"]  = Encryption(appid);
 	root["app"]["appkey"] = Encryption(appkey);
 
-	Json::StreamWriterBuilder builder {};
+	::Json::StreamWriterBuilder builder {};
 	builder["commentStyle"] = "None";
 	builder["indentation"]	= "    ";
 
-	std::unique_ptr<Json::StreamWriter> writer(builder.newStreamWriter());
+	std::unique_ptr<::Json::StreamWriter> writer(builder.newStreamWriter());
 	writer->write(root, &ofs);
 
 	ofs.close();
@@ -164,13 +164,13 @@ _STD filesystem::path BaiduTranslateDLL::PasswordFunction::GetLocalFilePath(void
 		_STD filesystem::create_directory(data_path);
 	}
 
-	data_path += L"\\app.ini";
+	data_path += L"\\config.json";
 
 	return data_path;
 }
 
-void BaiduTranslateDLL::PasswordFunction::GetLocalAppIDAndKey(_string& appid,
-															  _string& appkey) noexcept
+void BaiduTranslateDLL::PasswordFunction::ReadLocalAppidAndAppkey(_string& appid,
+																  _string& appkey) noexcept
 {
 	if (!_STD filesystem::exists(m_path))
 	{
@@ -188,22 +188,22 @@ void BaiduTranslateDLL::PasswordFunction::GetLocalAppIDAndKey(_string& appid,
 	if (!ifs.is_open())
 	{
 		ifs.close();
-		GlobalErrorHandling::SetLastError(ErrorCodeEnum::PASSWORD_FUNC_OPEN_APPINI_FILE_FAILED);
-		GlobalErrorHandling::SetErrorTip("打开 app.ini 文件失败在 GetLocalAppIDAndKey 函数中。");
+		GlobalErrorHandling::SetLastError(ErrorCodeEnum::PASSWORD_FUNC_OPEN_CONFIG_FILE_FAILED);
+		GlobalErrorHandling::SetErrorTip("打开配置文件失败在 ReadLocalAppidAndAppkey 函数中。");
 		return;
 	}
 
 	_string str((_STD istreambuf_iterator<char>(ifs)), _STD istreambuf_iterator<char>());
 	ifs.close();
 
-	Json::Value	 root {};
-	Json::Reader reader {};
+	::Json::Value  root {};
+	::Json::Reader reader {};
 
 	if (!reader.parse(str, root))
 	{
 		GlobalErrorHandling::SetLastError(ErrorCodeEnum::PASSWORD_FUNC_OPEN_WITH_JSON_FAILED);
 		GlobalErrorHandling::SetErrorTip(
-			"无法以 JSON 格式读取 app.ini 在 GetLocalAppIDAndKey 函数中。");
+			"无法以 JSON 格式读取配置文件在 ReadLocalAppidAndAppkey 函数中。");
 		return;
 	}
 

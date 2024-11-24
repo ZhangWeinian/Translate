@@ -6,8 +6,6 @@
 
 	#include "TypeDefined.h"
 
-	#include "GlobalError.h"
-
 	#include <filesystem>
 	#include <version>
 
@@ -36,7 +34,7 @@ namespace BaiduTranslateDLL
 	private:
 		_STD filesystem::path GetLocalFilePath(void) noexcept;
 
-		void				  GetLocalAppIDAndKey(_string& appid, _string& appkey) noexcept;
+		void				  ReadLocalAppidAndAppkey(_string& appid, _string& appkey) noexcept;
 
 		_string				  Encryption(const _string& str) const noexcept;
 
