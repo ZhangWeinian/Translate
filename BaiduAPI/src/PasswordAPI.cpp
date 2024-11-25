@@ -97,7 +97,7 @@ _string BaiduTranslateDLL::PasswordFunction::GetAppKey(void) const noexcept
 
 _string BaiduTranslateDLL::PasswordFunction::GetAppIDAndKey(void) const noexcept
 {
-	::Json::Value				root {};
+	::Json::Value				root { ::Json::objectValue };
 	_STD ostringstream			os {};
 
 	root["appid"]  = _STD		 move(Encryption(m_appid));
@@ -135,7 +135,7 @@ void BaiduTranslateDLL::PasswordFunction::SetAppIDAndKey(_string_view appid,
 		return;
 	}
 
-	::Json::Value root {};
+	::Json::Value root { ::Json::objectValue };
 	root["app"s]["appid"s]	= Encryption(appid);
 	root["app"s]["appkey"s] = Encryption(appkey);
 
@@ -222,7 +222,7 @@ void BaiduTranslateDLL::PasswordFunction::ReadLocalAppidAndAppkey(void) noexcept
 	_string str((_STD istreambuf_iterator<char>(ifs)), _STD istreambuf_iterator<char>());
 	ifs.close();
 
-	::Json::Value  root {};
+	::Json::Value  root { ::Json::objectValue };
 	::Json::Reader reader {};
 
 	if (!reader.parse(str, root))

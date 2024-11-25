@@ -38,6 +38,8 @@ namespace BaiduTranslateDLL
 		static _size_t
 			CurlWriteCallback(const char* contents, _size_t size, _size_t nmemb, _string* userp);
 
+		_string CheckQuery(_string_view query) const noexcept;
+
 	private:
 		static inline bool m_init_is_no_error { false };
 
