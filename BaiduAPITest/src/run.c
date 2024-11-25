@@ -19,9 +19,15 @@ int main(int argc, char* argv[])
 	const char* appid  = "1234567890";
 	const char* appkey = "abcdefg";
 
+	BaiduTranslate_SetAppIDAndKey(appid, appkey);
+
+	const char* appid_key = BaiduTranslate_GetAppIDAndKey();
+
+	fputs(appid_key, stdout);
+
 	const char* result = BaiduTranslate_Translate(query, from, to, appid, appkey);
 
-	BaiduTranslate_SetAppIDAndKey(appid, appkey);
+	fputs(result, stdout);
 
 	return 0;
 }

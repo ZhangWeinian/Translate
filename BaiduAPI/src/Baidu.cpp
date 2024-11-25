@@ -17,8 +17,8 @@ using GlobalErrorHandling = ::BaiduTranslateDLL::GlobalErrorHandling;
 class TranslatePtr
 {
 public:
-	static inline ::BaiduTranslateDLL::BaiduTranslateFunction* Ptr(const char* appid  = "",
-																   const char* appkey = "")
+	static inline ::BaiduTranslateDLL::BaiduTranslateFunction* Ptr(_string_view appid  = "",
+																   _string_view appkey = "")
 	{
 		static _STD once_flag once {};
 
@@ -57,8 +57,10 @@ bool BaiduTranslate_Init(const char* appid, const char* appkey)
 	{
 		GlobalErrorHandling::SetLastError(ErrorCodeEnum::EXPORT_TRANSLATE_PTR_IS_NULL);
 		GlobalErrorHandling::SetErrorTip(
-			"公开头文件中的基指针为空。这发生在包装的初始化过程中，可能是 TranslatePtr "
-			"实例化基指针时错误，也可能是 BaiduTranslateFunction 实例化过程中错误。");
+			R"(The base pointer in the public header file is empty. This occurs during the )"
+			R"(initialization process of the packaging, which may be due to an error in the )"
+			R"(instantiation of the base pointer by TranslatiePtr or an error in the instantiation )"
+			R"(process of BaiduTranslatieFunction.)");
 
 		return false;
 	}

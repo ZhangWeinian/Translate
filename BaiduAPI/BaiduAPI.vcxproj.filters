@@ -38,6 +38,12 @@
     <ClCompile Include="src\Baidu.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\BaiduAPI.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PasswordAPI.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
