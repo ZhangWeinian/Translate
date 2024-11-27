@@ -6,6 +6,8 @@
 
 	#include "TypeDefined.h"
 
+	#include <version>
+
 	#include <openssl/types.h>
 
 namespace BaiduTranslateDLL
@@ -17,26 +19,26 @@ namespace BaiduTranslateDLL
 
 		~PasswordFunction(void) noexcept;
 
-		_string		GetMD5(_string_view str) const noexcept;
+		_NODISCARD _string	   GetMD5(_string_view str) const noexcept;
 
-		_string		GetAppID(void) const noexcept;
+		_NODISCARD _string	   GetAppID(void) const noexcept;
 
-		_string		GetAppKey(void) const noexcept;
+		_NODISCARD _string	   GetAppKey(void) const noexcept;
 
-		_string		GetAppIDAndKey(void) const noexcept;
+		_NODISCARD _string	   GetAppIDAndKey(void) const noexcept;
 
-		void		SetAppIDAndKey(_string_view appid, _string_view appkey) noexcept;
+		_NODISCARD bool		   SetAppIDAndKey(_string_view appid, _string_view appkey) noexcept;
 
-		static bool InitIsNoError(void) noexcept;
+		_NODISCARD static bool InitIsNoError(void) noexcept;
 
 	private:
-		static _file_path GetLocalFilePath(void) noexcept;
+		_NODISCARD static _file_path& GetLocalFilePath(void) noexcept;
 
-		void			  ReadLocalAppidAndAppkey(void) noexcept;
+		_NODISCARD bool				  ReadLocalAppidAndAppkey(void) noexcept;
 
-		_string			  Encryption(_string_view str) const noexcept;
+		_NODISCARD _string			  Encryption(_string_view str) const noexcept;
 
-		_string			  Decryption(_string_view str) const noexcept;
+		_NODISCARD _string			  Decryption(_string_view str) const noexcept;
 
 	private:
 		static inline bool m_init_is_no_error { false };

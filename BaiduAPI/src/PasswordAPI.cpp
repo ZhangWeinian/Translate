@@ -33,8 +33,7 @@ BaiduTranslateDLL::PasswordFunction::PasswordFunction(void) noexcept:
 	if (m_ctx == nullptr)
 	{
 		GlobalErrorHandling::SetLastError(ErrorCodeEnum::PASSWORD_FUNC_CTX_IS_NULL);
-		GlobalErrorHandling::SetErrorTip(
-			R"(MD5 initialization failed in PasswordFunction constructor.)");
+		GlobalErrorHandling::SetErrorTip(R"(MD5 initialization failed in PasswordFunction constructor.)");
 
 		m_init_is_no_error = false;
 
@@ -54,9 +53,7 @@ BaiduTranslateDLL::PasswordFunction::PasswordFunction(void) noexcept:
 		return;
 	}
 
-	ReadLocalAppidAndAppkey();
-
-	m_init_is_no_error = true;
+	m_init_is_no_error = ReadLocalAppidAndAppkey();
 }
 
 BaiduTranslateDLL::PasswordFunction::~PasswordFunction(void) noexcept
@@ -113,8 +110,7 @@ _string BaiduTranslateDLL::PasswordFunction::GetAppIDAndKey(void) const noexcept
 	return os.str();
 }
 
-void BaiduTranslateDLL::PasswordFunction::SetAppIDAndKey(_string_view appid,
-														 _string_view appkey) noexcept
+bool BaiduTranslateDLL::PasswordFunction::SetAppIDAndKey(_string_view appid, _string_view appkey) noexcept
 {
 	if (!_STD filesystem::exists(m_path))
 	{
@@ -132,7 +128,7 @@ void BaiduTranslateDLL::PasswordFunction::SetAppIDAndKey(_string_view appid,
 		GlobalErrorHandling::SetErrorTip(
 			R"(Failed to create local file in PasswordFunction->SetAppIDAndKey function.)");
 
-		return;
+		return false;
 	}
 
 	::Json::Value root { ::Json::objectValue };
@@ -147,6 +143,8 @@ void BaiduTranslateDLL::PasswordFunction::SetAppIDAndKey(_string_view appid,
 	writer->write(root, &ofs);
 
 	ofs.close();
+
+	return true;
 }
 
 bool BaiduTranslateDLL::PasswordFunction::InitIsNoError(void) noexcept
@@ -154,17 +152,13 @@ bool BaiduTranslateDLL::PasswordFunction::InitIsNoError(void) noexcept
 	return m_init_is_no_error;
 }
 
-_file_path BaiduTranslateDLL::PasswordFunction::GetLocalFilePath(void) noexcept
+_file_path& BaiduTranslateDLL::PasswordFunction::GetLocalFilePath(void) noexcept
 {
-	_file_path data_path { L"" };
+	static _file_path data_path { L"" };
 
 	_STD array<wchar_t, MAX_PATH> path { L'\0' };
 
-	if (SHGetFolderPathW(nullptr,
-						 CSIDL_APPDATA,
-						 nullptr,
-						 SHGFP_TYPE::SHGFP_TYPE_CURRENT,
-						 path.data()) != S_OK)
+	if (SHGetFolderPathW(nullptr, CSIDL_APPDATA, nullptr, SHGFP_TYPE::SHGFP_TYPE_CURRENT, path.data()) != S_OK)
 	{
 		return data_path;
 	}
@@ -193,7 +187,7 @@ _file_path BaiduTranslateDLL::PasswordFunction::GetLocalFilePath(void) noexcept
 	return data_path;
 }
 
-void BaiduTranslateDLL::PasswordFunction::ReadLocalAppidAndAppkey(void) noexcept
+bool BaiduTranslateDLL::PasswordFunction::ReadLocalAppidAndAppkey(void) noexcept
 {
 	if (!_STD filesystem::exists(m_path))
 	{
@@ -203,7 +197,7 @@ void BaiduTranslateDLL::PasswordFunction::ReadLocalAppidAndAppkey(void) noexcept
 		m_appid	 = _STD	 move(""s);
 		m_appkey = _STD move(""s);
 
-		return;
+		return true;
 	}
 
 	_STD ifstream ifs(m_path.string());
@@ -216,7 +210,7 @@ void BaiduTranslateDLL::PasswordFunction::ReadLocalAppidAndAppkey(void) noexcept
 		GlobalErrorHandling::SetErrorTip(R"(Failed to open configuration file in the )"
 										 R"(PasswordFunction->ReadLocalAppidAndAppkey function.)");
 
-		return;
+		return false;
 	}
 
 	_string str((_STD istreambuf_iterator<char>(ifs)), _STD istreambuf_iterator<char>());
@@ -228,15 +222,16 @@ void BaiduTranslateDLL::PasswordFunction::ReadLocalAppidAndAppkey(void) noexcept
 	if (!reader.parse(str, root))
 	{
 		GlobalErrorHandling::SetLastError(ErrorCodeEnum::PASSWORD_FUNC_OPEN_WITH_JSON_FAILED);
-		GlobalErrorHandling::SetErrorTip(
-			R"(Unable to read configuration file in JSON format in the )"
-			R"(PasswordFunction->ReadLocalAppidAndAppkey function.)");
+		GlobalErrorHandling::SetErrorTip(R"(Unable to read configuration file in JSON format in the )"
+										 R"(PasswordFunction->ReadLocalAppidAndAppkey function.)");
 
-		return;
+		return false;
 	}
 
 	m_appid	 = _STD	 move(Decryption(root["app"s]["appid"s].asString()));
 	m_appkey = _STD move(Decryption(root["app"s]["appkey"s].asString()));
+
+	return true;
 }
 
 _string BaiduTranslateDLL::PasswordFunction::Encryption(_string_view str) const noexcept

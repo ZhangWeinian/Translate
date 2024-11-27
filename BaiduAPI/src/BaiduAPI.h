@@ -95,17 +95,17 @@ namespace BaiduTranslateDLL
 		_NODISCARD static _size_t CurlWriteCallback(const char* contents, _size_t size, _size_t nmemb, _string* userp);
 
 	private:
-		PasswordFunction   m_password {};
+		PasswordFunction m_password {};
 
-		static inline bool m_init_is_no_error { false };
+		bool			 m_init_is_no_error {};
 
-		_string			   m_appid {};
-		_string			   m_appkey {};
+		_string			 m_appid {};
+		_string			 m_appkey {};
 
-		const _string	   m_uri {};
-		CURL*			   m_curl {};
+		const _string	 m_uri {};
+		CURL*			 m_curl {};
 
-		_STD mt19937_64	   m_gen {};
+		_STD mt19937_64	 m_gen {};
 		_STD uniform_int_distribution<_size_t> m_dis {};
 	};
 } // namespace BaiduTranslateDLL

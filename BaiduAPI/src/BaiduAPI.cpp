@@ -117,12 +117,10 @@ bool BaiduTranslateDLL::BaiduTranslateFunction::SetAppIDAndKey(_string_view appi
 		return false;
 	}
 
-	m_password.SetAppIDAndKey(appid, appkey);
-
 	m_appkey = _STD move(_string(appkey));
 	m_appid	 = _STD	 move(_string(appid));
 
-	return true;
+	return m_password.SetAppIDAndKey(appid, appkey);
 }
 
 _string BaiduTranslateDLL::BaiduTranslateFunction::GetAppIDAndKey(void) const noexcept
