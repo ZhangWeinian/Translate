@@ -41,9 +41,6 @@ namespace BaiduTranslateDLL
 		BAIDUTRANSLATE_FUNC_API_RETURN_ERROR		 = 30'005,
 		BAIDUTRANSLATE_FUNC_INIT_ERROR				 = 39'999,
 
-		// 公开头文件标识符，以 4 开头
-		EXPORT_TRANSLATE_PTR_IS_NULL = 40'000,
-
 		// 其他标识符，以 99 开头
 		OTHER_UNDEFIND_ERROR = 99'999
 	};
@@ -206,15 +203,6 @@ namespace BaiduTranslateDLL
 				BAIDUTRANSLATE_FUNC_INIT_ERROR,
 				{
 					R"(BaiduTranslationFunction: Initialization failed.)", R"()"
-				}
-			},
-
-			// 公开头文件标识符，以 4 开头
-			{
-				EXPORT_TRANSLATE_PTR_IS_NULL,
-				{
-					R"(TranslatePtr: The base pointer is empty.)",
-					R"(The base pointer in the public header file is empty.)"
 				}
 			},
 

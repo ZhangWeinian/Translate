@@ -16,54 +16,13 @@
 #include <json/reader.h>
 #include <json/value.h>
 
-BaiduTranslateDLL::BaiduTranslateFunction::BaiduTranslateFunction(_string_view appid,
-																  _string_view appkey) noexcept:
-	m_uri(R"(http://api.fanyi.baidu.com/api/trans/vip/translate?)"),
-	m_curl(curl_easy_init()),
-	m_gen(_STD random_device {}()),
-	m_dis(32'768, 65'536)
+bool BaiduTranslateDLL::BaiduTranslateFunction::InitIsNoError(void) noexcept
 {
-	if (!PasswordFunction::InitIsNoError())
-	{
-		m_init_is_no_error = false;
-
-		return;
-	}
-
-	if (m_curl == nullptr)
-	{
-		m_init_is_no_error = false;
-
-		GlobalErrorHandling::SetLastError(ErrorCodeEnum::BAIDUTRANSLATE_FUNC_CURL_IS_NULL);
-		GlobalErrorHandling::SetErrorTip(
-			R"(CURL context is empty in BaiduTranslatieFunction initialization.)");
-
-		return;
-	}
-
-	curl_easy_setopt(m_curl, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_3);
-	//curl_easy_setopt(m_curl, CURLOPT_SSL_VERIFYPEER, 0L);
-	//curl_easy_setopt(m_curl, CURLOPT_SSL_VERIFYHOST, 0L);
-
-	m_appid			   = _STD  move(m_password.GetAppID());
-	m_appkey		   = _STD move(m_password.GetAppKey());
-
-	m_init_is_no_error = true;
+	return m_init_is_no_error;
 }
 
-BaiduTranslateDLL::BaiduTranslateFunction::~BaiduTranslateFunction(void) noexcept
-{
-	if (m_curl != nullptr)
-	{
-		curl_easy_cleanup(m_curl);
-	}
-}
-
-_string BaiduTranslateDLL::BaiduTranslateFunction::Translate(_string_view query,
-															 _string_view from,
-															 _string_view to,
-															 _string_view appid,
-															 _string_view appkey) noexcept
+_string BaiduTranslateDLL::BaiduTranslateFunction::
+	Translate(_string_view query, _string_view from, _string_view to, _string_view appid, _string_view appkey) noexcept
 {
 	if (!m_init_is_no_error)
 	{
@@ -74,7 +33,7 @@ _string BaiduTranslateDLL::BaiduTranslateFunction::Translate(_string_view query,
 		return GlobalErrorHandling::GetErrorInfo();
 	}
 
-	const _string& full_query { CheckQuery(query) };
+	const _string& full_query { _STD move(CheckQuery(query)) };
 
 	_string		   tmp_appid { appid };
 	_string		   tmp_appkey { appkey };
@@ -83,8 +42,7 @@ _string BaiduTranslateDLL::BaiduTranslateFunction::Translate(_string_view query,
 	{
 		if (m_appid.empty() || m_appkey.empty())
 		{
-			GlobalErrorHandling::SetLastError(
-				ErrorCodeEnum::BAIDUTRANSLATE_FUNC_APPID_OR_APPKEY_IS_EMPTY);
+			GlobalErrorHandling::SetLastError(ErrorCodeEnum::BAIDUTRANSLATE_FUNC_APPID_OR_APPKEY_IS_EMPTY);
 			GlobalErrorHandling::SetErrorTip(
 				R"(Initialize appid, appkey, and the appid and appkey passed by the Translate )"
 				R"(function are all null values.)");
@@ -97,21 +55,17 @@ _string BaiduTranslateDLL::BaiduTranslateFunction::Translate(_string_view query,
 	}
 
 	const _size_t  salt { m_dis(m_gen) };
-	const _string& sign {
-		m_password.GetMD5(_STD format(R"({0}{1}{2}{3})", tmp_appid, full_query, salt, tmp_appkey))
-	};
-	const _string& full_uri {
-		(_STD format(R"({0}appid={1}&q={2}&from={3}&to={4}&salt={5}&sign={6})",
-					 m_uri,
-					 tmp_appid,
-					 full_query,
-					 from,
-					 to,
-					 salt,
-					 sign))
-	};
+	const _string& sign { m_password.GetMD5(_STD format(R"({0}{1}{2}{3})", tmp_appid, full_query, salt, tmp_appkey)) };
+	const _string& full_uri { (_STD format(R"({0}appid={1}&q={2}&from={3}&to={4}&salt={5}&sign={6})",
+										   m_uri,
+										   tmp_appid,
+										   full_query,
+										   from,
+										   to,
+										   salt,
+										   sign)) };
 
-	_string readBuffer {};
+	_string		   readBuffer {};
 
 	curl_easy_setopt(m_curl, CURLOPT_URL, full_uri.c_str());
 	curl_easy_setopt(m_curl, CURLOPT_WRITEFUNCTION, BaiduTranslateFunction::CurlWriteCallback);
@@ -120,9 +74,8 @@ _string BaiduTranslateDLL::BaiduTranslateFunction::Translate(_string_view query,
 	if (auto res { curl_easy_perform(m_curl) }; res != CURLE_OK)
 	{
 		GlobalErrorHandling::SetLastError(ErrorCodeEnum::BAIDUTRANSLATE_FUNC_CURL_RETURN_ERROR);
-		GlobalErrorHandling::SetErrorTip(
-			_STD format(R"(The request initiated by CURL returned an error: {})",
-						curl_easy_strerror(res)));
+		GlobalErrorHandling::SetErrorTip(_STD format(R"(The request initiated by CURL returned an error: {})",
+													 curl_easy_strerror(res)));
 
 		return GlobalErrorHandling::GetErrorInfo();
 	}
@@ -142,15 +95,15 @@ _string BaiduTranslateDLL::BaiduTranslateFunction::Translate(_string_view query,
 	{
 		::Json::Value api_root { ::Json::objectValue };
 
-		api_root["api error code"] = root["error_code"];
-		api_root["api error msg"]  = root["error_msg"];
+		api_root["api error code"]	  = root["error_code"];
+		api_root["api error message"] = root["error_msg"];
 
 		GlobalErrorHandling::SetLastError(ErrorCodeEnum::BAIDUTRANSLATE_FUNC_API_RETURN_ERROR);
 		GlobalErrorHandling::SetErrorTip(
 			R"(The API request in the Translate function was successful but returned an error. )"
-			R"(For detailed error information, please refer to 'API error info')");
+			R"(For detailed error information, please refer to 'api error info')");
 
-		return GlobalErrorHandling::GetErrorInfo("API error info", api_root);
+		return GlobalErrorHandling::GetErrorInfo("api error info", api_root);
 	}
 	else
 	{
@@ -158,8 +111,7 @@ _string BaiduTranslateDLL::BaiduTranslateFunction::Translate(_string_view query,
 	}
 }
 
-void BaiduTranslateDLL::BaiduTranslateFunction::SetAppIDAndKey(_string_view appid,
-															   _string_view appkey) noexcept
+bool BaiduTranslateDLL::BaiduTranslateFunction::SetAppIDAndKey(_string_view appid, _string_view appkey) noexcept
 {
 	if (!m_init_is_no_error)
 	{
@@ -167,13 +119,15 @@ void BaiduTranslateDLL::BaiduTranslateFunction::SetAppIDAndKey(_string_view appi
 		GlobalErrorHandling::SetErrorTip(
 			R"(BaiduTranslatieFunction initialization failed, unable to perform operation.)");
 
-		return;
+		return false;
 	}
 
 	m_password.SetAppIDAndKey(appid, appkey);
 
 	m_appkey = _STD move(_string(appkey));
 	m_appid	 = _STD	 move(_string(appid));
+
+	return true;
 }
 
 _string BaiduTranslateDLL::BaiduTranslateFunction::GetAppIDAndKey(void) const noexcept
@@ -190,16 +144,12 @@ _string BaiduTranslateDLL::BaiduTranslateFunction::GetAppIDAndKey(void) const no
 	return m_password.GetAppIDAndKey();
 }
 
-bool BaiduTranslateDLL::BaiduTranslateFunction::InitIsNoError(void) noexcept
+BaiduTranslateDLL::BaiduTranslateFunction::~BaiduTranslateFunction(void) noexcept
 {
-	return m_init_is_no_error;
-}
-
-_size_t BaiduTranslateDLL::BaiduTranslateFunction::
-	CurlWriteCallback(const char* contents, _size_t size, _size_t nmemb, _string* userp)
-{
-	userp->append(contents, size * nmemb);
-	return size * nmemb;
+	if (m_curl != nullptr)
+	{
+		curl_easy_cleanup(m_curl);
+	}
 }
 
 _string BaiduTranslateDLL::BaiduTranslateFunction::CheckQuery(_string_view query) const noexcept
@@ -219,4 +169,11 @@ _string BaiduTranslateDLL::BaiduTranslateFunction::CheckQuery(_string_view query
 	}
 
 	return result;
+}
+
+_size_t BaiduTranslateDLL::BaiduTranslateFunction::
+	CurlWriteCallback(const char* contents, _size_t size, _size_t nmemb, _string* userp)
+{
+	userp->append(contents, size * nmemb);
+	return size * nmemb;
 }

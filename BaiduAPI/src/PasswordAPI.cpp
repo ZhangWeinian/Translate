@@ -25,10 +25,10 @@
 #include <json/writer.h>
 
 BaiduTranslateDLL::PasswordFunction::PasswordFunction(void) noexcept:
-	m_path(GetLocalFilePath()),
-	m_appid(R"()"),
-	m_appkey(R"()"),
-	m_ctx(EVP_MD_CTX_new())
+	m_path { GetLocalFilePath() },
+	m_appid { R"()" },
+	m_appkey { R"()" },
+	m_ctx { EVP_MD_CTX_new() }
 {
 	if (m_ctx == nullptr)
 	{

@@ -7,7 +7,7 @@
 
 int main(int argc, char* argv[])
 {
-	if (!BaiduTranslate_Init("", ""))
+	if (!BaiduTranslate_Init())
 	{
 		fputs("BaiduTranslate_Init failed.\n", stderr);
 		return EXIT_FAILURE;
