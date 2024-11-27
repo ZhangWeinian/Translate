@@ -16,11 +16,6 @@
 #include <json/reader.h>
 #include <json/value.h>
 
-bool BaiduTranslateDLL::BaiduTranslateFunction::InitIsNoError(void) noexcept
-{
-	return m_init_is_no_error;
-}
-
 _string BaiduTranslateDLL::BaiduTranslateFunction::
 	Translate(_string_view query, _string_view from, _string_view to, _string_view appid, _string_view appkey) noexcept
 {

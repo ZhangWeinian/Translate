@@ -13,13 +13,6 @@
 using GlobalErrorHandling	 = ::BaiduTranslateDLL::GlobalErrorHandling;
 using BaiduTranslateFunction = ::BaiduTranslateDLL::BaiduTranslateFunction;
 
-bool BaiduTranslate_Init(void)
-{
-	// 注意：InitIsNoError() 方法必须要通过 BaiduTranslateFunction::GetInstance() 来调用
-	// 而不是调用 BaiduTranslateFunction::InitIsNoError()
-	return BaiduTranslateFunction::GetInstance().InitIsNoError();
-}
-
 const char*
 	BaiduTranslate_Translate(const char* query, const char* from, const char* to, const char* appid, const char* appkey)
 {

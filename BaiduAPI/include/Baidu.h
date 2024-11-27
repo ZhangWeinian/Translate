@@ -20,12 +20,6 @@
 
 
 /// <summary>
-/// 初始化百度翻译API
-/// </summary>
-/// <returns>bool 表示的初始化状态，如果为 true ，表示初始化成功，可以后续工作</returns>
-EXTREN_C BAIDU_API bool BaiduTranslate_Init(void);
-
-/// <summary>
 /// 翻译文本
 /// </summary>
 /// <param name="query">要翻译的文本</param>

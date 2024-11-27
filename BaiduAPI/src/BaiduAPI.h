@@ -41,17 +41,15 @@ namespace BaiduTranslateDLL
 	class BaiduTranslateFunction final: public BaiduTranslateFunctionBase<BaiduTranslateFunction>
 	{
 	public:
-		_NODISCARD _string	   Translate(_string_view query,
-										 _string_view from,
-										 _string_view to,
-										 _string_view appid	 = "",
-										 _string_view appkey = "") noexcept;
+		_NODISCARD _string Translate(_string_view query,
+									 _string_view from,
+									 _string_view to,
+									 _string_view appid	 = "",
+									 _string_view appkey = "") noexcept;
 
-		_NODISCARD static bool InitIsNoError(void) noexcept;
+		_NODISCARD bool	   SetAppIDAndKey(_string_view appid, _string_view appkey) noexcept;
 
-		_NODISCARD bool		   SetAppIDAndKey(_string_view appid, _string_view appkey) noexcept;
-
-		_NODISCARD _string	   GetAppIDAndKey(void) const noexcept;
+		_NODISCARD _string GetAppIDAndKey(void) const noexcept;
 
 	private:
 		friend class BaiduTranslateFunctionBase<BaiduTranslateFunction>;
